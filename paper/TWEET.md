@@ -1,0 +1,7 @@
+1/ New preprint: a small new lower bound for Frankl's union-closed sets conjecture, open since 1979. In every finite union-closed family some element lies in at least 0.38284 of the sets, up from 0.382709 (Liu, 2023). Plus two short theorems showing why the entropy method behind every bound since 2022 stops at 0.382885. Paper, code, logs: https://github.com/moffatstudio/union-closed-constant
+
+2/ How it was made: a team of Claude agents under my direction, in one day. Claude Fable 5.1 led: picked the problem from five candidates, found the two ceiling theorems, designed the protocol and the certification. Sonnet agents transcribed the literature. Opus agents refereed the manuscript over four rounds, re-implemented the certificate independently from the written statement, and proved the key small-entropy lemma.
+
+3/ My role: setting the goal and the standard, choosing what to trust, deciding what to publish. Every error the referee agent caught, including one in the lead's own lemma, is documented in the repo. Nothing was hidden to make the story cleaner.
+
+4/ What it is and isn't: the new constant is computer-assisted and conditional on two numerically verified hypotheses of the same type as the previous record, with one regime now fully proved. The two ceiling theorems are unconditional. The gain is +0.00018; the ceiling shows this route cannot give more. Corrections welcome. That is the point of posting it.

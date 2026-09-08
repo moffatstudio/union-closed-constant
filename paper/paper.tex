@@ -145,18 +145,19 @@ For $q,y\in(0,1)$ and $\delta\in(0,\tfrac12)$ let
 \begin{equation}\label{eq:mudelta}
 \mu_{q,y,\delta}:=q\,\delta_1+(1-q)\big[(1-\delta)\,\delta_0+\delta\,\delta_y\big].
 \end{equation}
-A class $\cC$ \emph{admits hiding} if for all $q,y\in(0,1)$ and all sufficiently small $\delta$, $\cC(\mu_{q,y,\delta})$ contains a coupling $P$ with $P(X=y,\,Y=1)=P(X=1,\,Y=y)=0$.
+A class $\cC$ \emph{admits hiding} if for all $q,y\in(0,1)$ and all sufficiently small $\delta$, $\cC(\mu_{q,y,\delta})$ contains a coupling $P$ with
+\[P(X=y,\,Y=1)=P(X=1,\,Y=y)=0\qquad\text{and}\qquad P(X=y,\,Y=y)\le\delta^2 .\]
 \end{definition}
 
 \begin{lemma}\label{lem:classes}
 The classes of the i.i.d.\ protocol, of Sawin's protocol, of Yu's protocols for every $\rho>0$, and of every conditionally-i.i.d.\ protocol contain the product law. All but the first admit hiding.
 \end{lemma}
 \begin{proof}
-Products: immediate for the singleton, for all couplings, and for mixtures of products; the product law has maximal correlation $0\le\rho$. Hiding for all couplings is trivial. For mixtures of products take $P=q\,\delta_1\otimes\delta_1+(1-q)\,P_0\otimes P_0$ with $P_0=(1-\delta)\delta_0+\delta\delta_y$; its marginal is $\mu_{q,y,\delta}$ and $P(X=y,Y=1)=0$. For the maximal-correlation class, write $p_1=q$, $p_0=(1-q)(1-\delta)$, $p_y=(1-q)\delta$ and define the coupling $P$ on $\{1,0,y\}^2$ by $P(y,0)=P(0,y)=p_y$, $P(y,y)=P(y,1)=P(1,y)=0$, and on $\{1,0\}^2$ by $P(a,b)=r_ar_b/(r_1+r_0)$ with $r_1=p_1$, $r_0=p_0-p_y$. Both marginals are $(p_1,p_0,p_y)$. The maximal correlation of $P$ is the second largest singular value of the matrix $M_{ab}=P(a,b)/\sqrt{p_ap_b}$. As $\delta\to0$, $r_0\to p_0$ and the $\{1,0\}$ block of $M$ converges to the rank-one matrix $\sqrt{p_ap_b}$ of the product law, while the entries of the row and column of $y$ are $0$ or $\sqrt{p_y/p_0}\to0$. Singular values depend continuously on the entries, so the second singular value tends to $0$ and is below $\rho$ for all small $\delta$.
+Products: immediate for the singleton, for all couplings, and for mixtures of products; the product law has maximal correlation $0\le\rho$. Hiding for the class of all couplings is trivial (take the coupling of the maximal-correlation case below, which has $P(X=y,Y=y)=0$). For mixtures of products take $P=q\,\delta_1\otimes\delta_1+(1-q)\,P_0\otimes P_0$ with $P_0=(1-\delta)\delta_0+\delta\delta_y$; its marginal is $\mu_{q,y,\delta}$, $P(X=y,Y=1)=0$ and $P(X=y,Y=y)=(1-q)\delta^2\le\delta^2$. For the maximal-correlation class, write $p_1=q$, $p_0=(1-q)(1-\delta)$, $p_y=(1-q)\delta$ and define the coupling $P$ on $\{1,0,y\}^2$ by $P(y,0)=P(0,y)=p_y$, $P(y,y)=P(y,1)=P(1,y)=0$, and on $\{1,0\}^2$ by $P(a,b)=r_ar_b/(r_1+r_0)$ with $r_1=p_1$, $r_0=p_0-p_y$. Both marginals are $(p_1,p_0,p_y)$. The maximal correlation of $P$ is the second largest singular value of the matrix $M_{ab}=P(a,b)/\sqrt{p_ap_b}$. As $\delta\to0$, $r_0\to p_0$ and the $\{1,0\}$ block of $M$ converges to the rank-one matrix $\sqrt{p_ap_b}$ of the product law, while the entries of the row and column of $y$ are $0$ or $\sqrt{p_y/p_0}\to0$. Singular values depend continuously on the entries, so the second singular value tends to $0$ and is below $\rho$ for all small $\delta$.
 \end{proof}
 
 \begin{theorem}[refined ceiling]\label{thm:refined}
-Suppose \eqref{eq:cert} uses the i.i.d.\ protocol with weight $w\in[0,1]$, and that every other class contains the product law and admits hiding. Then
+Suppose \eqref{eq:cert} uses the i.i.d.\ protocol with its singleton class $\{\mu\otimes\mu\}$ and weight $w\in[0,1]$, and that every other class contains the product law and admits hiding. Then
 \begin{align}
 2w(1-c)&\ge1,\label{eq:H}\\
 c&\le1-\frac{x\,\ent(x)}{w\,\ent(x^2)+1-w}\qquad\text{for every }x\in[\tfrac12,\tfrac1{\sqrt2}].\label{eq:D}
@@ -167,11 +168,11 @@ G(c):=\min_{x\in[1/2,1/\sqrt2]}\Big[1-\frac{x\,\ent(x)}{1-(1-\ent(x^2))/(2(1-c))
 \end{equation}
 \end{theorem}
 \begin{proof}
-\emph{Inequality \eqref{eq:H}.} Fix $y\in(0,1)$, put $q=1-c$ and $\mu_\delta=\mu_{q,y,\delta}$. Then $\E_{\mu_\delta}[X]=q+(1-q)\delta y\ge1-c$ and $\E_{\mu_\delta}[\ent(X)]=(1-q)\delta\,\ent(y)$. Consider any coupling of $\mu_\delta$ with itself and any protocol. Pairs containing the atom $0$ carry no entropy. On the pair $(1,1)$ both bits are surely $0$, so the union bit is surely $0$ and carries no entropy. On the pairs $(y,1)$ and $(1,y)$ one bit is surely $0$, so the union bit equals the other bit and has entropy exactly $\ent(y)$, for every protocol. The pair $(y,y)$ carries entropy at most $1$, and its mass is at most $\min\{P(X=y),P(Y=y)\}=(1-q)\delta$ under any coupling; under the product law it is $(1-q)^2\delta^2$, and under a hiding coupling with $P(X=y,Y=y)=0$ it is $0$. The hiding couplings constructed in Lemma~\ref{lem:classes} all have $P(X=y,Y=y)=0$, and we use those.
+\emph{Inequality \eqref{eq:H}.} Fix $y\in(0,1)$, put $q=1-c$ and $\mu_\delta=\mu_{q,y,\delta}$. Then $\E_{\mu_\delta}[X]=q+(1-q)\delta y\ge1-c$ and $\E_{\mu_\delta}[\ent(X)]=(1-q)\delta\,\ent(y)$. Consider any coupling of $\mu_\delta$ with itself and any protocol. Pairs containing the atom $0$ carry no entropy. On the pair $(1,1)$ both bits are surely $0$, so the union bit is surely $0$ and carries no entropy. On the pairs $(y,1)$ and $(1,y)$ one bit is surely $0$, so the union bit equals the other bit and has entropy exactly $\ent(y)$, for every protocol. The pair $(y,y)$ carries entropy at most $1$; its mass is $(1-q)^2\delta^2$ under the product law and at most $\delta^2$ under a hiding coupling, by definition.
 
-For the i.i.d.\ term, whose class is the singleton $\{\mu_\delta\otimes\mu_\delta\}$, the value is exactly $2q(1-q)\delta\,\ent(y)+(1-q)^2\delta^2\,\ent(y^2)$. For every other protocol the infimum over its class is at most its value at the hiding coupling, which is $0$. Hence
-\[\text{LHS of \eqref{eq:cert}}\le w\big[2q(1-q)\delta\,\ent(y)+(1-q)^2\delta^2\ent(y^2)\big].\]
-Dividing by $\E_{\mu_\delta}\ent(X)=(1-q)\delta\,\ent(y)$ and letting $\delta\to0$, \eqref{eq:cert} forces $2wq\ge C>1$. Hence $2w(1-c)\ge1$ is necessary: if $2w(1-c)<1$, then \eqref{eq:cert} fails at $\mu_\delta$ for all small $\delta$. (For a class whose hiding couplings must charge $(y,y)$, the same argument gives the bound with $2wq$ replaced by $2wq+(1-w)\theta$, where $\theta\le1$ is the $(y,y)$-mass divided by $(1-q)\delta$; this is not needed here.)
+For the i.i.d.\ term, whose class is the singleton $\{\mu_\delta\otimes\mu_\delta\}$, the value is exactly $2q(1-q)\delta\,\ent(y)+(1-q)^2\delta^2\,\ent(y^2)$. For every other protocol the infimum over its class is at most its value at a hiding coupling, which is at most $\delta^2$. Hence
+\[\text{LHS of \eqref{eq:cert}}\le w\big[2q(1-q)\delta\,\ent(y)+(1-q)^2\delta^2\ent(y^2)\big]+(1-w)\,\delta^2 .\]
+Dividing by $\E_{\mu_\delta}\ent(X)=(1-q)\delta\,\ent(y)$ and letting $\delta\to0$, \eqref{eq:cert} forces $2wq\ge C>1$. Hence $2w(1-c)\ge1$ is necessary: if $2w(1-c)<1$, then \eqref{eq:cert} fails at $\mu_\delta$ for all small $\delta$.
 
 \emph{Inequality \eqref{eq:D}.} Fix $x\in[\frac12,\frac1{\sqrt2}]$ and let $\mu=p\,\delta_x+(1-p)\,\delta_0$. Present the product law to every class. The i.i.d.\ term equals $p^2\,\ent(x^2)$ and every other term is at most $p^2$, so \eqref{eq:cert} forces $p\,(w\,\ent(x^2)+1-w)\ge C\,\ent(x)>\ent(x)$. If $c>1-x\,\ent(x)/(w\,\ent(x^2)+1-w)$ then $p:=\ent(x)/(w\,\ent(x^2)+1-w)$ has $px>1-c$, so $p$ can be decreased slightly, keeping $\E_\mu[X]=px\ge1-c$, to a law violating \eqref{eq:cert}. This proves \eqref{eq:D}.
 
@@ -179,7 +180,7 @@ Dividing by $\E_{\mu_\delta}\ent(X)=(1-q)\delta\,\ent(y)$ and letting $\delta\to
 \end{proof}
 
 \begin{remark}\label{rem:literature}
-(i) Cambie's exact value $0.3823455$ for Sawin's class lies below $c^{**}$ because the class of all couplings also lets the adversary reduce the mass of the diagonal pair $(x,x)$ from $p^2$ to $\max(0,2p-1)$, and Cambie's extremal law saturates the independent and the anti-correlated terms simultaneously. (ii) Liu's $0.382709$ lies below $c^{**}$ because the diagonal of his kernel is $x^2+x^2(1-x)^2<\frac12$ for the relevant $x$: his adversary is the two-point law of \eqref{eq:D} placed at the unique $x$ with $x^2+x^2(1-x)^2=1-x^2$, where the kernel term is entropy-neutral, and with his weight $w=0.899947$ the bound \eqref{eq:D} at that point is exactly $0.382709$. Placing the two-point adversary at the optimal diagonal instead gives, for the same $w$, $0.382752$.
+(i) Cambie's exact value $0.3823455$ for Sawin's class lies below $c^{**}$ because the class of all couplings also lets the adversary reduce the mass of the diagonal pair $(x,x)$ from $p^2$ to $\max(0,2p-1)$, and Cambie's extremal law saturates the independent and the anti-correlated terms simultaneously. (ii) Liu's $0.382709$ lies below $c^{**}$ because the diagonal $x^2+x^2(1-x)^2$ of his kernel is not $\frac12$ at the binding point: his adversary is the two-point law of \eqref{eq:D} placed at the unique $x$ with $x^2+x^2(1-x)^2=1-x^2$ (namely $x=0.6908$, where the diagonal equals $0.5228$), so that $\ent$ of the kernel term equals $\ent(x^2)$ and the kernel is entropy-neutral there; with his weight $w=0.899947$ the resulting bound is exactly $0.382709$. Placing the two-point adversary against the optimal diagonal instead gives, for the same $w$, $0.382752$.
 \end{remark}
 
 \section{A protocol with the optimal diagonal}\label{sec:protocol}
@@ -193,7 +194,7 @@ and let $\Pi^{\id}$ be the conditionally-i.i.d.\ protocol with $r_x(u)=x+f(x)\,\
 $\Pi^{\id}$ is a protocol. For all $x,y\in[0,1]$, $\ent(xy+f(x)f(y))\ge\ent(xy)$, and $x^2+f(x)^2=\frac12$ for $x\in[\frac12,\frac1{\sqrt2}]$.
 \end{lemma}
 \begin{proof}
-We need $r_x\in[0,1]$, i.e.\ $f(x)\le\min(x,1-x)$. On $[0,\frac12]$ this is equality. On $[\frac12,\frac1{\sqrt2}]$, $\frac12-x^2\le(1-x)^2$ is equivalent to $2x^2-2x+\frac12\ge0$, i.e.\ $(2x-1)^2\ge0$. Next, $x^2+f(x)^2=x$ on $[0,\frac12]$ and $=\frac12$ on $[\frac12,\frac1{\sqrt2}]$, so $x^2+f(x)^2\le\frac12$ wherever $f(x)>0$. If $f(x)f(y)>0$ then by Cauchy--Schwarz $xy+f(x)f(y)\le\sqrt{x^2+f(x)^2}\sqrt{y^2+f(y)^2}\le\frac12$; since $xy\le xy+f(x)f(y)\le\frac12$ and $\ent$ is increasing on $[0,\frac12]$, $\ent(xy+f(x)f(y))\ge\ent(xy)$. If $f(x)f(y)=0$ the two quantities coincide.
+We need $r_x\in[0,1]$, i.e.\ $f(x)\le\min(x,1-x)$. On $[0,\frac12]$ this is equality. On $[\frac12,\frac1{\sqrt2}]$, $\frac12-x^2\le(1-x)^2$ is equivalent to $2x^2-2x+\frac12\ge0$, i.e.\ $(2x-1)^2\ge0$. Next, $x^2+f(x)^2=2x^2\le\frac12$ on $[0,\frac12]$ and $=\frac12$ on $[\frac12,\frac1{\sqrt2}]$, so $x^2+f(x)^2\le\frac12$ wherever $f(x)>0$. If $f(x)f(y)>0$ then by Cauchy--Schwarz $xy+f(x)f(y)\le\sqrt{x^2+f(x)^2}\sqrt{y^2+f(y)^2}\le\frac12$; since $xy\le xy+f(x)f(y)\le\frac12$ and $\ent$ is increasing on $[0,\frac12]$, $\ent(xy+f(x)f(y))\ge\ent(xy)$. If $f(x)f(y)=0$ the two quantities coincide.
 \end{proof}
 
 \begin{proposition}[value against the two adversaries]\label{prop:twoadv}
@@ -247,19 +248,20 @@ Fix $q$, and fix the values $\int x\,dP_j$, $\int g_2\,dP_j$, $\int g_3\,dP_j$ f
 \end{proof}
 
 \begin{lemma}[small-entropy regime]\label{lem:small}
-Let $\mu_n$ be laws on $[0,1]$ with $\E_{\mu_n}[X]\ge1-c$ and $\E_{\mu_n}[\ent(X)]\to0$. Then for any $q_n,P_0^{(n)},P_1^{(n)}$ with marginal $\mu_n$,
-\[\liminf_{n\to\infty}\frac{w\iint\ent(xy)\,d\mu_n\,d\mu_n+(1-w)\big[(1-q_n)J(P_0^{(n)})+q_nJ(P_1^{(n)})\big]}{\E_{\mu_n}\ent(X)}\;\ge\;2w(1-c).\]
+Let $\mu$ be a law on $[0,1]$ with $\E_\mu[X]\ge1-c$ and $\E_\mu[\ent(X)]>0$, and let $\eta\in(0,\frac14]$. Then for every $q,P_0,P_1$ with marginal $\mu$,
+\[\frac{w\iint\ent(xy)\,d\mu\,d\mu+(1-w)\big[(1-q)J(P_0)+qJ(P_1)\big]}{\E_{\mu}\ent(X)}\;\ge\;2w\,\kappa(\eta)\Big(1-c-\eta-\frac{\E_\mu\ent(X)}{\ent(\eta)}\Big),\qquad\kappa(\eta):=(1-\eta)\Big(1-\frac2{\log_2(1/\eta)}\Big).\]
+In particular, for $w=0.810222$ and $c=0.38284$, taking $\eta=10^{-4}$ gives a ratio of at least $1.048$ whenever $\E_\mu\ent(X)\le10^{-7}$, and letting $\eta\to0$ gives $\liminf\ge2w(1-c)$ along any sequence with $\E_\mu\ent(X)\to0$.
 \end{lemma}
 \begin{proof}
-The kernel term is non-negative, so it suffices to show $\liminf\iint\ent(xy)\,d\mu\,d\mu/\E_\mu\ent(X)\ge2(1-c)$ along the sequence. Fix $\eta\in(0,\frac14]$ and split $[0,1]$ into $L=[0,\eta)$, $M=[\eta,1-\eta]$, $T=(1-\eta,1]$; write $a=\mu(T)$, $m=\mu(M)$. Since $\ent\ge\ent(\eta)$ on $M$, $m\le\E_\mu\ent(X)/\ent(\eta)\to0$. Since $\E_\mu[X]\le\eta\mu(L)+m+a$, we get $a\ge1-c-\eta-m$.
+The kernel term is non-negative, so it suffices to show $\iint\ent(xy)\,d\mu\,d\mu\ge2\kappa(\eta)(1-c-\eta-\E_\mu\ent(X)/\ent(\eta))\,\E_\mu\ent(X)$. Split $[0,1]$ into $L=[0,\eta)$, $M=[\eta,1-\eta]$, $T=(1-\eta,1]$; write $a=\mu(T)$, $m=\mu(M)$. Since $\ent\ge\ent(\eta)$ on $M$, $m\le\E_\mu\ent(X)/\ent(\eta)$. Since $\E_\mu[X]\le\eta\mu(L)+m+a$, we get $a\ge1-c-\eta-m$.
 
 \emph{Claim 1: for $x\in[0,1]$ and $x'\in T$, $\ent(xx')\ge(1-\eta)\ent(x)$.} If $x\le\frac12$: $\ent$ is concave with $\ent(0)=0$, so $\ent(\theta x)\ge\theta\ent(x)$ for $\theta\in[0,1]$, and $xx'\ge(1-\eta)x$ with $xx'\le\frac12$, so $\ent(xx')\ge\ent((1-\eta)x)\ge(1-\eta)\ent(x)$. If $x>\frac12$ and $xx'\ge\frac12$: $\ent$ is decreasing on $[\frac12,1]$ and $xx'\le x$, so $\ent(xx')\ge\ent(x)$. If $x>\frac12$ and $xx'<\frac12$: $xx'\ge(1-\eta)/2$, so $\ent(xx')\ge\ent((1-\eta)/2)\ge1-\eta\ge(1-\eta)\ent(x)$, using $\ent(\frac12-\frac\eta2)\ge1-\eta$ for $\eta\le\frac14$.
 
 \emph{Claim 2: for $x=1-t$, $x'=1-t'$ in $T$, $\ent(xx')\ge(1-\eta)\big(1-\tfrac{2}{\log_2(1/\eta)}\big)\big(\ent(x)+\ent(x')\big)$.} Here $xx'=1-s$ with $s=t+t'-tt'\ge(1-\eta)(t+t')$ and $s\le\frac12$, so $\ent(xx')=\ent(s)\ge(1-\eta)\ent(t+t')$. Next, $\ent(t+t')-\ent(t)-\ent(t')=-(t+t')\,\ent\big(\tfrac t{t+t'}\big)+\big[\varphi(t)+\varphi(t')-\varphi(t+t')\big]$ with $\varphi(u)=(1-u)\log_2(1-u)$; the first term is at least $-(t+t')$, and since $\varphi$ is convex with $\varphi(0)=0$ and $|\varphi''|\le1/(\ln2\,(1-u))$, the bracket is at least $-tt'/((1-2\eta)\ln2)\ge-(t+t')$ for $\eta\le\frac14$. So $\ent(t+t')\ge\ent(t)+\ent(t')-2(t+t')$. Finally $\ent(t)\ge t\log_2(1/t)\ge t\log_2(1/\eta)$ for $t\le\eta$, so $2(t+t')\le\frac{2}{\log_2(1/\eta)}(\ent(t)+\ent(t'))$, and $\ent(t)=\ent(x)$.
 
 Writing $\kappa=(1-\eta)(1-2/\log_2(1/\eta))$ and using Claim~2 on $T\times T$ and Claim~1 on $T\times T^c$ and $T^c\times T$,
-\[\iint\ent(xy)\,d\mu\,d\mu\;\ge\;\kappa\cdot2a\int_T\ent\,d\mu+2a(1-\eta)\int_{T^c}\ent\,d\mu\;\ge\;2a\kappa\,\E_\mu\ent(X).\]
-Hence the ratio is at least $2\kappa(1-c-\eta-m)$, and letting $n\to\infty$ and then $\eta\to0$ gives the claim.
+\[\iint\ent(xy)\,d\mu\,d\mu\;\ge\;\kappa\cdot2a\int_T\ent\,d\mu+2a(1-\eta)\int_{T^c}\ent\,d\mu\;\ge\;2a\kappa\,\E_\mu\ent(X),\]
+and $a\ge1-c-\eta-m\ge1-c-\eta-\E_\mu\ent(X)/\ent(\eta)$. The numerical instance is $2\cdot0.810222\cdot\kappa(10^{-4})\cdot(1-0.38284-10^{-4}-10^{-7}/\ent(10^{-4}))=1.0481$.
 \end{proof}
 
 \section{Numerical certification and the main theorem}\label{sec:numerics}
@@ -267,7 +269,7 @@ By Proposition~\ref{prop:atoms}, certifying $\Phi_C\ge0$ reduces, under Hypothes
 \begin{equation}\label{eq:ratio}
 R(q,P_0,P_1):=\frac{w\iint\ent(xy)\,d\mu\,d\mu+(1-w)\big[(1-q)J(P_0)+qJ(P_1)\big]}{\int\ent\,d\mu}
 \end{equation}
-(so $\Phi_C\ge0$ iff $R\ge C$ whenever $\int\ent\,d\mu>0$) with sequential least-squares programming from $300$--$500$ random starting points per run, together with structured starting points: two-point laws $p\,\delta_x+(1-p)\delta_0$ for $x\in[0.6,0.75]$; the hiding laws \eqref{eq:mudelta} with $\delta\in\{10^{-2},10^{-3},10^{-4}\}$; the extremal laws of Cambie and Liu; and combinations of the two-point and hiding laws. Because the infimum along the hiding family is approached only as $\delta\to0$, where the denominator of $R$ vanishes, that family was evaluated in closed form (Proposition~\ref{prop:twoadv}(b)), and the optimiser was run with the additional constraint $\int\ent\,d\mu\ge\eta_0$ for $\eta_0=10^{-3},10^{-4},10^{-5},10^{-6}$. The atom budget was also increased to five and six per law as a check. The computation was implemented independently twice (the second time from the statement alone, without access to the first implementation), and the evaluator reproduces Liu's optimum for his kernel to nine digits: $R=1.000000000$ at his $(c',w)$, attained at his minimiser $q=0$, $P_0=0.8936\,\delta_{0.6908}+0.1064\,\delta_0$.
+(so $\Phi_C\ge0$ iff $R\ge C$ whenever $\int\ent\,d\mu>0$) with sequential least-squares programming from $300$--$500$ random starting points per run, together with structured starting points: two-point laws $p\,\delta_x+(1-p)\delta_0$ for $x\in[0.6,0.75]$; the hiding laws \eqref{eq:mudelta} with $\delta\in\{10^{-2},10^{-3},10^{-4}\}$; the extremal laws of Cambie and Liu; and combinations of the two-point and hiding laws. Because the infimum along the hiding family is approached only as $\delta\to0$, where the denominator of $R$ vanishes, that family was evaluated in closed form (Proposition~\ref{prop:twoadv}(b)), and the optimiser was run with the additional constraint $\int\ent\,d\mu\ge\eta_0$ for $\eta_0=10^{-3},10^{-4},10^{-5},10^{-6},10^{-7}$; below $10^{-7}$, Lemma~\ref{lem:small} gives $R\ge1.048$ unconditionally. The atom budget was also increased to five and six per law as a check. The computation was implemented independently twice (the second time from the statement alone, without access to the first implementation), and the evaluator reproduces Liu's optimum for his kernel to nine digits: $R=1.000000000$ at his $(c',w)$, attained at his minimiser $q=0$, $P_0=0.8936\,\delta_{0.6908}+0.1064\,\delta_0$.
 
 \begin{table}[h]\centering\footnotesize
 \begin{tabular}{lcrr}\toprule
@@ -282,15 +284,15 @@ two-point/hiding combinations, seeded & 4 & 1.0000733 & ---\\\bottomrule
 \end{table}
 
 \begin{hypothesis}[global minimum]\label{hyp:global}
-For $w=0.810222$ and $c=0.38284$, the infimum of $R$ over $q\in[0,1]$ and laws $P_0,P_1$ with at most four atoms each, $\E_\mu[X]\ge1-c$ and $\int\ent\,d\mu>0$, is $1.0000733$, attained at the two-point law of Table~\ref{tab:cert}.
+For $w=0.810222$ and $c=0.38284$, the infimum of $R$ over $q\in[0,1]$ and laws $P_0,P_1$ with at most four atoms each, $\E_\mu[X]\ge1-c$ and $\int\ent\,d\mu\ge10^{-7}$, is $1.0000733$, attained at the two-point law of Table~\ref{tab:cert}.
 \end{hypothesis}
-Hypothesis~\ref{hyp:global} is supported by Table~\ref{tab:cert}, by the same minima with the floor $\int\ent\,d\mu\ge\eta_0$ lowered to $10^{-6}$, and, for the limit $\int\ent\,d\mu\to0$, by Lemma~\ref{lem:small}, which gives $\liminf R\ge2w(1-c)=1.000073$. It plays the role of the ``global minimiser structure'' hypothesis in \cite[Theorem~13]{Liu}.
+Hypothesis~\ref{hyp:global} is supported by Table~\ref{tab:cert} and by the same minima with the floor lowered to $10^{-7}$ (in every case the same minimiser and the same value). The complementary region $\int\ent\,d\mu<10^{-7}$ is covered unconditionally by Lemma~\ref{lem:small}. The hypothesis plays the role of the ``global minimiser structure'' hypothesis in \cite[Theorem~13]{Liu}.
 
 \begin{theorem}\label{thm:main}
 Assume Hypotheses~\ref{hyp:inertia} and~\ref{hyp:global}. Then the certificate \eqref{eq:cert} holds for $w\Pi^{\iid}+(1-w)\Pi^{\id}$ with $w=0.810222$, $c=0.38284$ and $C=1.00005$; consequently every finite union-closed family $\F\ne\{\emptyset\}$ has an element contained in at least $0.38284\,|\F|$ of its members. The same computation with $w$ chosen as in Proposition~\ref{prop:twoadv}(c) certifies every $c<c^{**}=0.382885$.
 \end{theorem}
 \begin{proof}
-Let $\mu$ have $\E_\mu[X]\ge1-c$ and let $P\in\cC_3(\mu)$. By Liu's Theorem~9 we may assume $P$ is of the form \eqref{eq:twoprod}. If $\int\ent\,d\mu=0$ both sides of \eqref{eq:cert} vanish. Otherwise, by Proposition~\ref{prop:atoms} (with $C=1.00005$), $\Phi_C(q,P_0,P_1)\ge\inf\Phi_C$ over four-atom pairs on the same slice, which is non-negative by Hypothesis~\ref{hyp:global} since $R\ge1.0000733>C$ there. Proposition~\ref{prop:cert} concludes. The final sentence follows from Proposition~\ref{prop:twoadv}(c) and the same computation.
+Let $\mu$ have $\E_\mu[X]\ge1-c$ and let $P\in\cC_3(\mu)$. By Liu's Theorem~9 we may assume $P$ is of the form \eqref{eq:twoprod}. If $\int\ent\,d\mu=0$ both sides of \eqref{eq:cert} vanish. If $0<\int\ent\,d\mu<10^{-7}$, Lemma~\ref{lem:small} gives $R\ge1.048>C$. Otherwise, by Proposition~\ref{prop:atoms} (with $C=1.00005$), $\Phi_C(q,P_0,P_1)\ge\Phi_C(q,P_0',P_1')$ for some pair $(P_0',P_1')$ with at most four atoms each on the same slice (so with the same $\E_\mu[X]$). If $\int\ent\,d\mu'\ge10^{-7}$, Hypothesis~\ref{hyp:global} gives $R\ge1.0000733>C$, so $\Phi_C(q,P_0',P_1')\ge0$; if $0<\int\ent\,d\mu'<10^{-7}$, Lemma~\ref{lem:small} gives $R\ge1.048>C$ and again $\Phi_C\ge0$; if $\int\ent\,d\mu'=0$ then $\Phi_C(q,P_0',P_1')\ge0$ trivially. Proposition~\ref{prop:cert} concludes. The final sentence follows from Proposition~\ref{prop:twoadv}(c) and the same computation.
 \end{proof}
 
 \begin{remark}

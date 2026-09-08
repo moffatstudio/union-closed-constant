@@ -30,8 +30,7 @@ violates (16) — actually gives equality, and perturbing p slightly below h(1/�
    (A=B) protocol has class {diagonal laws} and gives exactly E[h(S)] — no gain. Any protocol that ever decouples the
    two chains lets a family drive the prefix pair towards independence, so escaping the ceiling needs a *tensorising
    invariant that rules out near-independent prefixes* — none is known.
-3. Numerically (code/sweep_*.log) the rank-one kernel f_ideal with β=0.3 certifies 0.382953, i.e. within 1.5e-4 of the
-   ceiling; Liu's kernel is at 0.382709.
+3. The β=0.3 sweep figure 0.382953 was an optimiser miss on the hiding law and is withdrawn; see the refined section below.
 
 ---
 # Refined ceiling for protocol mixtures containing an iid term (lead, 2026-09-08, 16:00)
@@ -55,8 +54,8 @@ using h(Π(0,0)) ≤ 1 on the diagonal; for x* ≥ 1/√2 the bound is 1 − x* 
 (all classes in the literature: Sawin/C2, Yu/max-correlation, Liu/conditionally-iid, and any realizable kernel K),
 the certified constant satisfies c ≤ c** where c** is the joint solution of (H) with equality and (D) minimised over x*:
    **c** = 0.382885260…,   w_iid = 1/(2(1−c**)) = 0.810222,   β = 1 − w_iid = 0.189778,   binding x* = 0.690908.**
-**Attainment.** The rank-one kernel f_ideal (ideal diagonal h=1 on [1/2,1/√2]) with β = 0.19 certifies c = 0.382885 numerically
-(code/sweep_ideal_b0.19.log), i.e. the ceiling is attained up to the resolution of the adversary search. Liu's kernel is at
+**Attainment.** The rank-one kernel f_ideal (ideal diagonal h=1 on [1/2,1/√2]) with β = β** = 0.189778 certifies every c < c** = 0.382885
+(c = 0.38284 certified with margin 7e-5; at β = 0.19 exactly, (H) caps c at 0.382716 — the earlier 'β=0.19 certifies 0.382885' was a two-point-only figure and is withdrawn). Liu's kernel is at
 0.382709 because its diagonal x²+x²(1−x)² is not ideal; Cambie's exact 0.3823455 for Sawin's class is below because
 the anti-correlated class C2 also lets the adversary shrink the diagonal mass to 2p−1.
 **Consequence.** The whole single-letter "protocol + coupling class" method, in every form used since 2022, is exhausted at

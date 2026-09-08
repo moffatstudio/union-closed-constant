@@ -5,3 +5,7 @@ batch 3 (500 restarts): min ratio=1.00007334  running best=1.00007334  (2157s)
 batch 4 (500 restarts): min ratio=1.00007334  running best=1.00007334  (2639s)
 batch 5 (500 restarts): min ratio=1.00007334  running best=1.00007334  (3168s)
 batch 6 (500 restarts): min ratio=1.00007334  running best=1.00007334  (3615s)
+batch 7 (500 restarts): min ratio=1.00007334  running best=1.00007334  (4407s)
+batch 8 (500 restarts): min ratio=1.00007334  running best=1.00007334  (5230s)
+batch 9 (500 restarts): min ratio=1.00007334  running best=1.00007334  (5790s)
+FINAL 5000 restarts + seeds, floor 1e-7, m=4, c=0.38284, beta=0.189778: min ratio=1.00007334  q=0.0000 | P0: [(np.float64(0.6909), np.float64(0.8933)), (np.float64(0.0), np.float64(0.1067)), (np.float64(0.0), np.float64(0.0)), (np.float64(0.0), np.float64(0.0))] | P1: [(np.float64(0.7559), np.float64(0.25)), (np.float64(0.8253), np.float64(0.25)), (np.float64(0.2191), np.float64(0.25)), (np.float64(0.4839), np.float64(0.25))]

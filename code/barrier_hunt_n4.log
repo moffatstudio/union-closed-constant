@@ -1,0 +1,4 @@
+new S-barrier: p=0.50000 F=[0, 1] uc=True Gmax=0.000e+00
+n=4  iid barrier p=0.40000 F=[0, 2, 3, 4, 5]
+n=4  S   barrier p=0.50000 F=[0, 1]
+time 1.8376002311706543

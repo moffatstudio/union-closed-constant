@@ -1,0 +1,11 @@
+pool size 21 34.62888026237488
+  certify c=0.382840  pool=21  beta in (0.2, 1.0)
+    round 0: pool-relaxed t*=1.000356 beta=0.99848  (48.2s)
+    round 0: true worst-case ratio=0.001884  (62.9s)  adversary: q=0.6192 | P0: [(np.float64(0.3204), np.float64(0.0)), (np.float64(0.0), np.float64(0.5)), (np.float64(0.0), np.float64(0.5))] | P1: [(np.float64(1.0), np.float64(0.158)), (np.float64(1.0), np.float64(0.421)), (np.float64(1.0), np.float64(0.421))]
+    round 1: pool-relaxed t*=0.990789 beta=0.20000  (38.9s)
+    pool-relaxed bound already < 1 -> infeasible at this c
+ok False val 0.9907892696144326
+beta 0.2
+v [0.     0.0625 0.0307 0.1441 0.0529 0.2598 0.0235 0.3612 0.0823 0.1641
+ 0.1188 0.0069 0.     0.0743 0.0007 0.0164 0.    ]
+elapsed 184.625102519989

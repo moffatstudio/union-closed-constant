@@ -1,0 +1,5 @@
+certify driver B: 4 combos: [(0.38284, 5), (0.38288, 4), (0.38288, 6), (0.38292, 5)]
+CERTIFY beta=0.1897 c=0.38284 m=5 restarts=500(+14 exact struct) : min_ratio=1.00007323 mean_x=0.617160 type=TWO-POINT(known) time=521s
+  q=1.00000 | P0 occ=[(np.float64(0.0), np.float64(0.1064)), (np.float64(0.6909), np.float64(0.8936))] | P1 occ=[(np.float64(0.0), np.float64(0.1065)), (np.float64(0.6909), np.float64(0.8933))]
+CERTIFY beta=0.1897 c=0.38288 m=4 restarts=500(+14 exact struct) : min_ratio=1.00000841 mean_x=0.617120 type=TWO-POINT(known) time=421s
+  q=0.00000 | P0 occ=[(np.float64(0.0), np.float64(0.1065)), (np.float64(0.6909), np.float64(0.8932))] | P1 occ=[(np.float64(0.0), np.float64(0.1064)), (np.float64(0.6909), np.float64(0.8936))]

@@ -1,0 +1,5 @@
+driver B: 9 combos
+RESULT beta=0.15 c=0.38284 m=4 restarts=300(+60 struct) : min_ratio=1.00000233 mean_x=0.617160 time=304s
+  adversary: q=0.0000 | P0: [(np.float64(0.6876), np.float64(0.8976)), (np.float64(0.0), np.float64(0.1018)), (np.float64(0.0), np.float64(0.0003)), (np.float64(0.0), np.float64(0.0003))] | P1: [(np.float64(0.9617), np.float64(0.25)), (np.float64(0.7248), np.float64(0.25)), (np.float64(0.5412), np.float64(0.25)), (np.float64(0.2769), np.float64(0.25))]
+RESULT beta=0.20 c=0.38280 m=4 restarts=300(+60 struct) : min_ratio=0.99213119 mean_x=0.620038 time=378s
+  adversary: q=0.6200 | P0: [(np.float64(0.0001), np.float64(0.25)), (np.float64(0.0001), np.float64(0.25)), (np.float64(0.0001), np.float64(0.25)), (np.float64(0.0001), np.float64(0.25))] | P1: [(np.float64(1.0), np.float64(0.25)), (np.float64(1.0), np.float64(0.25)), (np.float64(1.0), np.float64(0.25)), (np.float64(1.0), np.float64(0.25))]

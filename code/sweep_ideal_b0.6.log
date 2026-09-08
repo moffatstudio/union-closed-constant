@@ -1,0 +1,2 @@
+class ceiling (two-point adversary at x=1/sqrt2): c <= 0.383099
+kernel=ideal lam=1.000 beta=0.600 m=3 : c_max=0.381500  worst adversary: q=0.3818 | P0: [(np.float64(1.0), np.float64(0.3888)), (np.float64(1.0), np.float64(0.4446)), (np.float64(1.0), np.float64(0.1666))] | P1: [(np.float64(0.3967), np.float64(0.0)), (np.float64(0.0), np.float64(0.4053)), (np.float64(0.0015), np.float64(0.5947))]  (469s)

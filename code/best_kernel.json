@@ -1,0 +1,23 @@
+{
+  "status": "no improvement found; search stopped per lead's analytic bound (2026-09-08)",
+  "best_known": {
+    "kernel": "f_ideal(x) = min(x,1-x) for x<=1/2, sqrt(1/2-x^2) for x in [1/2,1/sqrt2], 0 beyond (rank-1, K=f(x)f(y))",
+    "beta": 0.19,
+    "c_max": 0.382885,
+    "source": "lead's sweep (reported live); own numeric check at beta=0.19419 gave c_max=0.382840 with true worst-case ratio 1.000079"
+  },
+  "class_ceiling": 0.3830993,
+  "lead_analytic_bound": {
+    "c_star_star": 0.38288,
+    "beta_star": 0.19,
+    "adversary_1": "mu = q*delta_{x=1} + (1-q)*[(1-d) delta_{x=0} + d delta_{y}], d->0, q=1-c: hides cross pairs inside one mixture component, forcing 2*w_iid*(1-c) >= 1",
+    "adversary_2": "two-point law (x*,0), x*=1/sqrt2: best any protocol can do on the diagonal is h=1/2 relative to h(1/2)"
+  },
+  "search_summary": {
+    "rank1_piecewise_linear_f_17_knots": "double-oracle pipeline validated (reproduces f_ideal's operating point, beta~0.194, c=0.382840); no improvement over baseline",
+    "variance_profile_family": "K(x,y) from nested two-value coupling r_x(u)=1 (u<=t(x)) / lam(x) (u>t(x)), closed form t(x)=v(x)/((1-x)^2+v(x)), lam(x)=x-v(x)/(1-x); exact analytic match to kernel_game.K_new verified (max err 2e-16 off the knot grid). At c=0.38284: beta=0.2 already infeasible in the pool-relaxed check (t*=0.9908); beta pushed toward 1 collapses true worst-case ratio to 0.0019 against the cross-pair-hiding adversary (lead's adversary_1) -- confirms the lead's analytic ceiling from first principles.",
+    "conclusion": "no kernel evaluated in either family exceeded c=0.38289; f_ideal at beta~0.19 (c~0.382885) stands as the best in the conditionally-iid + iid mixture class"
+  },
+  "adversary_pool_file": "kernel_opt_adversary_pool.json",
+  "time": "2026-09-08"
+}

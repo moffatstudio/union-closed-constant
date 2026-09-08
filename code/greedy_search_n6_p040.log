@@ -1,0 +1,8 @@
+greedy n=6 pmax=0.400 restart 2: g=0.34945 p=0.3750 uc=False F=[0, 1, 2, 25, 30, 33, 42, 48]
+greedy n=6 pmax=0.400 restart 3: g=0.30455 p=0.4000 uc=False F=[1, 3, 5, 8, 12, 18, 20, 23, 26, 32, 33, 41, 46, 48, 58]
+greedy n=6 pmax=0.400 restart 7: g=0.19474 p=0.4000 uc=False F=[0, 4, 26, 47, 49]
+greedy n=6 pmax=0.400 restart 30: g=0.06141 p=0.4000 uc=False F=[0, 19, 21, 32, 38]
+greedy n=6 pmax=0.400 restart 279: g=0.01141 p=0.4000 uc=False F=[0, 2, 9, 18, 21, 24, 33, 44, 47, 54]
+greedy n=6 pmax=0.400 restart 2333: g=0.01004 p=0.4000 uc=False F=[0, 1, 3, 8, 14, 15, 32, 33, 38, 60]
+greedy n=6 pmax=0.400 restart 2338: g=-0.03435 p=0.4000 uc=False F=[0, 2, 13, 15, 16, 25, 34, 42, 49, 52]
+DONE greedy n=6 pmax=0.400 restarts=29445 best g=-0.034347 F=[0, 2, 13, 15, 16, 25, 34, 42, 49, 52]

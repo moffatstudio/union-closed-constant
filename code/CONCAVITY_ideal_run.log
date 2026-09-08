@@ -1,0 +1,44 @@
+=== Task 1: reproduce Liu grid check (f_liu, codim-3) ===
+n=2499 grid points; smallest 10 eigenvalues:
+[-1.66865123e-14 -1.66865123e-14 -1.66865123e-14 -1.66865123e-14
+ -1.66865123e-14 -1.66865123e-14 -1.66865123e-14 -1.66865123e-14
+ -1.66865123e-14 -1.66865123e-14]
+=== Task 1b: f_liu, codim-2 (mean-only) ===
+smallest 10 eigenvalues:
+[-5.73549602e+00 -1.90175437e-14 -1.90175437e-14 -1.90175437e-14
+ -1.90175437e-14 -1.90175437e-14 -1.90175437e-14 -1.90175437e-14
+ -1.90175437e-14 -1.90175437e-14]
+[37.2s elapsed]
+=== Task 2: f_ideal, codim-3 (Theorem-12 condition) ===
+smallest 10 eigenvalues:
+[-1.63250898e-03 -2.37633439e-10 -1.76394591e-14 -1.76394591e-14
+ -1.76394591e-14 -1.76394591e-14 -1.76394591e-14 -1.76394591e-14
+ -1.76394591e-14 -1.76394591e-14]
+=== Task 2b: f_ideal, codim-2 (stronger, mean-only) ===
+smallest 10 eigenvalues:
+[-3.59190588e+01 -1.60386621e-03 -2.37634087e-10 -2.23612619e-14
+ -2.23612619e-14 -2.23612619e-14 -2.23612619e-14 -2.23612619e-14
+ -2.23612619e-14 -2.23612619e-14]
+[71.6s elapsed]
+[ideal_full] negative min-eigval=-1.632509e-03; top-|component| x-locations: [0.6988 0.6992 0.6996 0.7    0.7004 0.7008 0.7012 0.7016 0.702  0.7024
+ 0.7028 0.7032 0.7036 0.704  0.7044]
+[ideal_mean_only] negative min-eigval=-3.591906e+01; top-|component| x-locations: [0.0004 0.0008 0.0012 0.0016 0.002  0.0024 0.0028 0.0032 0.0036 0.004
+ 0.0044 0.0048 0.0052 0.0056 0.006 ]
+=== Task 3: smoothed variants ===
+lam=0.9: full-cond smallest6=[-8.14214227e-04 -6.48466911e-10 -1.75636599e-14 -1.75636599e-14
+ -1.75636599e-14 -1.75636599e-14]  mean-only smallest6=[-3.13341005e+01 -7.93879214e-04 -6.47905384e-10 -2.11353039e-14
+ -2.11353039e-14 -2.11353039e-14]
+lam=0.8: full-cond smallest6=[-3.07863057e-04 -1.89758323e-10 -1.76521311e-14 -1.76521311e-14
+ -1.76521311e-14 -1.76521311e-14]  mean-only smallest6=[-2.60772445e+01 -3.03565302e-04 -1.89618041e-10 -1.46431242e-14
+ -1.46431242e-14 -1.46431242e-14]
+C1-smoothed f_ideal: full-cond smallest6=[-1.38534362e-03 -1.04903416e-08 -2.74085829e-13 -1.83346522e-14
+ -1.83346522e-14 -1.83346522e-14]  mean-only smallest6=[-3.64640890e+01 -1.35926124e-03 -1.04846079e-08 -2.74201061e-13
+ -2.11045200e-14 -2.11045200e-14]
+[172.1s elapsed]
+=== Task 4: random-measure concavity sampling ===
+[f_liu] n_valid_pairs=298/300 n_violations=0 worst_gap=4.148116e-10
+[f_ideal] n_valid_pairs=300/300 n_violations=0 worst_gap=1.024174e-08
+[f_ideal_lam0.9] n_valid_pairs=300/300 n_violations=0 worst_gap=2.536270e-09
+[f_ideal_lam0.8] n_valid_pairs=297/300 n_violations=0 worst_gap=3.615099e-08
+[f_ideal_c1] n_valid_pairs=298/300 n_violations=0 worst_gap=4.174181e-07
+DONE [241.2s elapsed]

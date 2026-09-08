@@ -1,0 +1,48 @@
+Running differential_evolution search (coarse dt=0.003)...
+differential_evolution step 1: f(x)= -0.3824918581455881
+differential_evolution step 2: f(x)= -0.3824918581455881
+differential_evolution step 3: f(x)= -0.3824918581455881
+differential_evolution step 4: f(x)= -0.3824918581455881
+differential_evolution step 5: f(x)= -0.3824918581455881
+differential_evolution step 6: f(x)= -0.3824918581455881
+differential_evolution step 7: f(x)= -0.38250585956557265
+differential_evolution step 8: f(x)= -0.38250585956557265
+differential_evolution step 9: f(x)= -0.38253368471429067
+differential_evolution step 10: f(x)= -0.38253368471429067
+differential_evolution step 11: f(x)= -0.38257695451113516
+differential_evolution step 12: f(x)= -0.38257695451113516
+differential_evolution step 13: f(x)= -0.38257695451113516
+differential_evolution step 14: f(x)= -0.38257695451113516
+differential_evolution step 15: f(x)= -0.3825819757455052
+differential_evolution step 16: f(x)= -0.3825852964531376
+differential_evolution step 17: f(x)= -0.38258838819822005
+differential_evolution step 18: f(x)= -0.38258838819822005
+differential_evolution step 19: f(x)= -0.38259439145445795
+differential_evolution step 20: f(x)= -0.38259439145445795
+differential_evolution step 21: f(x)= -0.38259439145445795
+differential_evolution step 22: f(x)= -0.38259439145445795
+differential_evolution step 23: f(x)= -0.38259439145445795
+differential_evolution step 24: f(x)= -0.38259439758372676
+differential_evolution step 25: f(x)= -0.3825957951614735
+differential_evolution step 26: f(x)= -0.3825957951614735
+differential_evolution step 27: f(x)= -0.3825957951614735
+differential_evolution step 28: f(x)= -0.382596226820768
+differential_evolution step 29: f(x)= -0.3825976075867952
+differential_evolution step 30: f(x)= -0.3825976075867952
+differential_evolution step 31: f(x)= -0.3825976075867952
+differential_evolution step 32: f(x)= -0.3825976075867952
+differential_evolution step 33: f(x)= -0.38259774091803495
+differential_evolution step 34: f(x)= -0.38259774091803495
+differential_evolution step 35: f(x)= -0.38259774091803495
+differential_evolution step 36: f(x)= -0.38259793137587866
+differential_evolution step 37: f(x)= -0.38259793137587866
+differential_evolution step 38: f(x)= -0.38259793137587866
+differential_evolution step 39: f(x)= -0.382598271324694
+differential_evolution step 40: f(x)= -0.382598271324694
+DE done in 407.0s, n_evals=2050
+Local polish at dt=0.0015...
+
+Best params: y25=0.16933 y50=0.29495 y707=0.05000 y78=0.11686 y90=0.08095
+c_2pt=0.382885 at x=0.6909
+PSD min eig: dt=0.001 -> -1.721e-06   dt=0.0004 -> -4.304e-06
+n_evals=2355  time=847.4s

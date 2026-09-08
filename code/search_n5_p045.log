@@ -1,0 +1,4 @@
+n=5 pmax=0.450 restart 1: Gmax=0.17881 p=0.4444 uc=False F=[0, 1, 3, 4, 15, 20, 22, 25, 26]
+n=5 pmax=0.450 restart 25: Gmax=0.05983 p=0.4444 uc=False F=[0, 3, 8, 10, 15, 17, 21, 22, 28]
+n=5 pmax=0.450 restart 36: Gmax=0.02525 p=0.4444 uc=False F=[3, 6, 7, 8, 10, 12, 16, 21, 25]
+DONE n=5 pmax=0.450 restarts=13756 best Gmax=0.025248 F=[3, 6, 7, 8, 10, 12, 16, 21, 25]

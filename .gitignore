@@ -1,0 +1,6 @@
+__pycache__/
+*.pyc
+*.pdf
+*.png
+liu_fulltext.txt
+paper/docker_pull.log

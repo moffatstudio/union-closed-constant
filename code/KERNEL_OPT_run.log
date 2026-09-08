@@ -1,0 +1,18 @@
+  certify c=0.382840  pool=24  signed=False rank2=False
+    round 0: pool-relaxed t*=0.960672 beta=0.60000  (19.2s)
+    pool-relaxed bound already < 1 -> infeasible at this c
+  certify c=0.382840  pool=17  signed=False rank2=False
+    round 0: pool-relaxed t*=1.000300 beta=0.60000  (56.3s)
+    round 0: true worst-case ratio=0.496589  (32.0s)  adversary: q=0.6204 | P0: [(np.float64(0.0002), np.float64(0.4183)), (np.float64(0.0001), np.float64(0.226)), (np.float64(0.0001), np.float64(0.3557))] | P1: [(np.float64(1.0), np.float64(0.3457)), (np.float64(1.0), np.float64(0.6543)), (np.float64(0.3559), np.float64(0.0))]
+    round 1: pool-relaxed t*=1.000082 beta=0.19419  (47.2s)
+    round 1: true worst-case ratio=1.000079  (30.6s)  adversary: q=1.0000 | P0: [(np.float64(0.5521), np.float64(0.3846)), (np.float64(0.5989), np.float64(0.1713)), (np.float64(0.6335), np.float64(0.4441))] | P1: [(np.float64(0.6916), np.float64(0.8923)), (np.float64(0.3219), np.float64(0.0)), (np.float64(0.0), np.float64(0.1077))]
+  certify c=0.382840  pool=21  beta in (0.2, 1.0)
+  certify c=0.382840  pool=21  beta in (0.2, 1.0)
+    round 0: pool-relaxed t*=1.000356 beta=0.99848  (48.2s)
+    round 0: pool-relaxed t*=1.000356 beta=0.99848  (49.3s)
+    round 0: true worst-case ratio=0.001884  (62.9s)  adversary: q=0.6192 | P0: [(np.float64(0.3204), np.float64(0.0)), (np.float64(0.0), np.float64(0.5)), (np.float64(0.0), np.float64(0.5))] | P1: [(np.float64(1.0), np.float64(0.158)), (np.float64(1.0), np.float64(0.421)), (np.float64(1.0), np.float64(0.421))]
+    round 0: true worst-case ratio=0.001884  (59.0s)  adversary: q=0.6192 | P0: [(np.float64(0.3204), np.float64(0.0)), (np.float64(0.0), np.float64(0.5)), (np.float64(0.0), np.float64(0.5))] | P1: [(np.float64(1.0), np.float64(0.158)), (np.float64(1.0), np.float64(0.421)), (np.float64(1.0), np.float64(0.421))]
+    round 1: pool-relaxed t*=0.990789 beta=0.20000  (38.9s)
+    pool-relaxed bound already < 1 -> infeasible at this c
+    round 1: pool-relaxed t*=0.990789 beta=0.20000  (43.3s)
+    pool-relaxed bound already < 1 -> infeasible at this c

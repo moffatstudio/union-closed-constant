@@ -160,11 +160,11 @@ Products: immediate for the singleton, for all couplings, and for mixtures of pr
 Suppose \eqref{eq:cert} uses the i.i.d.\ protocol with its singleton class $\{\mu\otimes\mu\}$ and weight $w\in[0,1]$, and that every other class contains the product law and admits hiding. Then
 \begin{align}
 2w(1-c)&\ge1,\label{eq:H}\\
-c&\le1-\frac{x\,\ent(x)}{w\,\ent(x^2)+1-w}\qquad\text{for every }x\in[\tfrac12,\tfrac1{\sqrt2}].\label{eq:D}
+c&\le1-\frac{x\,\ent(x)}{w\,\ent(x^2)+1-w}\qquad\text{for every }x\in[\tfrac12,\tfrac1{\sqrt2}]\text{ with }\ent(x)\le w\,\ent(x^2)+1-w.\label{eq:D}
 \end{align}
 Consequently $c\le c^{**}$, where $c^{**}=0.382885260\ldots$ is the unique solution of $c=G(c)$,
 \begin{equation}\label{eq:G}
-G(c):=\min_{x\in[1/2,1/\sqrt2]}\Big[1-\frac{x\,\ent(x)}{1-(1-\ent(x^2))/(2(1-c))}\Big].
+G(c):=\min_{x\in X_c}\Big[1-\frac{x\,\ent(x)}{1-(1-\ent(x^2))/(2(1-c))}\Big],\qquad X_c:=\Big\{x\in[\tfrac12,\tfrac1{\sqrt2}]:\ent(x)\le1-\tfrac{1-\ent(x^2)}{2(1-c)}\Big\}.
 \end{equation}
 \end{theorem}
 \begin{proof}
@@ -174,7 +174,7 @@ For the i.i.d.\ term, whose class is the singleton $\{\mu_\delta\otimes\mu_\delt
 \[\text{LHS of \eqref{eq:cert}}\le w\big[2q(1-q)\delta\,\ent(y)+(1-q)^2\delta^2\ent(y^2)\big]+(1-w)\,\delta^2 .\]
 Dividing by $\E_{\mu_\delta}\ent(X)=(1-q)\delta\,\ent(y)$ and letting $\delta\to0$, \eqref{eq:cert} forces $2wq\ge C>1$. Hence $2w(1-c)\ge1$ is necessary: if $2w(1-c)<1$, then \eqref{eq:cert} fails at $\mu_\delta$ for all small $\delta$.
 
-\emph{Inequality \eqref{eq:D}.} Fix $x\in[\frac12,\frac1{\sqrt2}]$ and let $\mu=p\,\delta_x+(1-p)\,\delta_0$. Present the product law to every class. The i.i.d.\ term equals $p^2\,\ent(x^2)$ and every other term is at most $p^2$, so \eqref{eq:cert} forces $p\,(w\,\ent(x^2)+1-w)\ge C\,\ent(x)>\ent(x)$. If $c>1-x\,\ent(x)/(w\,\ent(x^2)+1-w)$ then $p:=\ent(x)/(w\,\ent(x^2)+1-w)$ has $px>1-c$, so $p$ can be decreased slightly, keeping $\E_\mu[X]=px\ge1-c$, to a law violating \eqref{eq:cert}. This proves \eqref{eq:D}.
+\emph{Inequality \eqref{eq:D}.} Fix $x\in[\frac12,\frac1{\sqrt2}]$ with $\ent(x)\le w\,\ent(x^2)+1-w$, so that $p:=\ent(x)/(w\,\ent(x^2)+1-w)\in(0,1]$, and let $\mu_p=p\,\delta_x+(1-p)\,\delta_0$. Present the product law to every class. The i.i.d.\ term equals $p^2\,\ent(x^2)$ and every other term is at most $p^2$, so \eqref{eq:cert} at $\mu_p$ forces $p\,(w\,\ent(x^2)+1-w)\ge C\,\ent(x)>\ent(x)$, which fails at the chosen $p$ and at every slightly smaller $p$. If $c>1-x\,\ent(x)/(w\,\ent(x^2)+1-w)$ then $px>1-c$, so a slightly smaller $p$ still has $\E_{\mu_p}[X]=px\ge1-c$ and gives a law violating \eqref{eq:cert}. This proves \eqref{eq:D}. (The condition on $x$ holds at the binding point below, and restricting to it does not change the value of $c^{**}$.)
 
 \emph{The fixed point.} The right side of \eqref{eq:D} is decreasing in $w$, because its denominator $1-w(1-\ent(x^2))$ is decreasing in $w$ and $\ent(x^2)\le1$. By \eqref{eq:H}, $w\ge w_0(c):=1/(2(1-c))$; substituting $w_0(c)$ into \eqref{eq:D} and minimising over $x$ gives $c\le G(c)$. Since $w_0$ is increasing in $c$, $G$ is decreasing in $c$, so $c\mapsto c-G(c)$ is strictly increasing on $(0,\frac12)$ and $\{c:c\le G(c)\}=(0,c^{**}]$ with $c^{**}$ the unique root of $c=G(c)$. Its numerical value is computed in Appendix~\ref{app:const}.
 \end{proof}
@@ -250,7 +250,7 @@ Fix $q$, and fix the values $\int x\,dP_j$, $\int g_2\,dP_j$, $\int g_3\,dP_j$ f
 \begin{lemma}[small-entropy regime]\label{lem:small}
 Let $\mu$ be a law on $[0,1]$ with $\E_\mu[X]\ge1-c$ and $\E_\mu[\ent(X)]>0$, and let $\eta\in(0,\frac14]$. Then for every $q,P_0,P_1$ with marginal $\mu$,
 \[\frac{w\iint\ent(xy)\,d\mu\,d\mu+(1-w)\big[(1-q)J(P_0)+qJ(P_1)\big]}{\E_{\mu}\ent(X)}\;\ge\;2w\,\kappa(\eta)\Big(1-c-\eta-\frac{\E_\mu\ent(X)}{\ent(\eta)}\Big),\qquad\kappa(\eta):=(1-\eta)\Big(1-\frac2{\log_2(1/\eta)}\Big).\]
-In particular, for $w=0.810222$ and $c=0.38284$, taking $\eta=10^{-4}$ gives a ratio of at least $1.048$ whenever $\E_\mu\ent(X)\le10^{-7}$, and letting $\eta\to0$ gives $\liminf\ge2w(1-c)$ along any sequence with $\E_\mu\ent(X)\to0$.
+Consequently $\liminf R\ge2w(1-c)$ along any sequence of laws with $\E_\mu\ent(X)\to0$. The bound is not uniform enough to replace the computation near the hiding laws: since $\kappa(\eta)<1$ and $2w(1-c)=1.000073$ exceeds $C=1.00005$ by only $2.3\cdot10^{-5}$, no admissible $\eta$ makes the right-hand side exceed $C$. The loss is in Claim~2 below, which charges $2(t+t')$ for a pair of atoms at distances $t,t'$ from $1$, whereas the true loss is $(t+t')\ent(t/(t+t'))\le2\sqrt{tt'}$; a sharp version is left open.
 \end{lemma}
 \begin{proof}
 The kernel term is non-negative, so it suffices to show $\iint\ent(xy)\,d\mu\,d\mu\ge2\kappa(\eta)(1-c-\eta-\E_\mu\ent(X)/\ent(\eta))\,\E_\mu\ent(X)$. Split $[0,1]$ into $L=[0,\eta)$, $M=[\eta,1-\eta]$, $T=(1-\eta,1]$; write $a=\mu(T)$, $m=\mu(M)$. Since $\ent\ge\ent(\eta)$ on $M$, $m\le\E_\mu\ent(X)/\ent(\eta)$. Since $\E_\mu[X]\le\eta\mu(L)+m+a$, we get $a\ge1-c-\eta-m$.
@@ -261,7 +261,7 @@ The kernel term is non-negative, so it suffices to show $\iint\ent(xy)\,d\mu\,d\
 
 Writing $\kappa=(1-\eta)(1-2/\log_2(1/\eta))$ and using Claim~2 on $T\times T$ and Claim~1 on $T\times T^c$ and $T^c\times T$,
 \[\iint\ent(xy)\,d\mu\,d\mu\;\ge\;\kappa\cdot2a\int_T\ent\,d\mu+2a(1-\eta)\int_{T^c}\ent\,d\mu\;\ge\;2a\kappa\,\E_\mu\ent(X),\]
-and $a\ge1-c-\eta-m\ge1-c-\eta-\E_\mu\ent(X)/\ent(\eta)$. The numerical instance is $2\cdot0.810222\cdot\kappa(10^{-4})\cdot(1-0.38284-10^{-4}-10^{-7}/\ent(10^{-4}))=1.0481$.
+and $a\ge1-c-\eta-m\ge1-c-\eta-\E_\mu\ent(X)/\ent(\eta)$.
 \end{proof}
 
 \section{Numerical certification and the main theorem}\label{sec:numerics}
@@ -269,7 +269,7 @@ By Proposition~\ref{prop:atoms}, certifying $\Phi_C\ge0$ reduces, under Hypothes
 \begin{equation}\label{eq:ratio}
 R(q,P_0,P_1):=\frac{w\iint\ent(xy)\,d\mu\,d\mu+(1-w)\big[(1-q)J(P_0)+qJ(P_1)\big]}{\int\ent\,d\mu}
 \end{equation}
-(so $\Phi_C\ge0$ iff $R\ge C$ whenever $\int\ent\,d\mu>0$) with sequential least-squares programming from $300$--$500$ random starting points per run, together with structured starting points: two-point laws $p\,\delta_x+(1-p)\delta_0$ for $x\in[0.6,0.75]$; the hiding laws \eqref{eq:mudelta} with $\delta\in\{10^{-2},10^{-3},10^{-4}\}$; the extremal laws of Cambie and Liu; and combinations of the two-point and hiding laws. Because the infimum along the hiding family is approached only as $\delta\to0$, where the denominator of $R$ vanishes, that family was evaluated in closed form (Proposition~\ref{prop:twoadv}(b)), and the optimiser was run with the additional constraint $\int\ent\,d\mu\ge\eta_0$ for $\eta_0=10^{-3},10^{-4},10^{-5},10^{-6},10^{-7}$; below $10^{-7}$, Lemma~\ref{lem:small} gives $R\ge1.048$ unconditionally. The atom budget was also increased to five and six per law as a check. The computation was implemented independently twice (the second time from the statement alone, without access to the first implementation), and the evaluator reproduces Liu's optimum for his kernel to nine digits: $R=1.000000000$ at his $(c',w)$, attained at his minimiser $q=0$, $P_0=0.8936\,\delta_{0.6908}+0.1064\,\delta_0$.
+(so $\Phi_C\ge0$ iff $R\ge C$ whenever $\int\ent\,d\mu>0$) with sequential least-squares programming from $300$--$500$ random starting points per run, together with structured starting points: two-point laws $p\,\delta_x+(1-p)\delta_0$ for $x\in[0.6,0.75]$; the hiding laws \eqref{eq:mudelta} with $\delta\in\{10^{-2},10^{-3},10^{-4}\}$; the extremal laws of Cambie and Liu; and combinations of the two-point and hiding laws. Because the infimum along the hiding family is approached only as $\delta\to0$, where the denominator of $R$ vanishes, that family was evaluated in closed form (Proposition~\ref{prop:twoadv}(b)), and the optimiser was run with the additional constraint $\int\ent\,d\mu\ge\eta_0$ for $\eta_0=10^{-3},10^{-4},10^{-5},10^{-6},10^{-7}$, always with the same minimum and minimiser. The atom budget was also increased to five and six per law as a check. The computation was implemented independently twice (the second time from the statement alone, without access to the first implementation), and the evaluator reproduces Liu's optimum for his kernel to nine digits: $R=1.000000000$ at his $(c',w)$, attained at his minimiser $q=0$, $P_0=0.8936\,\delta_{0.6908}+0.1064\,\delta_0$.
 
 \begin{table}[h]\centering\footnotesize
 \begin{tabular}{lcrr}\toprule
@@ -284,15 +284,15 @@ two-point/hiding combinations, seeded & 4 & 1.0000733 & ---\\\bottomrule
 \end{table}
 
 \begin{hypothesis}[global minimum]\label{hyp:global}
-For $w=0.810222$ and $c=0.38284$, the infimum of $R$ over $q\in[0,1]$ and laws $P_0,P_1$ with at most four atoms each, $\E_\mu[X]\ge1-c$ and $\int\ent\,d\mu\ge10^{-7}$, is $1.0000733$, attained at the two-point law of Table~\ref{tab:cert}.
+For $w=0.810222$ and $c=0.38284$, the infimum of $R$ over $q\in[0,1]$ and laws $P_0,P_1$ with at most four atoms each, $\E_\mu[X]\ge1-c$ and $\int\ent\,d\mu>0$, is $1.0000733$, attained at the two-point law of Table~\ref{tab:cert}; in particular $R\ge C=1.00005$ on this set.
 \end{hypothesis}
-Hypothesis~\ref{hyp:global} is supported by Table~\ref{tab:cert} and by the same minima with the floor lowered to $10^{-7}$ (in every case the same minimiser and the same value). The complementary region $\int\ent\,d\mu<10^{-7}$ is covered unconditionally by Lemma~\ref{lem:small}. The hypothesis plays the role of the ``global minimiser structure'' hypothesis in \cite[Theorem~13]{Liu}.
+Hypothesis~\ref{hyp:global} is supported by Table~\ref{tab:cert}, by the same minima with the floor lowered to $10^{-7}$ (in every case the same minimiser and the same value), by the closed-form evaluation of the hiding family, whose ratio decreases to $2w(1-c)=1.000073>C$, and, for the limit $\int\ent\,d\mu\to0$, by Lemma~\ref{lem:small}. The region of very small entropy is the one part of the hypothesis that the computation cannot exhaust, because the infimum there is approached rather than attained; it has the same status as the corresponding limit in \cite[Lemma~7 and Theorem~13]{Liu}, whose search used no entropy floor. The hypothesis plays the role of the ``global minimiser structure'' hypothesis in \cite[Theorem~13]{Liu}.
 
 \begin{theorem}\label{thm:main}
 Assume Hypotheses~\ref{hyp:inertia} and~\ref{hyp:global}. Then the certificate \eqref{eq:cert} holds for $w\Pi^{\iid}+(1-w)\Pi^{\id}$ with $w=0.810222$, $c=0.38284$ and $C=1.00005$; consequently every finite union-closed family $\F\ne\{\emptyset\}$ has an element contained in at least $0.38284\,|\F|$ of its members. The same computation with $w$ chosen as in Proposition~\ref{prop:twoadv}(c) certifies every $c<c^{**}=0.382885$.
 \end{theorem}
 \begin{proof}
-Let $\mu$ have $\E_\mu[X]\ge1-c$ and let $P\in\cC_3(\mu)$. By Liu's Theorem~9 we may assume $P$ is of the form \eqref{eq:twoprod}. If $\int\ent\,d\mu=0$ both sides of \eqref{eq:cert} vanish. If $0<\int\ent\,d\mu<10^{-7}$, Lemma~\ref{lem:small} gives $R\ge1.048>C$. Otherwise, by Proposition~\ref{prop:atoms} (with $C=1.00005$), $\Phi_C(q,P_0,P_1)\ge\Phi_C(q,P_0',P_1')$ for some pair $(P_0',P_1')$ with at most four atoms each on the same slice (so with the same $\E_\mu[X]$). If $\int\ent\,d\mu'\ge10^{-7}$, Hypothesis~\ref{hyp:global} gives $R\ge1.0000733>C$, so $\Phi_C(q,P_0',P_1')\ge0$; if $0<\int\ent\,d\mu'<10^{-7}$, Lemma~\ref{lem:small} gives $R\ge1.048>C$ and again $\Phi_C\ge0$; if $\int\ent\,d\mu'=0$ then $\Phi_C(q,P_0',P_1')\ge0$ trivially. Proposition~\ref{prop:cert} concludes. The final sentence follows from Proposition~\ref{prop:twoadv}(c) and the same computation.
+Let $\mu$ have $\E_\mu[X]\ge1-c$ and let $P\in\cC_3(\mu)$. By Liu's Theorem~9 we may assume $P$ is of the form \eqref{eq:twoprod}. If $\int\ent\,d\mu=0$ both sides of \eqref{eq:cert} vanish. Otherwise, by Proposition~\ref{prop:atoms} (with $C=1.00005$), $\Phi_C(q,P_0,P_1)\ge\Phi_C(q,P_0',P_1')$ for some pair $(P_0',P_1')$ with at most four atoms each on the same slice (so with the same $\E_\mu[X]$). If $\int\ent\,d\mu'>0$, Hypothesis~\ref{hyp:global} gives $R\ge C$ there, so $\Phi_C(q,P_0',P_1')\ge0$; if $\int\ent\,d\mu'=0$ then $\Phi_C(q,P_0',P_1')\ge0$ trivially. Proposition~\ref{prop:cert} concludes. The final sentence follows from Proposition~\ref{prop:twoadv}(c) and the same computation.
 \end{proof}
 
 \begin{remark}

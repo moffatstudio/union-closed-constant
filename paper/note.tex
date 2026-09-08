@@ -120,14 +120,14 @@ Under Hypotheses~\ref{hyp:inertia} and \ref{hyp:global}, \eqref{eq:cert} holds w
 
 The certification table (minimum ratio found for each atom budget) is given in Section~\ref{sec:repro}.
 
-\begin{table}[h]\centering
-\begin{tabular}{llrr}\toprule
-adversary family & atom budget per component & $c=0.38284$ & $c=0.38288$\\midrule
-non-degenerate ($\E_\mu\ent(X)\ge10^{-3}$), 300--500 restarts & 4 & 1.0000733 & 1.0000085\
- & 5 & 1.0000733 & 1.0000085\
- & 6 & 1.0000733 & 1.0000085\
-hiding family $\mu_\delta$, $\delta\in\{10^{-2},\dots,10^{-6}\}$, $y\in\{0.05,0.2,0.5,0.7\}$ & exact & $\ge1.000073$ & ---\
-mixed laws (two-point $+$ tiny atom), seeded & 4 & 1.0000733 & ---\\bottomrule
+\begin{table}[h]\centering\small
+\begin{tabular}{lcrr}\toprule
+adversary family & atoms/component & $c=0.38284$ & $c=0.38288$\\\midrule
+non-degenerate ($\E_\mu\ent(X)\ge10^{-3}$), 300--500 restarts & 4 & 1.0000733 & 1.0000085\\
+ & 5 & 1.0000733 & 1.0000085\\
+ & 6 & 1.0000733 & 1.0000085\\
+hiding family $\mu_\delta$, $\delta\le10^{-2}$, $y\in\{0.05,0.2,0.5,0.7\}$ & exact & $\ge1.000073$ & ---\\
+mixed laws (two-point $+$ tiny atom), seeded & 4 & 1.0000733 & ---\\\bottomrule
 \end{tabular}
 \caption{Minimum of the ratio in Hypothesis~\ref{hyp:global} at $w=0.810222$ ($\beta=0.189778$). Every minimiser found is the two-point law $0.893\,\delta_{0.6909}+0.107\,\delta_0$ with $q\in\{0,1\}$; the hiding family converges to its limit $2w(1-c)=1.000073$ from above.}
 \end{table}

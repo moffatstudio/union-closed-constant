@@ -1,0 +1,10 @@
+maximal correlation of the hiding coupling (should -> 0):
+  delta=0.1  rho_m=0.291554
+  delta=0.01  rho_m=0.081192
+  delta=0.001  rho_m=0.025057
+  delta=0.0001  rho_m=0.007876
+  delta=1e-06  rho_m=0.000786
+limit 2w(1-c) = 1.00007321904
+floor=0.0001 : min ratio=1.00007334  E_h=5.52e-01  q=0.0000 | P0: [(np.float64(0.6909), np.float64(0.8933)), (np.float64(0.0), np.float64(0.1067)), (np.float64(0.0), np.float64(0.0)), (np.float64(0.0), np.float64(0.0))] | P1: [(np.float64(0.6628), np.float64(0.25)), (np.float64(0.2753), np.float64(0.25)), (np.float64(0.138), np.float64(0.25)), (np.float64(0.788), np.float64(0.25))]  (158s)
+floor=1e-05 : min ratio=1.00007334  E_h=5.52e-01  q=0.0000 | P0: [(np.float64(0.6909), np.float64(0.8933)), (np.float64(0.0), np.float64(0.1067)), (np.float64(0.0008), np.float64(0.0)), (np.float64(0.0008), np.float64(0.0))] | P1: [(np.float64(0.1479), np.float64(0.25)), (np.float64(0.9282), np.float64(0.25)), (np.float64(0.0704), np.float64(0.25)), (np.float64(0.1298), np.float64(0.25))]  (154s)
+floor=1e-06 : min ratio=1.00007334  E_h=5.52e-01  q=0.0000 | P0: [(np.float64(0.6909), np.float64(0.6001)), (np.float64(0.3161), np.float64(0.0)), (np.float64(0.0), np.float64(0.1067)), (np.float64(0.6909), np.float64(0.2931))] | P1: [(np.float64(0.5047), np.float64(0.3021)), (np.float64(0.6034), np.float64(0.0618)), (np.float64(0.6447), np.float64(0.3366)), (np.float64(0.7015), np.float64(0.2995))]  (153s)

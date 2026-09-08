@@ -4,6 +4,7 @@
 \usepackage{booktabs}
 \usepackage{microtype}
 \usepackage[hidelinks]{hyperref}
+\emergencystretch=1.5em
 \newtheorem{theorem}{Theorem}[section]
 \newtheorem{lemma}[theorem]{Lemma}
 \newtheorem{proposition}[theorem]{Proposition}
@@ -46,7 +47,7 @@ A family $\F$ of finite sets is \emph{union-closed} if $A\cup B\in\F$ whenever $
 In November 2022 Gilmer \cite{Gilmer} proved $c_0\ge0.01$ by an entropy argument, the first constant lower bound. Within days Alweiss, Huang and Sellke \cite{AHS}, Chase and Lovett \cite{CL}, Sawin \cite{Sawin} and Pebody \cite{Pebody} sharpened the argument to $c_0\ge\psi:=(3-\sqrt5)/2=0.381966\ldots$; Chase and Lovett showed that $\psi$ is the correct constant for the \emph{approximate} version of the conjecture, in which $A\cup B\in\F$ is only required for most pairs. Sawin proposed coupling the two random sets in Gilmer's argument; Yu \cite{Yu} and Cambie \cite{Cambie} carried this out, and Cambie proved that Sawin's coupling gives exactly $0.3823455\ldots$. Liu \cite{Liu} introduced \emph{conditionally i.i.d.} couplings and obtained $c_0\ge0.382709$, conditional on two numerically verified hypotheses. Table~\ref{tab:history} summarises the record.
 
 \begin{table}[h]\centering\small
-\begin{tabular}{llp{6.3cm}}\toprule
+\begin{tabular}{llp{5.6cm}}\toprule
 lower bound on $c_0$ & reference & mechanism\\\midrule
 $0.01$ & Gilmer \cite{Gilmer} & entropy of the union of two independent samples\\
 $(3-\sqrt5)/2=0.381966$ & \cite{AHS,CL,Sawin,Pebody} & sharp form of the same inequality; optimal for approximate closure\\
@@ -85,8 +86,10 @@ For a prefix $a\in\{0,1\}^{i-1}$ with $\Prob(A_{<i}=a)>0$ write
 \[x_i(a):=\Prob(A_i=0\mid A_{<i}=a)\in[0,1]\]
 for the conditional \emph{zero}-probability. By the chain rule and the fact that $(A\cup B)_{<i}$ is a function of $(A_{<i},B_{<i})$,
 \begin{equation}\label{eq:chain}
-H(A\cup B)=\sum_{i=1}^nH\big((A\cup B)_i\mid(A\cup B)_{<i}\big)\;\ge\;\sum_{i=1}^nH\big((A\cup B)_i\mid A_{<i},B_{<i}\big),\qquad
-H(A)=\sum_{i=1}^n\E\,\ent\big(x_i(A_{<i})\big).
+\begin{aligned}
+H(A\cup B)&=\sum_{i=1}^nH\big((A\cup B)_i\mid(A\cup B)_{<i}\big)\;\ge\;\sum_{i=1}^nH\big((A\cup B)_i\mid A_{<i},B_{<i}\big),\\
+H(A)&=\sum_{i=1}^n\E\,\ent\big(x_i(A_{<i})\big).
+\end{aligned}
 \end{equation}
 Conditionally on $(A_{<i},B_{<i})=(a,b)$ the bit $(A\cup B)_i$ is Bernoulli with $\Prob((A\cup B)_i=0\mid a,b)=\Prob(A_i=0,B_i=0\mid a,b)$, so the $i$-th summand on the left is $\E\,\ent(\Prob(A_i=B_i=0\mid A_{<i},B_{<i}))$. Gilmer takes $B$ independent of $A$, so that $\Prob(A_i=B_i=0\mid a,b)=x_i(a)x_i(b)$, and proves an inequality of the form $\E\,\ent(XY)\ge\E\,\ent(X)$ for i.i.d.\ $X,Y$ with $\E X$ large; the sharp version \cite{AHS,CL,Sawin,Pebody} is $\ent(xy)\ge\frac{\varphi}2\,(x\ent(y)+y\ent(x))$ with $\varphi=(1+\sqrt5)/2$, tight at $x=y=1/\varphi$, which gives $\E\,\ent(XY)\ge\varphi\,\E[X]\,\E\,\ent(X)\ge\E\,\ent(X)$ whenever $\E X\ge1/\varphi$, i.e.\ whenever every element has frequency at most $1-1/\varphi=\psi$.
 
@@ -118,7 +121,7 @@ The four protocol/class pairs used so far are the following; here and below $\mu
 \begin{equation}\label{eq:kernel}
 \Pi_{x,y}(0,0)=\int_0^1r_x(u)r_y(u)\,du=xy+K(x,y),\qquad K(x,y)=\Cov(r_x,r_y),
 \end{equation}
-where $K$ is a positive semidefinite kernel; class $\cC_3(\mu)$: the closed convex hull of product laws $\nu\otimes\nu$ with $\int\nu(d\nu')$ ranging so that the marginal is $\mu$, i.e.\ mixtures of products with marginal $\mu$ \cite{Liu}. Liu's Theorem~9 shows that for every conditionally-i.i.d.\ protocol the infimum in \eqref{eq:cert} over $\cC_3(\mu)$ is attained at a mixture of two products,
+where $K$ is a positive semidefinite kernel; class $\cC_3(\mu)$: the laws $\int\nu\otimes\nu\,d\pi(\nu)$, mixtures of product laws over a probability measure $\pi$ on laws $\nu$ on $[0,1]$, whose marginal $\int\nu\,d\pi(\nu)$ equals $\mu$ \cite{Liu}. Liu's Theorem~9 shows that for every conditionally-i.i.d.\ protocol the infimum in \eqref{eq:cert} over $\cC_3(\mu)$ is attained at a mixture of two products,
 \begin{equation}\label{eq:twoprod}
 P=(1-q)\,P_0\otimes P_0+q\,P_1\otimes P_1,\qquad\mu=(1-q)P_0+qP_1,\qquad q\in[0,1].
 \end{equation}
@@ -266,7 +269,7 @@ R(q,P_0,P_1):=\frac{w\iint\ent(xy)\,d\mu\,d\mu+(1-w)\big[(1-q)J(P_0)+qJ(P_1)\big
 \end{equation}
 (so $\Phi_C\ge0$ iff $R\ge C$ whenever $\int\ent\,d\mu>0$) with sequential least-squares programming from $300$--$500$ random starting points per run, together with structured starting points: two-point laws $p\,\delta_x+(1-p)\delta_0$ for $x\in[0.6,0.75]$; the hiding laws \eqref{eq:mudelta} with $\delta\in\{10^{-2},10^{-3},10^{-4}\}$; the extremal laws of Cambie and Liu; and combinations of the two-point and hiding laws. Because the infimum along the hiding family is approached only as $\delta\to0$, where the denominator of $R$ vanishes, that family was evaluated in closed form (Proposition~\ref{prop:twoadv}(b)), and the optimiser was run with the additional constraint $\int\ent\,d\mu\ge\eta_0$ for $\eta_0=10^{-3},10^{-4},10^{-5},10^{-6}$. The atom budget was also increased to five and six per law as a check. The computation was implemented independently twice (the second time from the statement alone, without access to the first implementation), and the evaluator reproduces Liu's optimum for his kernel to nine digits: $R=1.000000000$ at his $(c',w)$, attained at his minimiser $q=0$, $P_0=0.8936\,\delta_{0.6908}+0.1064\,\delta_0$.
 
-\begin{table}[h]\centering\small
+\begin{table}[h]\centering\footnotesize
 \begin{tabular}{lcrr}\toprule
 adversary family & atoms per law & $c=0.38284$ & $c=0.38288$\\\midrule
 all laws, $\int\ent\,d\mu\ge10^{-3}$, 300--500 starts & 4 & 1.0000733 & 1.0000085\\

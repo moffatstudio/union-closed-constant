@@ -59,3 +59,11 @@ Scout reports archived in `literature/scouts/`.
 - 2026-09-08 17:30 — **CERTIFIED.** At β**=0.189778: non-degenerate search m=4,5,6 (300–500 restarts) min ratio 1.0000733 (c=0.38284),
   1.0000085 (c=0.38288); hiding family ≥ 1.000073 (limit from above); mixed laws 1.0000733. Headline: c ≥ 0.38284 at Liu-level rigor
   (sup 0.382885). arXiv note drafted: paper/note.tex (tex only; no LaTeX on this machine, Docker declined by user).
+- 2026-09-08 18:30 — **Publication draft finalised.** paper/paper.tex (12 pp, compiled with Tectonic → paper/paper.pdf). Four referee rounds by a
+  fresh Opus agent (C:	mpeferee\REFEREE{,2,3,4}.md): round 1 found 4 errors/4 gaps (hiding definition needed P(y,y) ≤ δ²; 2x² slip;
+  Liu-diagonal remark; stale β=0.19 claims; singleton-class hypothesis; (D) range), round 2 found my small-entropy lemma's numerical
+  instance dropped the factor w (withdrawn; region back in the numerical hypothesis, = Liu's status), round 3 four statement-precision
+  gaps, round 4: **no ERROR, no GAP**; referee reproduced c**, both table columns, Liu to 13 digits, inertia k=2 on 11 grids.
+  Independent re-certification (fresh Opus agent, own evaluator from the note alone): calibration on Liu passes, 4-atom min 1.00007334
+  at the two-point law, hiding limit 1.000073219 from above, fixed point c**=0.382885260 — no discrepancy (5/6-atom runs in flight).
+  Repo: https://github.com/moffatstudio/union-closed-constant (private). Open: sharp small-entropy lemma (lemma-prover agent).

@@ -1,0 +1,364 @@
+\documentclass[11pt,a4paper]{article}
+\usepackage[margin=1.05in]{geometry}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{booktabs}
+\usepackage{microtype}
+\usepackage[hidelinks]{hyperref}
+\emergencystretch=1.5em
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{corollary}[theorem]{Corollary}
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+\newtheorem{hypothesis}[theorem]{Hypothesis}
+\theoremstyle{remark}
+\newtheorem{remark}[theorem]{Remark}
+\newcommand{\E}{\mathbb{E}}
+\newcommand{\Prob}{\mathbb{P}}
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\F}{\mathcal{F}}
+\newcommand{\cC}{\mathcal{C}}
+\newcommand{\cM}{\mathcal{M}}
+\newcommand{\ent}{h}
+\newcommand{\iid}{\mathrm{iid}}
+\newcommand{\id}{\mathrm{id}}
+\DeclareMathOperator{\Cov}{Cov}
+\DeclareMathOperator{\Var}{Var}
+\DeclareMathOperator{\supp}{supp}
+
+\title{The ceiling of the single-letter entropy method for the union-closed sets conjecture, and a protocol that reaches it}
+\author{Andrew Moffat\thanks{Moffat Studio, United Kingdom. Email: \texttt{andrewmoffat.business@gmail.com}.}}
+\date{8 September 2026}
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+Gilmer's entropy method for Frankl's union-closed sets conjecture, in the form developed by Sawin, Yu, Cambie and Liu, certifies a constant $c$ (some element lies in at least $c|\F|$ members of every union-closed family $\F$) through a single-letter inequality. The inequality involves a \emph{protocol}, a memoryless rule that couples the two conditional bits, and a \emph{class} of admissible joint laws of the two prefix-conditional probabilities. We prove that every such certificate whose classes contain product laws is bounded by $1-\ent(1/\sqrt2)/\sqrt2=0.383099\ldots$, and that every certificate which uses the i.i.d.\ protocol and whose other classes admit \emph{component hiding} (a property of every class in the literature) is bounded by $c^{**}=0.382885260\ldots$, the joint solution of two explicit adversarial laws. We then construct a conditionally-i.i.d.\ protocol whose kernel has the optimal diagonal and show, by a computer-assisted argument of the type used for the previous record $0.382709$ of Liu, with the small-entropy regime handled by a new analytic bound, that it certifies $c=0.38284$, and, under the analogous hypothesis at each weight, every $c<c^{**}$. The improvement is small, $+1.8\cdot10^{-4}$, and the second theorem shows that it is the last one available to this family of arguments.
+\end{abstract}
+
+\noindent\textit{2020 Mathematics Subject Classification.} Primary 05D05; Secondary 94A17, 60E15.\\
+\textit{Keywords.} Union-closed sets conjecture, Frankl's conjecture, entropy method, coupling, maximal correlation.
+
+\section{Introduction}\label{sec:intro}
+A family $\F$ of finite sets is \emph{union-closed} if $A\cup B\in\F$ whenever $A,B\in\F$. Frankl's conjecture \cite{Frankl,BruhnSchaudt} asserts that if $\F$ is a finite union-closed family other than $\{\emptyset\}$, then some element belongs to at least half of the members of $\F$. Write $c(\F)$ for the largest fraction $|\{A\in\F:i\in A\}|/|\F|$ over elements $i$, and let $c_0$ be the largest constant such that $c(\F)\ge c_0$ for all such $\F$; the conjecture is $c_0=\tfrac12$, and the family $\{\emptyset,\{1\}\}$ shows $c_0\le\tfrac12$.
+
+In November 2022 Gilmer \cite{Gilmer} proved $c_0\ge0.01$ by an entropy argument, the first constant lower bound. Within days Alweiss, Huang and Sellke \cite{AHS}, Chase and Lovett \cite{CL}, Sawin \cite{Sawin} and Pebody \cite{Pebody} sharpened the argument to $c_0\ge\psi:=(3-\sqrt5)/2=0.381966\ldots$; Chase and Lovett showed that $\psi$ is the correct constant for the \emph{approximate} version of the conjecture, in which $A\cup B\in\F$ is only required for most pairs. Sawin proposed coupling the two random sets in Gilmer's argument; Yu \cite{Yu} and Cambie \cite{Cambie} carried this out, and Cambie proved that Sawin's coupling gives exactly $0.3823455\ldots$. Liu \cite{Liu} introduced \emph{conditionally i.i.d.} couplings and obtained $c_0\ge0.382709$, conditional on two numerically verified hypotheses. Table~\ref{tab:history} summarises the record.
+
+\begin{table}[h]\centering\small
+\begin{tabular}{llp{5.6cm}}\toprule
+lower bound on $c_0$ & reference & mechanism\\\midrule
+$0.01$ & Gilmer \cite{Gilmer} & entropy of the union of two independent samples\\
+$(3-\sqrt5)/2=0.381966$ & \cite{AHS,CL,Sawin,Pebody} & sharp form of the same inequality; optimal for approximate closure\\
+$0.3823455$ & Sawin \cite{Sawin}, Yu \cite{Yu}, Cambie \cite{Cambie} & anti-correlated coupling; exact value by Cambie\\
+$0.382709$ & Liu \cite{Liu} & conditionally-i.i.d.\ coupling (computer-assisted)\\
+$0.38284$, and $c<0.382885$ & this paper & optimal-diagonal conditionally-i.i.d.\ protocol (computer-assisted)\\\bottomrule
+\end{tabular}
+\caption{Lower bounds on the union-closed constant.}\label{tab:history}
+\end{table}
+
+All of these arguments have the same shape, made explicit by Liu \cite[Definition~1, Proposition~3]{Liu}: a protocol, a class of admissible couplings, and a single-letter inequality (see Section~\ref{sec:framework}). Our first contribution is to determine the supremum of the constants that this framework can certify.
+
+\begin{theorem}[informal; Theorems~\ref{thm:ceil} and~\ref{thm:refined}]\label{thm:A}
+Every single-letter certificate whose classes contain product laws certifies at most $1-\ent(1/\sqrt2)/\sqrt2=0.383099\ldots$. Every single-letter certificate that uses the i.i.d.\ protocol and whose other classes admit component hiding certifies at most $c^{**}=0.382885260\ldots$. All classes used in \cite{Gilmer,AHS,CL,Sawin,Pebody,Yu,Cambie,Liu} contain product laws and admit hiding.
+\end{theorem}
+
+Our second contribution is a protocol that reaches this ceiling. Write $x=\Prob(\text{bit}=0)$ for a conditional zero-probability.
+
+\begin{theorem}[informal; Theorem~\ref{thm:main}]\label{thm:B}
+Let $f(x)=\min(x,1-x)$ for $x\le\frac12$, $f(x)=\sqrt{\frac12-x^2}$ for $\frac12\le x\le\frac1{\sqrt2}$ and $f(x)=0$ otherwise, and let $\Pi^{\id}$ be the conditionally-i.i.d.\ protocol with $\Prob(\text{both bits }0)=xy+f(x)f(y)$. Under two numerically verified hypotheses of the same kind as those in \cite{Liu}, the mixture of the i.i.d.\ protocol with weight $w=0.810222$ and $\Pi^{\id}$ with weight $1-w$ certifies $c_0\ge0.38284$; letting $w$ increase to the value forced by Theorem~\ref{thm:A}, the same computation, under the analogous hypothesis at each weight, certifies every $c<c^{**}$.
+\end{theorem}
+
+The proofs of the ceiling theorems are short and elementary: two explicit families of laws of the conditional probabilities defeat every protocol. The first, a two-point law, is the one Gilmer's argument has always been fighting. The second, which we call \emph{component hiding}, is new: once the two random sets are coupled in a way that the adversary may rearrange, an atom of tiny mass that carries all the entropy can be kept away from the atom on which the element is surely absent, so that only the i.i.d.\ term, whose class is a singleton, is guaranteed the cross pairs that carry entropy. This forces the i.i.d.\ weight to be at least $1/(2(1-c))\approx0.81$ and is what makes the remaining improvement small.
+
+\paragraph{Organisation.} Section~\ref{sec:framework} recalls Gilmer's argument and Liu's framework, with a self-contained proof of the certificate. Section~\ref{sec:ceiling} proves the ceiling theorems. Section~\ref{sec:protocol} constructs the protocol and computes its value against the two adversaries. Section~\ref{sec:card} gives the cardinality reduction (a generalisation of Liu's Theorem~12) and the small-entropy bound. Section~\ref{sec:numerics} describes the computation and states the main numerical theorem. Section~\ref{sec:discussion} discusses what would be needed to go further. Appendix~\ref{app:const} records the constants.
+
+\section{Gilmer's argument and the single-letter framework}\label{sec:framework}
+Throughout, $\ent(p)=-p\log_2p-(1-p)\log_2(1-p)$ is the binary entropy, $H$ is Shannon entropy in bits, and $[n]=\{1,\dots,n\}$. For $\F\subseteq2^{[n]}$ we identify a set with its indicator string in $\{0,1\}^n$.
+
+\subsection{Gilmer's argument}
+Let $\F\subseteq2^{[n]}$ be union-closed, $\F\ne\{\emptyset\}$, and let $A=(A_1,\dots,A_n)$ be uniform on $\F$, so $H(A)=\log_2|\F|$. Let $B$ be a second random set with the same law, coupled with $A$ in some way. Since $A\cup B\in\F$,
+\begin{equation}\label{eq:union}
+H(A\cup B)\le\log_2|\F|=H(A).
+\end{equation}
+For a prefix $a\in\{0,1\}^{i-1}$ with $\Prob(A_{<i}=a)>0$ write
+\[x_i(a):=\Prob(A_i=0\mid A_{<i}=a)\in[0,1]\]
+for the conditional \emph{zero}-probability. By the chain rule and the fact that $(A\cup B)_{<i}$ is a function of $(A_{<i},B_{<i})$,
+\begin{equation}\label{eq:chain}
+\begin{aligned}
+H(A\cup B)&=\sum_{i=1}^nH\big((A\cup B)_i\mid(A\cup B)_{<i}\big)\;\ge\;\sum_{i=1}^nH\big((A\cup B)_i\mid A_{<i},B_{<i}\big),\\
+H(A)&=\sum_{i=1}^n\E\,\ent\big(x_i(A_{<i})\big).
+\end{aligned}
+\end{equation}
+Conditionally on $(A_{<i},B_{<i})=(a,b)$ the bit $(A\cup B)_i$ is Bernoulli with $\Prob((A\cup B)_i=0\mid a,b)=\Prob(A_i=0,B_i=0\mid a,b)$, so the $i$-th summand on the left is $\E\,\ent(\Prob(A_i=B_i=0\mid A_{<i},B_{<i}))$. Gilmer takes $B$ independent of $A$, so that $\Prob(A_i=B_i=0\mid a,b)=x_i(a)x_i(b)$, and proves an inequality of the form $\E\,\ent(XY)\ge\E\,\ent(X)$ for i.i.d.\ $X,Y$ with $\E X$ large; the sharp version \cite{AHS,CL,Sawin,Pebody} is $\ent(xy)\ge\frac{\varphi}2\,(x\ent(y)+y\ent(x))$ with $\varphi=(1+\sqrt5)/2$, tight at $x=y=1/\varphi$, which gives $\E\,\ent(XY)\ge\varphi\,\E[X]\,\E\,\ent(X)\ge\E\,\ent(X)$ whenever $\E X\ge1/\varphi$, i.e.\ whenever every element has frequency at most $1-1/\varphi=\psi$.
+
+\subsection{Protocols, classes and the certificate}
+\begin{definition}[protocol, class; \cite{Liu}]\label{def:protocol}
+A \emph{protocol} $\Pi$ assigns to every $(x,y)\in[0,1]^2$ a probability law $\Pi_{x,y}$ on $\{0,1\}^2$ whose two marginals have zero-probabilities $x$ and $y$. Given $\F$, the protocol generates $(A,B)$ coordinate by coordinate: after $(A_{<i},B_{<i})=(a,b)$ has been generated, $(A_i,B_i)$ is drawn from $\Pi_{x_i(a),x_i(b)}$. A \emph{class} for $\Pi$ is a map $\mu\mapsto\cC_\Pi(\mu)$ from laws on $[0,1]$ to sets of couplings of $\mu$ with itself (laws on $[0,1]^2$ with both marginals $\mu$) such that, for every union-closed $\F$ and every $i$, the joint law of $\big(x_i(A_{<i}),x_i(B_{<i})\big)$ belongs to $\cC_\Pi(\mu)$, where $\mu$ is the law of $x_i(A_{<i})$.
+\end{definition}
+The marginal laws of $A$ and $B$ under any protocol are both uniform on $\F$: summing the product $\prod_i\Pi_{x_i(a_{<i}),x_i(b_{<i})}(a_i,b_i)$ over $b_n,b_{n-1},\dots$ in turn leaves $\prod_i\Prob(A_i=a_i\mid A_{<i}=a_{<i})$.
+
+\begin{proposition}[the certificate; \cite{Liu}, Proposition~3]\label{prop:cert}
+Let $\Pi^{(1)},\dots,\Pi^{(K)}$ be protocols with classes $\cC_1,\dots,\cC_K$, let $w_1,\dots,w_K\ge0$ sum to $1$, and let $c\in(0,\tfrac12]$. Suppose there is $C>1$ such that
+\begin{equation}\label{eq:cert}
+\sum_{k=1}^Kw_k\inf_{P\in\cC_k(\mu)}\E_{(X,Y)\sim P}\Big[\ent\big(\Pi^{(k)}_{X,Y}(0,0)\big)\Big]\;\ge\;C\,\E_\mu\big[\ent(X)\big]
+\end{equation}
+for every law $\mu$ on $[0,1]$ with $\E_\mu[X]\ge1-c$. Then $c(\F)\ge c$ for every finite union-closed $\F\ne\{\emptyset\}$.
+\end{proposition}
+\begin{proof}
+Suppose $c(\F)<c$. For each $i$ let $\mu_i$ be the law of $x_i(A_{<i})$; then $\E_{\mu_i}[X]=\Prob(A_i=0)>1-c$. Generate $(A,B^{(k)})$ with protocol $\Pi^{(k)}$. By \eqref{eq:chain}, the definition of a class, and \eqref{eq:cert},
+\[\sum_kw_kH(A\cup B^{(k)})\ge\sum_i\sum_kw_k\inf_{P\in\cC_k(\mu_i)}\E_P\,\ent\big(\Pi^{(k)}_{X,Y}(0,0)\big)\ge C\sum_i\E_{\mu_i}\ent(X)=C\,H(A).\]
+By \eqref{eq:union} the left side is at most $H(A)$, so $H(A)=0$ and $|\F|=1$, i.e.\ $\F=\{S\}$; then $c(\F)=1\ge c$ unless $S=\emptyset$, which is excluded.
+\end{proof}
+
+The four protocol/class pairs used so far are the following; here and below $\mu\otimes\mu$ denotes the product law.
+\begin{enumerate}
+\item \emph{I.i.d.} $\Pi^{\iid}_{x,y}(0,0)=xy$, class $\{\mu\otimes\mu\}$ \cite{Gilmer}.
+\item \emph{Sawin's maximum-entropy protocol.} $\Pi_{x,y}(0,0)=1-\max\{1-x,\,1-y,\,\min(2-x-y,\tfrac12)\}$, the point of the Fr\'echet interval nearest $\frac12$ when $x,y\ge\frac12$ and comonotone otherwise; class: all couplings of $\mu$ with itself \cite{Sawin,Yu,Cambie}.
+\item \emph{Yu's maximal-correlation protocols.} $\Pi_{x,y}$ with maximal correlation at most $\rho$; class: couplings of $\mu$ with itself of maximal correlation at most $\rho$ (tensorisation of maximal correlation) \cite{Yu}.
+\item \emph{Liu's conditionally-i.i.d.\ protocols.} The two bits are generated conditionally independently given a shared uniform variable $U$: $\Prob(A_i=0\mid U=u)=r_x(u)$ with $r_x:[0,1]\to[0,1]$, $\int_0^1r_x=x$, and likewise for $B_i$ with $r_y$. Then
+\begin{equation}\label{eq:kernel}
+\Pi_{x,y}(0,0)=\int_0^1r_x(u)r_y(u)\,du=xy+K(x,y),\qquad K(x,y)=\Cov(r_x,r_y),
+\end{equation}
+where $K$ is a positive semidefinite kernel; class $\cC_3(\mu)$: the laws $\int\nu\otimes\nu\,d\pi(\nu)$, mixtures of product laws over a probability measure $\pi$ on laws $\nu$ on $[0,1]$, whose marginal $\int\nu\,d\pi(\nu)$ equals $\mu$ \cite{Liu}. Liu's Theorem~9 shows that for every conditionally-i.i.d.\ protocol the infimum in \eqref{eq:cert} over $\cC_3(\mu)$ is attained at a mixture of two products,
+\begin{equation}\label{eq:twoprod}
+P=(1-q)\,P_0\otimes P_0+q\,P_1\otimes P_1,\qquad\mu=(1-q)P_0+qP_1,\qquad q\in[0,1].
+\end{equation}
+Liu's own protocol is the rank-one kernel $K(x,y)=x(1-x)\,y(1-y)$, realised by $r_x(u)=x+x(1-x)\,\mathrm{sgn}(u-\tfrac12)$.
+\end{enumerate}
+
+\section{Two adversaries and the ceiling}\label{sec:ceiling}
+Two facts about protocols are used repeatedly. If $x=0$ then $A_i=1$ surely, so the union bit is surely $1$ whatever the protocol: pairs containing the atom $0$ carry no entropy. On any pair $(x,y)$, $\Pi_{x,y}(0,0)$ lies in the Fr\'echet interval $[\max(0,x+y-1),\min(x,y)]$ and $\ent(\Pi_{x,y}(0,0))\le1$.
+
+\begin{theorem}[product ceiling]\label{thm:ceil}
+Suppose every class $\cC_k(\mu)$ in \eqref{eq:cert} contains the product law $\mu\otimes\mu$ for every $\mu$. Then \eqref{eq:cert} fails for every $c>c_{\mathrm{ceil}}:=1-\ent(1/\sqrt2)/\sqrt2=0.3830993\ldots$
+\end{theorem}
+\begin{proof}
+Let $x^*=1/\sqrt2$, so $\ent(x^{*2})=\ent(\tfrac12)=1$, and let $\mu=p\,\delta_{x^*}+(1-p)\,\delta_0$ with $p\in(0,1)$. Then $\E_\mu[X]=px^*$ and $\E_\mu[\ent(X)]=p\,\ent(x^*)$. For each $k$ the infimum in \eqref{eq:cert} is at most the value at $\mu\otimes\mu$, which is at most $p^2\cdot1$: the pair $(x^*,x^*)$ has mass $p^2$ and entropy at most $1$, and every other pair contains the atom $0$. Hence \eqref{eq:cert} implies $p^2\ge Cp\,\ent(x^*)>p\,\ent(x^*)$, i.e.\ $p>\ent(1/\sqrt2)$. Choose $p$ slightly smaller than $\ent(1/\sqrt2)$; the law $\mu$ violates \eqref{eq:cert}, and its mean $p/\sqrt2$ is slightly smaller than $\ent(1/\sqrt2)/\sqrt2=1-c_{\mathrm{ceil}}$, hence at least $1-c$ for every $c>c_{\mathrm{ceil}}$ once $p$ is close enough.
+\end{proof}
+
+The i.i.d.\ protocol itself has $\ent(x^2)=1$ at $x=1/\sqrt2$; its constant $\psi$ is smaller than $c_{\mathrm{ceil}}$ only because for $x<1/\sqrt2$ it under-uses the diagonal, $\ent(x^2)<1$. Every improvement since 2022 consists in recovering part of that deficit while controlling what an enlarged class allows the adversary to do. The second adversary bounds how much can be recovered.
+
+\begin{definition}[component hiding]\label{def:hiding}
+For $q,y\in(0,1)$ and $\delta\in(0,\tfrac12)$ let
+\begin{equation}\label{eq:mudelta}
+\mu_{q,y,\delta}:=q\,\delta_1+(1-q)\big[(1-\delta)\,\delta_0+\delta\,\delta_y\big].
+\end{equation}
+A class $\cC$ \emph{admits hiding} if for all $q,y\in(0,1)$ and all sufficiently small $\delta$, $\cC(\mu_{q,y,\delta})$ contains a coupling $P$ with
+\[P(X=y,\,Y=1)=P(X=1,\,Y=y)=0\qquad\text{and}\qquad P(X=y,\,Y=y)\le\delta^2 .\]
+\end{definition}
+
+\begin{lemma}\label{lem:classes}
+The classes of the i.i.d.\ protocol, of Sawin's protocol, of Yu's protocols for every $\rho>0$, and of every conditionally-i.i.d.\ protocol contain the product law. All but the first admit hiding.
+\end{lemma}
+\begin{proof}
+Products: immediate for the singleton, for all couplings, and for mixtures of products; the product law has maximal correlation $0\le\rho$. Hiding for the class of all couplings is trivial (take the coupling of the maximal-correlation case below, which has $P(X=y,Y=y)=0$). For mixtures of products take $P=q\,\delta_1\otimes\delta_1+(1-q)\,P_0\otimes P_0$ with $P_0=(1-\delta)\delta_0+\delta\delta_y$; its marginal is $\mu_{q,y,\delta}$, $P(X=y,Y=1)=0$ and $P(X=y,Y=y)=(1-q)\delta^2\le\delta^2$. For the maximal-correlation class, write $p_1=q$, $p_0=(1-q)(1-\delta)$, $p_y=(1-q)\delta$ and define the coupling $P$ on $\{1,0,y\}^2$ by $P(y,0)=P(0,y)=p_y$, $P(y,y)=P(y,1)=P(1,y)=0$, and on $\{1,0\}^2$ by $P(a,b)=r_ar_b/(r_1+r_0)$ with $r_1=p_1$, $r_0=p_0-p_y$. Both marginals are $(p_1,p_0,p_y)$. The maximal correlation of $P$ is the second largest singular value of the matrix $M_{ab}=P(a,b)/\sqrt{p_ap_b}$. As $\delta\to0$, $r_0\to p_0$ and the $\{1,0\}$ block of $M$ converges to the rank-one matrix $\sqrt{p_ap_b}$ of the product law, while the entries of the row and column of $y$ are $0$ or $\sqrt{p_y/p_0}\to0$. Singular values depend continuously on the entries, so the second singular value tends to $0$ and is below $\rho$ for all small $\delta$.
+\end{proof}
+
+\begin{theorem}[refined ceiling]\label{thm:refined}
+Suppose \eqref{eq:cert} uses the i.i.d.\ protocol with its singleton class $\{\mu\otimes\mu\}$ and weight $w\in[0,1]$, and that every other class contains the product law and admits hiding. Then
+\begin{align}
+2w(1-c)&\ge1,\label{eq:H}\\
+c&\le1-\frac{x\,\ent(x)}{w\,\ent(x^2)+1-w}\qquad\text{for every }x\in[\tfrac12,\tfrac1{\sqrt2}]\text{ with }\ent(x)\le w\,\ent(x^2)+1-w.\label{eq:D}
+\end{align}
+Consequently $c\le c^{**}$, where $c^{**}=0.382885260\ldots$ is the unique solution of $c=G(c)$,
+\begin{equation}\label{eq:G}
+G(c):=\min_{x\in X_c}\Big[1-\frac{x\,\ent(x)}{1-(1-\ent(x^2))/(2(1-c))}\Big],\qquad X_c:=\Big\{x\in[\tfrac12,\tfrac1{\sqrt2}]:\ent(x)\le1-\tfrac{1-\ent(x^2)}{2(1-c)}\Big\}.
+\end{equation}
+\end{theorem}
+\begin{proof}
+\emph{Inequality \eqref{eq:H}.} Fix $y\in(0,1)$, put $q=1-c$ and $\mu_\delta=\mu_{q,y,\delta}$. Then $\E_{\mu_\delta}[X]=q+(1-q)\delta y\ge1-c$ and $\E_{\mu_\delta}[\ent(X)]=(1-q)\delta\,\ent(y)$. Consider any coupling of $\mu_\delta$ with itself and any protocol. Pairs containing the atom $0$ carry no entropy. On the pair $(1,1)$ both bits are surely $0$, so the union bit is surely $0$ and carries no entropy. On the pairs $(y,1)$ and $(1,y)$ one bit is surely $0$, so the union bit equals the other bit and has entropy exactly $\ent(y)$, for every protocol. The pair $(y,y)$ carries entropy at most $1$; its mass is $(1-q)^2\delta^2$ under the product law and at most $\delta^2$ under a hiding coupling, by definition.
+
+For the i.i.d.\ term, whose class is the singleton $\{\mu_\delta\otimes\mu_\delta\}$, the value is exactly $2q(1-q)\delta\,\ent(y)+(1-q)^2\delta^2\,\ent(y^2)$. For every other protocol the infimum over its class is at most its value at a hiding coupling, which is at most $\delta^2$. Hence
+\[\text{LHS of \eqref{eq:cert}}\le w\big[2q(1-q)\delta\,\ent(y)+(1-q)^2\delta^2\ent(y^2)\big]+(1-w)\,\delta^2 .\]
+Dividing by $\E_{\mu_\delta}\ent(X)=(1-q)\delta\,\ent(y)$ and letting $\delta\to0$, \eqref{eq:cert} forces $2wq\ge C>1$. Hence $2w(1-c)\ge1$ is necessary: if $2w(1-c)<1$, then \eqref{eq:cert} fails at $\mu_\delta$ for all small $\delta$.
+
+\emph{Inequality \eqref{eq:D}.} Fix $x\in[\frac12,\frac1{\sqrt2}]$ with $\ent(x)\le w\,\ent(x^2)+1-w$, so that $p:=\ent(x)/(w\,\ent(x^2)+1-w)\in(0,1]$, and let $\mu_p=p\,\delta_x+(1-p)\,\delta_0$. Present the product law to every class. The i.i.d.\ term equals $p^2\,\ent(x^2)$ and every other term is at most $p^2$, so \eqref{eq:cert} at $\mu_p$ forces $p\,(w\,\ent(x^2)+1-w)\ge C\,\ent(x)>\ent(x)$, which fails at the chosen $p$ and at every slightly smaller $p$. If $c>1-x\,\ent(x)/(w\,\ent(x^2)+1-w)$ then $px>1-c$, so a slightly smaller $p$ still has $\E_{\mu_p}[X]=px\ge1-c$ and gives a law violating \eqref{eq:cert}. This proves \eqref{eq:D}. (The condition on $x$ holds at the binding point below, and restricting to it does not change the value of $c^{**}$.)
+
+\emph{The fixed point.} The right side of \eqref{eq:D} is decreasing in $w$, because its denominator $1-w(1-\ent(x^2))$ is decreasing in $w$ and $\ent(x^2)\le1$. By \eqref{eq:H}, $w\ge w_0(c):=1/(2(1-c))$; substituting $w_0(c)$ into \eqref{eq:D} and minimising over $x\in X_c$ gives $c\le G(c)$. For $c\in[0.2,0.45]$ the constraint defining $X_c$ is inactive at the minimiser (the minimiser stays near $0.69$ while $X_c\supseteq[0.62,1/\sqrt2]$), so $G(c)$ coincides with the minimum over all of $[\frac12,\frac1{\sqrt2}]$; since $w_0$ is increasing in $c$, that minimum is decreasing in $c$, so $c\mapsto c-G(c)$ is strictly increasing on this range and $\{c:c\le G(c)\}=(0,c^{**}]$ with $c^{**}$ the unique root of $c=G(c)$ (for $c$ outside $[0.2,0.45]$ the inequality $c\le G(c)$ is checked directly). Its numerical value is computed in Appendix~\ref{app:const}.
+\end{proof}
+
+\begin{remark}\label{rem:literature}
+(i) Cambie's exact value $0.3823455$ for Sawin's class lies below $c^{**}$ because the class of all couplings also lets the adversary reduce the mass of the diagonal pair $(x,x)$ from $p^2$ to $\max(0,2p-1)$, and Cambie's extremal law saturates the independent and the anti-correlated terms simultaneously. (ii) Liu's $0.382709$ lies below $c^{**}$ because the diagonal $x^2+x^2(1-x)^2$ of his kernel is not $\frac12$ at the binding point: his adversary is the two-point law of \eqref{eq:D} placed at the unique $x$ with $x^2+x^2(1-x)^2=1-x^2$ (namely $x=0.6908$, where the diagonal equals $0.5228$), so that $\ent$ of the kernel term equals $\ent(x^2)$ and the kernel is entropy-neutral there; with his weight $w=0.899947$ the resulting bound is exactly $0.382709$. Placing the two-point adversary against the optimal diagonal instead gives, for the same $w$, $0.382752$.
+\end{remark}
+
+\section{A protocol with the optimal diagonal}\label{sec:protocol}
+\begin{definition}\label{def:ideal}
+Let
+\[f(x)=\begin{cases}\min(x,1-x),&0\le x\le\frac12,\\ \sqrt{\frac12-x^2},&\frac12\le x\le\frac1{\sqrt2},\\ 0,&\frac1{\sqrt2}\le x\le1,\end{cases}\]
+and let $\Pi^{\id}$ be the conditionally-i.i.d.\ protocol with $r_x(u)=x+f(x)\,\mathrm{sgn}(u-\tfrac12)$, so that $\Pi^{\id}_{x,y}(0,0)=xy+f(x)f(y)$.
+\end{definition}
+
+\begin{lemma}\label{lem:ideal}
+$\Pi^{\id}$ is a protocol. For all $x,y\in[0,1]$, $\ent(xy+f(x)f(y))\ge\ent(xy)$, and $x^2+f(x)^2=\frac12$ for $x\in[\frac12,\frac1{\sqrt2}]$.
+\end{lemma}
+\begin{proof}
+We need $r_x\in[0,1]$, i.e.\ $f(x)\le\min(x,1-x)$. On $[0,\frac12]$ this is equality. On $[\frac12,\frac1{\sqrt2}]$, $\frac12-x^2\le(1-x)^2$ is equivalent to $2x^2-2x+\frac12\ge0$, i.e.\ $(2x-1)^2\ge0$. Next, $x^2+f(x)^2=2x^2\le\frac12$ on $[0,\frac12]$ and $=\frac12$ on $[\frac12,\frac1{\sqrt2}]$, so $x^2+f(x)^2\le\frac12$ wherever $f(x)>0$. If $f(x)f(y)>0$ then by Cauchy--Schwarz $xy+f(x)f(y)\le\sqrt{x^2+f(x)^2}\sqrt{y^2+f(y)^2}\le\frac12$; since $xy\le xy+f(x)f(y)\le\frac12$ and $\ent$ is increasing on $[0,\frac12]$, $\ent(xy+f(x)f(y))\ge\ent(xy)$. If $f(x)f(y)=0$ the two quantities coincide.
+\end{proof}
+
+\begin{proposition}[value against the two adversaries]\label{prop:twoadv}
+Let $\Pi=w\,\Pi^{\iid}+(1-w)\,\Pi^{\id}$ denote the certificate \eqref{eq:cert} with the i.i.d.\ protocol at weight $w$ and $\Pi^{\id}$ (class $\cC_3$) at weight $1-w$.
+\begin{enumerate}
+\item[(a)] On the two-point law $\mu=p\,\delta_x+(1-p)\,\delta_0$, $x\in[\frac12,\frac1{\sqrt2}]$, the infimum over $\cC_3(\mu)$ of the $\Pi^{\id}$-term is attained at the product law and equals $p^2$; hence the ratio of the two sides of \eqref{eq:cert} is $p\,(w\,\ent(x^2)+1-w)/\ent(x)$, and \eqref{eq:D} holds with equality in the sense that the supremum of admissible $c$ against two-point laws is exactly
+\[c_2(w):=\min_{x\in[1/2,1/\sqrt2]}\Big[1-\frac{x\,\ent(x)}{w\,\ent(x^2)+1-w}\Big].\]
+\item[(b)] On the hiding laws $\mu_{q,y,\delta}$ with $q=1-c$, the ratio tends to $2w(1-c)$ as $\delta\to0$, from above.
+\item[(c)] Let $w^{**}=1/(2(1-c^{**}))=0.810222\ldots$. Then $c_2(w^{**})=c^{**}$: at $w=w^{**}$ both adversaries are tight simultaneously, and for every $c<c^{**}$ there is $w$ with $2w(1-c)>1$ and $c<c_2(w)$.
+\end{enumerate}
+\end{proposition}
+\begin{proof}
+(a) The mixtures of products with marginal $\mu$ are the laws \eqref{eq:twoprod}; the $\Pi^{\id}$-term assigns weight only to the pair $(x,x)$ and there equals $\ent(\frac12)=1$ by Lemma~\ref{lem:ideal}. Its mass is $(1-q)P_0(x)^2+qP_1(x)^2\ge\big((1-q)P_0(x)+qP_1(x)\big)^2=p^2$ by convexity, with equality at the product law. The rest is the computation in the proof of Theorem~\ref{thm:refined}. (b) With the hiding coupling of Lemma~\ref{lem:classes} the $\Pi^{\id}$-term is $\delta^2(1-q)\,\ent(y^2+f(y)^2)\ge0$ and the i.i.d.\ term is $2q(1-q)\delta\ent(y)+(1-q)^2\delta^2\ent(y^2)$; dividing by $(1-q)\delta\ent(y)$ gives $2wq+O(\delta)$ with a non-negative $O(\delta)$ term. (c) By definition of $c^{**}$ as the root of $c=G(c)$ and $G(c)=c_2(w_0(c))$. For $c<c^{**}$ take $w$ strictly between $w_0(c)$ and $w_0(c^{**})$: then $2w(1-c)>1$ and $c_2(w)>c_2(w_0(c^{**}))=c^{**}>c$ by monotonicity of $c_2$ in $w$.
+\end{proof}
+
+Proposition~\ref{prop:twoadv} shows that the mixture $w\,\Pi^{\iid}+(1-w)\,\Pi^{\id}$ meets the necessary conditions of Theorem~\ref{thm:refined} with equality. What remains is to verify \eqref{eq:cert} against \emph{all} laws in $\cC_3$, i.e.\ against all $(q,P_0,P_1)$ in \eqref{eq:twoprod}. This is a computation, once the laws $P_0,P_1$ have been reduced to finitely many atoms.
+
+\section{Cardinality reduction and the small-entropy regime}\label{sec:card}
+Fix $w$, $c$ and $C>1$, and for $q\in[0,1]$ and probability laws $P_0,P_1$ on $[0,1]$ with $\mu=(1-q)P_0+qP_1$ define
+\begin{equation}\label{eq:Phi}
+\begin{aligned}
+\Phi_C(q,P_0,P_1)&:=w\iint\ent(xy)\,d\mu\,d\mu+(1-w)\Big[(1-q)J(P_0)+qJ(P_1)\Big]-C\int\ent\,d\mu,\\
+J(P)&:=\iint\ent\big(xy+f(x)f(y)\big)\,dP\,dP.
+\end{aligned}
+\end{equation}
+By Liu's Theorem~9, the certificate \eqref{eq:cert} for $w\Pi^{\iid}+(1-w)\Pi^{\id}$ holds with constant $C$ if and only if $\Phi_C\ge0$ whenever $\E_\mu[X]\ge1-c$.
+
+\begin{lemma}[extreme points of moment sets; \cite{Karr,Winkler}]\label{lem:extreme}
+Let $g_1,\dots,g_r$ be continuous real functions on $[0,1]$ and $c_1,\dots,c_r\in\R$. The set $\cM=\{P\text{ probability law on }[0,1]:\int g_j\,dP=c_j,\ j=1,\dots,r\}$ is convex and weakly compact, and each of its extreme points is supported on at most $r+1$ points.
+\end{lemma}
+
+\begin{lemma}[concavity on slices]\label{lem:concave}
+Let $\phi$ be a continuous symmetric function on $[0,1]^2$ and $g_1,\dots,g_r$ continuous on $[0,1]$. Suppose that $\iint\phi\,d\nu\,d\nu\le0$ for every finite signed measure $\nu$ on $[0,1]$ with $\int d\nu=0$ and $\int g_j\,d\nu=0$ for all $j$. Then $P\mapsto\iint\phi\,dP\,dP$ is concave on every set $\cM$ of Lemma~\ref{lem:extreme}.
+\end{lemma}
+\begin{proof}
+For $P,Q\in\cM$ and $t\in[0,1]$, expanding the bilinear form gives $\iint\phi\,d(tP+(1-t)Q)^{\otimes2}-t\iint\phi\,dP^{\otimes2}-(1-t)\iint\phi\,dQ^{\otimes2}=-t(1-t)\iint\phi\,d(P-Q)\,d(P-Q)\ge0$, since $\nu=P-Q$ satisfies the hypotheses.
+\end{proof}
+
+The i.i.d.\ term satisfies the hypothesis of Lemma~\ref{lem:concave} with $\phi(x,y)=\ent(xy)$ and the single function $g_1(x)=x$: this is the concavity lemma of Alweiss, Huang and Sellke \cite[Lemma~5]{AHS} (see also \cite[proof of Theorem~9]{Liu}). For the kernel term we need the analogous statement, which for Liu's kernel he proves for small perturbations of the i.i.d.\ kernel and verifies numerically for his actual kernel \cite[Section~V-A]{Liu}. For $\Pi^{\id}$ the form is not negative semidefinite on $\{\int d\nu=\int x\,d\nu=0\}$: it has exactly two positive directions.
+
+\begin{hypothesis}[inertia]\label{hyp:inertia}
+There are continuous functions $g_2,g_3$ on $[0,1]$ such that $\iint\ent(xy+f(x)f(y))\,d\nu\,d\nu\le0$ for every finite signed measure $\nu$ with $\int d\nu=\int x\,d\nu=\int g_2\,d\nu=\int g_3\,d\nu=0$.
+\end{hypothesis}
+Numerically, discretising $[0,1]$ with step $10^{-3}$ and $5\cdot10^{-4}$ and projecting the matrix $[-\ent(x_ix_j+f(x_i)f(x_j))]_{ij}$ onto the orthogonal complement of the constant and linear vectors, the projected form has exactly two negative eigenvalues (stable across the two grids), separated from the remaining spectrum by six orders of magnitude; one of them is the same near-boundary direction that appears for Liu's kernel (where it is spanned, together with the constant and linear vectors, by Liu's moment function $x(1-x)$), and the other is concentrated on $x\in[0.696,0.705]$. Taking $g_2,g_3$ to be the interpolations of the two eigenvectors, the form projected onto the complement of $\{1,x,g_2,g_3\}$ has all eigenvalues above $-10^{-14}$, the level of rounding error, exactly as in Liu's check for his kernel. Hypothesis~\ref{hyp:inertia} is the continuous statement behind this computation; it has the same status as the positive-semidefiniteness hypothesis in \cite[Theorem~13]{Liu}.
+
+\begin{proposition}[atom budget]\label{prop:atoms}
+Assume Hypothesis~\ref{hyp:inertia}. Then for every $q\in[0,1]$, $\inf\Phi_C(q,P_0,P_1)$ over all pairs $(P_0,P_1)$ with $\E_\mu[X]\ge1-c$ equals the infimum over pairs in which $P_0$ and $P_1$ are each supported on at most four points.
+\end{proposition}
+\begin{proof}
+Fix $q$, and fix the values $\int x\,dP_j$, $\int g_2\,dP_j$, $\int g_3\,dP_j$ for $j=0,1$; this fixes $\E_\mu[X]$. On the product $\cM_0\times\cM_1$ of the two corresponding slices, $J(P_0)$ and $J(P_1)$ are concave by Lemma~\ref{lem:concave} and Hypothesis~\ref{hyp:inertia}; the i.i.d.\ term is the composition of the linear map $(P_0,P_1)\mapsto\mu$, which maps $\cM_0\times\cM_1$ into a slice with fixed mean, with the concave functional of \cite[Lemma~5]{AHS}; and the last term of \eqref{eq:Phi} is linear. So $\Phi_C$ is concave and weakly continuous on the compact convex set $\cM_0\times\cM_1$, and by Bauer's minimum principle it attains its minimum at an extreme point, which is a pair of extreme points of $\cM_0$ and $\cM_1$; by Lemma~\ref{lem:extreme} with $r=3$ these have at most four atoms each. Every pair $(P_0,P_1)$ lies in some such product of slices.
+\end{proof}
+
+The remaining difficulty is the region of very small entropy, where the infimum of the ratio is approached along the hiding family rather than attained, so that no finite computation can exhaust it. The following bound handles it. Write $R(q,P_0,P_1)$ for the ratio of the two sides of \eqref{eq:cert} at a mixture of two products, and $\tilde L(u):=\log_2(1/u)+(1-u)/\ln2$, a decreasing function on $(0,1)$.
+
+\begin{theorem}[small-entropy bound]\label{thm:small}
+Let $w=0.810222$, $t_0=0.006$ and $\rho:=(1-t_0)/\ent(t_0)=18.7849$. For every law $\mu$ on $[0,1]$ with $\E_\mu[X]\ge1-c$ and $E:=\E_\mu\ent(X)>0$, and every $q,P_0,P_1$ with marginal $\mu$,
+\begin{equation}\label{eq:small}
+R(q,P_0,P_1)\;\ge\;2w\big[(1-c)-\rho E\big].
+\end{equation}
+In particular, for $c=0.38284$, $R\ge C=1.00005$ whenever $E\le\varepsilon_0:=7.6\cdot10^{-7}$.
+\end{theorem}
+The proof needs four elementary facts about $\ent$ and one exact identity.
+\begin{enumerate}
+\item[(F1)] $\ent(\theta u)\ge\theta\,\ent(u)$ for $\theta,u\in[0,1]$ (concavity, $\ent(0)=0$); equivalently $u\mapsto\ent(u)/u$ is decreasing on $(0,1]$.
+\item[(F2)] $\ent(a)\le2\sqrt{a(1-a)}$ for $a\in[0,1]$.
+\item[(F3)] $\ent(u)\ge u\,\tilde L(u)$ for $u\in(0,1)$: indeed $\ent(u)=u\log_2(1/u)+(1-u)\log_2(1/(1-u))$ and $\ln(1/(1-u))\ge u$.
+\item[(F4)] For $x=1-t$, $y=1-t'$ with $t,t'\in[0,1]$, let $\Lambda(t,t'):=\ent(t)+\ent(t')-\ent(xy)$. Then $\Lambda\ge0$ and, with $\tau=1-xy=t+t'-tt'$, $A=t(1-t')$, $B=t'(1-t)$, $\gamma=tt'/\tau$, $\alpha=A/(A+B)$,
+\[\Lambda(t,t')=\tau\,\ent(\gamma)+(A+B)\,\ent(\alpha).\]
+Proof: for independent $X\sim\mathrm{Bern}(x)$, $Y\sim\mathrm{Bern}(y)$, $\ent(t)+\ent(t')=H(X,Y)=H(XY)+H(X,Y\mid XY)$, and given $XY=0$ (probability $\tau$) the pair takes the values $(0,0),(1,0),(0,1)$ with probabilities proportional to $tt',A,B$.
+\item[(F5)] For $t,t'\in(0,\frac12]$ and $m=\min(t,t')$: $\Lambda(t,t')\le2\sqrt{tt'}+tt'\big(\tilde L(m)+1+m/\ln2\big)$. Proof: by (F2), $(A+B)\ent(\alpha)\le2\sqrt{AB}\le2\sqrt{tt'}$; and $\tau\ent(\gamma)=tt'\log_2(1/\gamma)+\tau(1-\gamma)\log_2(1/(1-\gamma))\le tt'\log_2\big(\tfrac1t+\tfrac1{t'}\big)+tt'/\ln2\le tt'\big(\log_2(2/m)+1/\ln2\big)$, using $\tau\le t+t'$ and $(1-\gamma)\ln(1/(1-\gamma))\le\gamma$.
+\end{enumerate}
+(F2) is checked as follows: for $a=\frac12-u$ with $u\le0.4612$, $\ent''\le-4/\ln2$ gives $\ent(a)\le1-2u^2/\ln2\le\sqrt{1-4u^2}$; for $a<0.0389$, $\ent(a)\le\sqrt a\cdot\sqrt a\,(\log_2(1/a)+1/\ln2)\le1.2077\sqrt a<1.9608\sqrt a\le2\sqrt{a(1-a)}$, since $\sqrt a(\log_2(1/a)+1/\ln2)$ is increasing on $(0,0.3679)$.
+
+\begin{lemma}[pointwise inequality]\label{lem:pointwise}
+For all $t,t'\in[0,t_0]$, $w\,\Lambda(t,t')\le(1-w)\sqrt{\ent(t)\ent(t')}$.
+\end{lemma}
+\begin{proof}
+If $tt'=0$ then $\Lambda=0$. Otherwise let $m=\min(t,t')\le M=\max(t,t')\le t_0$. By (F3), $\sqrt{\ent(t)\ent(t')}\ge\sqrt{mM\,\tilde L(m)\tilde L(M)}$, so by (F5) it suffices that
+\[\frac{2}{\sqrt{\tilde L(m)\tilde L(M)}}+\frac{\sqrt{mM}\,(\tilde L(m)+1+m/\ln2)}{\sqrt{\tilde L(m)\tilde L(M)}}\;\le\;r:=\frac{1-w}{w}=0.234230.\]
+Since $\tilde L$ is decreasing, the first term is at most $2/\tilde L(t_0)$. The second term equals $\big[\sqrt{m\tilde L(m)}+\sqrt m(1+m/\ln2)/\sqrt{\tilde L(m)}\big]\cdot\sqrt{M/\tilde L(M)}$; each factor is increasing ($\frac{d}{dm}[m\tilde L(m)]=\log_2(1/m)-2m/\ln2>0$ on $(0,t_0]$), so it is at most its value at $m=M=t_0$. Altogether the left side is at most $2/\tilde L(t_0)+t_0(\tilde L(t_0)+1+t_0/\ln2)/\tilde L(t_0)=0.226890+0.006687=0.233577<r$.
+\end{proof}
+
+\begin{proof}[Proof of Theorem~\ref{thm:small}]
+Let $N=(1-t_0,1]$, $B=[0,1-t_0]$, and write $t_x=1-x$ for $x\in N$, $\sigma=\mu(N)$, $S=\int_Nx\,d\mu\le\sigma$, $E_N=\int_N\ent\,d\mu$, $E_B=\int_B\ent\,d\mu$, $E=E_N+E_B$. Note $\ent(x)=\ent(t_x)$.
+
+\emph{Kernel term.} For any mixture $\sum_j\pi_jP_j\otimes P_j$ of products with marginal $\mu$ (in particular for \eqref{eq:twoprod}), using $\ent(xy+f(x)f(y))\ge\ent(xy)\ge0$ and keeping only $N\times N$: for $x,y\in N$, $1-xy\in[\max(t_x,t_y),2t_0]\subset[0,\frac12]$, so $\ent(xy)\ge\ent(\max(t_x,t_y))\ge\sqrt{\ent(t_x)\ent(t_y)}$, whence $\iint\ent(xy+ff)\,dP_j\,dP_j\ge(\int_N\sqrt\ent\,dP_j)^2$, and by Jensen $\sum_j\pi_j(\int_N\sqrt\ent\,dP_j)^2\ge(\int_N\sqrt\ent\,d\mu)^2=\iint_{N\times N}\sqrt{\ent(t_x)\ent(t_y)}\,d\mu\,d\mu$.
+
+\emph{I.i.d.\ term.} Drop $B\times B$. For $x\in N$, $y\in B$, (F1) gives $\ent(xy)\ge x\,\ent(y)$, so the two cross terms contribute at least $2SE_B$. On $N\times N$, $\ent(xy)=\ent(t_x)+\ent(t_y)-\Lambda(t_x,t_y)$ by definition, contributing $2\sigma E_N-\iint_{N\times N}\Lambda$.
+
+\emph{Combination.} Therefore
+\begin{align*}
+w\iint\ent(xy)\,d\mu\,d\mu+(1-w)\sum_j\pi_jJ(P_j)\;&\ge\;2wSE_B+2w\sigma E_N+\iint_{N\times N}D(t_x,t_y)\,d\mu\,d\mu\\
+&\ge\;2wSE_B+2w\sigma E_N\;\ge\;2wS\,E,
+\end{align*}
+where $D(t,t'):=(1-w)\sqrt{\ent(t)\ent(t')}-w\Lambda(t,t')$ is non-negative by Lemma~\ref{lem:pointwise} (all $t_x,t_y<t_0$), and $\sigma\ge S$.
+
+\emph{Mean constraint.} By (F1), $y/\ent(y)$ is increasing on $(0,1]$, so $y\le\rho\,\ent(y)$ on $B$ with $\rho=(1-t_0)/\ent(1-t_0)=(1-t_0)/\ent(t_0)$. Hence $1-c\le\int x\,d\mu=S+\int_By\,d\mu\le S+\rho E_B\le S+\rho E$.
+
+Dividing by $E$ gives $R\ge2wS\ge2w[(1-c)-\rho E]$, which is at least $C$ iff $E\le[(1-c)-C/(2w)]/\rho=1.4329\cdot10^{-5}/18.7849=7.628\cdot10^{-7}$.
+\end{proof}
+
+Two features make \eqref{eq:small} sharp enough. A near-$1$ atom $x=1-t$ contributes $x\,\ent(y)$ to the cross terms, and the same factor $x$ enters the mean constraint through $S$, so the deficiency of such an atom cancels its cross-term loss exactly; and inside $N$ the subadditivity loss $\Lambda\approx2\sqrt{tt'}$ is paid for exactly by the kernel term, with no factor $1/\log_2(1/t)$ lost. The one genuine loss is the mean-deficiency step, which charges mass just below $1-t_0$ at rate $\rho$; this produces the linear term and hence $\varepsilon_0$. Numerically, the infimum of $R$ over laws with $E\le10^{-3}$ appears to be exactly $2w(1-c)$, so $\varepsilon_0$ is conservative.
+
+\section{Numerical certification and the main theorem}\label{sec:numerics}
+By Proposition~\ref{prop:atoms}, certifying $\Phi_C\ge0$ reduces, under Hypothesis~\ref{hyp:inertia}, to a minimisation over $q\in[0,1]$ and two laws with at most four atoms each: the variables are $q$, the atoms $x_{j,1},\dots,x_{j,4}\in[0,1]$ and weights of $P_j$ ($j=0,1$), 17 real parameters, with the constraint $\E_\mu[X]\ge1-c$. We minimised the ratio
+\begin{equation}\label{eq:ratio}
+R(q,P_0,P_1):=\frac{w\iint\ent(xy)\,d\mu\,d\mu+(1-w)\big[(1-q)J(P_0)+qJ(P_1)\big]}{\int\ent\,d\mu}
+\end{equation}
+(so $\Phi_C\ge0$ iff $R\ge C$ whenever $\int\ent\,d\mu>0$) with sequential least-squares programming from $300$--$500$ random starting points per run ($5{,}000$ for the decisive cell, four atoms at $c=0.38284$), together with structured starting points: two-point laws $p\,\delta_x+(1-p)\delta_0$ for $x\in[0.6,0.75]$; the hiding laws \eqref{eq:mudelta} with $\delta\in\{10^{-2},10^{-3},10^{-4}\}$; the extremal laws of Cambie and Liu; and combinations of the two-point and hiding laws. Because the infimum along the hiding family is approached only as $\delta\to0$, where the denominator of $R$ vanishes, that family was evaluated in closed form (Proposition~\ref{prop:twoadv}(b)), and the optimiser was run with the additional constraint $\int\ent\,d\mu\ge\eta_0$ for $\eta_0=10^{-3},10^{-4},10^{-5},10^{-6},10^{-7}$, always with the same minimum and minimiser. The atom budget was also increased to five and six per law as a check. The computation was implemented independently twice (the second time from the statement alone, without access to the first implementation), and the evaluator reproduces Liu's optimum for his kernel to nine digits: $R=1.000000000$ at his $(c',w)$, attained at his minimiser $q=0$, $P_0=0.8936\,\delta_{0.6908}+0.1064\,\delta_0$.
+
+\begin{table}[h]\centering\footnotesize
+\begin{tabular}{lcrr}\toprule
+adversary family & atoms per law & $c=0.38284$ & $c=0.38288$\\\midrule
+all laws, $\int\ent\,d\mu\ge10^{-3}$, 300--500 starts & 4 & 1.0000733 & 1.0000085\\
+ & 5 & 1.0000733 & 1.0000085\\
+ & 6 & 1.0000733 & 1.0000085\\
+hiding laws \eqref{eq:mudelta}, $\delta\le10^{-2}$, four values of $y$, closed form & --- & $\ge1.000073$ & ---\\
+two-point/hiding combinations, seeded & 4 & 1.0000733 & ---\\\bottomrule
+\end{tabular}
+\caption{Minimum of $R$ in \eqref{eq:ratio} at $w=0.810222$. Every minimiser found is the two-point law $0.893\,\delta_{0.6909}+0.107\,\delta_0$ (with $q\in\{0,1\}$), whose value is the closed-form expression of Proposition~\ref{prop:twoadv}(a); the hiding family decreases to its limit $2w(1-c)=1.000073$.}\label{tab:cert}
+\end{table}
+
+\begin{hypothesis}[global minimum]\label{hyp:global}
+For $w=0.810222$ and $c=0.38284$, the minimum of $R$ over $q\in[0,1]$ and laws $P_0,P_1$ with at most four atoms each, $\E_\mu[X]\ge1-c$ and $\int\ent\,d\mu\ge10^{-7}$, is $1.0000733$, attained at the two-point law of Table~\ref{tab:cert}; in particular $R\ge C=1.00005$ on this set.
+\end{hypothesis}
+Hypothesis~\ref{hyp:global} is supported by Table~\ref{tab:cert} and by the same minima with the floor lowered from $10^{-3}$ to $10^{-7}$ (in every case the same minimiser and the same value). The complementary region $\int\ent\,d\mu<10^{-7}$ is covered unconditionally by Theorem~\ref{thm:small}, whose threshold $\varepsilon_0=7.6\cdot10^{-7}$ exceeds the floor, so the two regions overlap and no window remains. This is the point at which the present certification is more complete than Liu's, whose analogue of Theorem~\ref{thm:small} \cite[Lemma~7]{Liu} is a statement about limits and whose search used no entropy floor. The hypothesis otherwise plays the role of the ``global minimiser structure'' hypothesis in \cite[Theorem~13]{Liu}. The analogous hypothesis at other $(w,c)$, with $C$ replaced by any constant strictly between $1$ and the two-point value of Proposition~\ref{prop:twoadv}(a) and with the threshold of Theorem~\ref{thm:small} recomputed as $\varepsilon_0(w,c,C)=[2w(1-c)-C]/(2w\rho)$, is denoted Hypothesis~\ref{hyp:global}$(w,c)$; we verified it, with the same minimiser, at $(0.810222,0.38288)$ as well, where the two-point value is $1.0000085$, $2w(1-c)=1.0000072$, and the best threshold is $2.8\cdot10^{-7}$, still above the floor. Since $2w(1-c)-C$ vanishes as $c\to c^{**}$, the threshold falls below the floor $10^{-7}$ once $c>c^{**}-1.9\cdot10^{-6}=0.3828834$; for such $c$ a shrinking small-entropy window is again hypothesised rather than proved.
+
+\begin{theorem}\label{thm:main}
+Assume Hypotheses~\ref{hyp:inertia} and~\ref{hyp:global}. Then the certificate \eqref{eq:cert} holds for $w\Pi^{\iid}+(1-w)\Pi^{\id}$ with $w=0.810222$, $c=0.38284$ and $C=1.00005$; consequently every finite union-closed family $\F\ne\{\emptyset\}$ has an element contained in at least $0.38284\,|\F|$ of its members. For any $c<c^{**}=0.382885$, the same conclusion holds under Hypothesis~\ref{hyp:inertia} and Hypothesis~\ref{hyp:global}$(w,c)$ with $w$ chosen as in Proposition~\ref{prop:twoadv}(c); for $c\le c^{**}-1.9\cdot10^{-6}$ the small-entropy regime is covered by Theorem~\ref{thm:small}, as at $c=0.38284$.
+\end{theorem}
+\begin{proof}
+Let $\mu$ have $\E_\mu[X]\ge1-c$ and let $P\in\cC_3(\mu)$. By Liu's Theorem~9 we may assume $P$ is of the form \eqref{eq:twoprod}. If $\int\ent\,d\mu=0$ both sides of \eqref{eq:cert} vanish. Otherwise, by Proposition~\ref{prop:atoms} (with $C=1.00005$), $\Phi_C(q,P_0,P_1)\ge\Phi_C(q,P_0',P_1')$ for some pair $(P_0',P_1')$ with at most four atoms each on the same slice (so with the same $\E_\mu[X]$). If $\int\ent\,d\mu'\ge10^{-7}$, Hypothesis~\ref{hyp:global} gives $R\ge C$ there; if $0<\int\ent\,d\mu'<10^{-7}<\varepsilon_0$, Theorem~\ref{thm:small} gives $R\ge C$ (note $\E_{\mu'}[X]=\E_\mu[X]\ge1-c$); in both cases $\Phi_C(q,P_0',P_1')\ge0$, and if $\int\ent\,d\mu'=0$ then $\Phi_C(q,P_0',P_1')\ge0$ trivially. Proposition~\ref{prop:cert} concludes. The final sentence follows in the same way from Proposition~\ref{prop:twoadv}(c) and Hypothesis~\ref{hyp:global}$(w,c)$.
+\end{proof}
+
+\begin{remark}
+Two features distinguish this certification from Liu's. First, the cardinality reduction needs two auxiliary functionals rather than one (Hypothesis~\ref{hyp:inertia}), because the kernel of $\Pi^{\id}$ is far from the i.i.d.\ kernel; the price is four atoms per law instead of three. Second, the hiding family, which is exactly what limits the weight $1-w$ of the kernel protocol, is handled analytically (Proposition~\ref{prop:twoadv}(b) and Theorem~\ref{thm:small}); numerical minimisation alone cannot resolve it, and a first, uncorrected computation of ours reported values up to $0.38295$ for larger kernel weights that are refuted by \eqref{eq:H}.
+\end{remark}
+
+\section{Discussion}\label{sec:discussion}
+Theorem~\ref{thm:refined} says that the single-letter method, in every form used since 2022, is exhausted at $c^{**}=0.382885$, and Theorem~\ref{thm:main} says that the last $1.8\cdot10^{-4}$ above Liu's constant is available. The two adversaries explain the shape of the record. The diagonal law of Theorem~\ref{thm:ceil} is what Gilmer's argument was always fighting, and the successive improvements are successive recoveries of the diagonal deficit $1-\ent(x^2)$. The hiding law is what prevents the recovery from being complete: because the certificate must hold for every law $\mu$, and in particular for laws in which almost all entropy sits on an atom of vanishing mass, any protocol whose class allows the adversary to keep that atom away from the ``surely absent'' atom receives none of the entropy, and only the i.i.d.\ term, whose class is a singleton, is guaranteed the cross pairs. Hence $w\ge1/(2(1-c))$.
+
+Going beyond $c^{**}$ therefore requires one of two things. Either a \emph{tensorising} constraint on the joint law of the two prefix-conditional probabilities that forbids hiding a tiny atom---maximal correlation does not, as Lemma~\ref{lem:classes} shows, because a tiny atom can be moved at vanishing cost in correlation---or an argument that is not single-letter, for instance one that uses the exact closure hypothesis through $H(A\cup B)\le\log_2|\F|-D\big(\mathrm{law}(A\cup B)\,\|\,\mathrm{Unif}(\F)\big)$ rather than through \eqref{eq:union}. Some evidence that the loss is in the single-letter relaxation rather than in the coupling idea comes from an exact dynamic-programming oracle for prefix-dependent (non-memoryless) couplings on small families: on every family on at most four elements with maximal frequency below $\frac12$, and on all unions of two Hamming layers on $24$ elements, some sequential coupling makes the lower bound in \eqref{eq:chain} exceed $H(A)$. We do not know how to turn this into a proof, because the adversary in the single-letter relaxation chooses the joint law of the two prefixes, which the dynamic programme controls.
+
+\section*{Acknowledgements}
+The literature survey, the transcription of the cited proofs, the numerical computations, including the independent re-implementation of the certificate, and the proof of Theorem~\ref{thm:small} were carried out with Claude (Anthropic) language-model agents under the author's direction; the mathematical claims were checked by the author and, separately, over several rounds by an agent instructed to referee the manuscript. Code, logs, the referee reports and the literature transcripts are available at \url{https://github.com/moffatstudio/union-closed-constant}.
+
+\appendix
+\section{Constants}\label{app:const}
+With $\ent$ in bits, $\ent(1/\sqrt2)=0.872429340\ldots$ and $c_{\mathrm{ceil}}=1-\ent(1/\sqrt2)/\sqrt2=0.383099298\ldots$. The fixed point of \eqref{eq:G} is
+\[c^{**}=0.382885260\ldots,\qquad w^{**}=\frac1{2(1-c^{**})}=0.810222\ldots,\qquad x^{**}=0.690908\ldots,\]
+where $x^{**}$ is the minimiser in \eqref{eq:G}, with $\ent(x^{**})=0.892123$, $\ent(x^{**2})=0.998520$ and $x^{**2}+f(x^{**})^2=\frac12$. For comparison, $c_2(w)$ of Proposition~\ref{prop:twoadv}(a) equals $0.382752$ at Liu's weight $w=0.899947$ (minimiser $x=0.6807$), $0.382841$ at $w=0.85$, and $0.382885$ at $w=w^{**}$; the constraint \eqref{eq:H} at $c=0.38284$ reads $w\ge0.81016$, and at $w=0.810222$ the hiding family gives $2w(1-c)=1.000073$. The maximal correlation of the hiding coupling of Lemma~\ref{lem:classes} at $q=1-0.38284$, $y=\frac12$ is $0.081$, $0.025$, $0.0079$, $0.00079$ for $\delta=10^{-2},10^{-3},10^{-4},10^{-6}$. In Theorem~\ref{thm:small}: $\tilde L(t_0)=8.814861$, $\ent(t_0)=0.0529151$, $\rho=18.784815$, $r=(1-w)/w=0.2342296$, $(1-c)-C/(2w)=1.43288\cdot10^{-5}$, $\varepsilon_0=7.62787\cdot10^{-7}$; the ratio $w\Lambda/((1-w)\sqrt{\ent\ent'})$ on $[0,t_0]^2$ is largest at the corner, where it equals $0.9909$, and Lemma~\ref{lem:pointwise} holds up to $t_0=0.00631$.
+
+\begin{thebibliography}{99}
+\bibitem{AHS} R.~Alweiss, B.~Huang and M.~Sellke, Improved lower bound for the union-closed sets conjecture, arXiv:2211.11731 (2022).
+\bibitem{BruhnSchaudt} H.~Bruhn and O.~Schaudt, The journey of the union-closed sets conjecture, \emph{Graphs Combin.} 31 (2015), 2043--2074.
+\bibitem{Cambie} S.~Cambie, Better bounds for the union-closed sets conjecture using the entropy approach, arXiv:2212.12500 (2022; revised 2025).
+\bibitem{CL} Z.~Chase and S.~Lovett, Approximate union closed conjecture, arXiv:2211.11689 (2022).
+\bibitem{Frankl} P.~Frankl, Extremal set systems, in: \emph{Handbook of Combinatorics}, Vol.~2, Elsevier, Amsterdam, 1995, pp.~1293--1329.
+\bibitem{Gilmer} J.~Gilmer, A constant lower bound for the union-closed sets conjecture, arXiv:2211.09055 (2022).
+\bibitem{Karr} A.~F.~Karr, Extreme points of certain sets of probability measures, with applications, \emph{Math. Oper. Res.} 8 (1983), 74--85.
+\bibitem{Liu} J.~Liu, Improving the lower bound for the union-closed sets conjecture via conditionally IID coupling, in: \emph{2024 IEEE International Symposium on Information Theory (ISIT)}; arXiv:2306.08824 (2023).
+\bibitem{Pebody} L.~Pebody, Extension of a method of Gilmer, arXiv:2211.13139 (2022).
+\bibitem{Sawin} W.~Sawin, An improved lower bound for the union-closed set conjecture, arXiv:2211.11504 (2022).
+\bibitem{Winkler} G.~Winkler, Extreme points of moment sets, \emph{Math. Oper. Res.} 13 (1988), 581--587.
+\bibitem{Yu} L.~Yu, Dimension-free bounds for the union-closed sets conjecture, \emph{Entropy} 25 (2023), no.~5, 767; arXiv:2212.00658.
+\end{thebibliography}
+\end{document}

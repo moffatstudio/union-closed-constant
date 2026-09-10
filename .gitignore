@@ -11,3 +11,6 @@ code/attack-*/
 # compiled PDFs are not tracked except the published paper
 *.pdf
 !paper/paper.pdf
+
+# Lean build artefacts and dependency checkouts (junctions to local Mathlib)
+lean/.lake/

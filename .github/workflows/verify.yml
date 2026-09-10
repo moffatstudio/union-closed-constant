@@ -1,0 +1,25 @@
+name: verify
+
+on:
+  push:
+    branches: [master]
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: pip install -r requirements.txt
+      - name: Recompute every constant in the paper with both evaluators
+        run: python verify.py --search
+      - name: Small-entropy lemma constants (code/lemma_verify.py)
+        run: python lemma_verify.py
+        working-directory: code
+      - name: Independent evaluator, closed forms (c**, hiding family)
+        run: python closed.py
+        working-directory: verification/independent-recertification

@@ -1,0 +1,37 @@
+{
+  "title": "The ceiling of the single-letter entropy method for the union-closed sets conjecture, and a protocol that reaches it: paper, code, logs and verification",
+  "upload_type": "software",
+  "creators": [
+    {
+      "name": "Moffat, Andrew",
+      "affiliation": "Moffat Studio, United Kingdom"
+    }
+  ],
+  "description": "Paper (PDF and LaTeX source), code, raw logs, four referee reports, an independent re-implementation of the certificate, and a one-minute verification script for the results: two unconditional ceiling theorems for the single-letter entropy method on Frankl's union-closed sets conjecture (c_ceil = 0.383099..., c** = 0.382885260...), and a computer-assisted, conditional lower bound c_0 >= 0.38284 on the union-closed constant, improving Liu's 0.382709. Frankl's conjecture itself remains open. Produced with Claude (Anthropic) language-model agents under the author's direction; every intermediate state and every referee-caught error is preserved in the git history and reports.",
+  "license": "MIT",
+  "keywords": [
+    "union-closed sets conjecture",
+    "Frankl's conjecture",
+    "entropy method",
+    "extremal set theory",
+    "computer-assisted proof",
+    "information theory",
+    "AI-assisted mathematics"
+  ],
+  "subjects": [
+    {"term": "Combinatorics", "identifier": "https://id.loc.gov/authorities/subjects/sh85028802", "scheme": "url"}
+  ],
+  "related_identifiers": [
+    {
+      "identifier": "https://github.com/moffatstudio/union-closed-constant",
+      "relation": "isSupplementTo",
+      "scheme": "url"
+    },
+    {
+      "identifier": "arXiv:2306.08824",
+      "relation": "cites",
+      "scheme": "arxiv"
+    }
+  ],
+  "notes": "Mathematics Subject Classification 2020: 05D05 (primary), 94A17, 60E15. Paper text and reports are CC BY 4.0; code, logs and JSON are MIT (see LICENSE)."
+}

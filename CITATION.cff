@@ -18,5 +18,7 @@ preferred-citation:
     - family-names: Moffat
       given-names: Andrew
   year: 2026
-  journal: "arXiv preprint"
-  notes: "arXiv identifier to be added on announcement"
+  month: 9
+  medium: "preprint"
+  url: https://github.com/moffatstudio/union-closed-constant/releases/tag/v1.0
+  notes: "Preprint of 8 September 2026, release v1.0 of the repository. Zenodo DOI and arXiv identifier to be added when available."

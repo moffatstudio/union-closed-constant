@@ -1,8 +1,19 @@
 # The ceiling of the single-letter entropy method for the union-closed sets conjecture, and a protocol that reaches it
 
-Andrew Moffat, 8 September 2026. Paper: [`paper/paper.pdf`](paper/paper.pdf) (13 pp; source [`paper/paper.tex`](paper/paper.tex)). arXiv: *identifier to be added on announcement*; math.CO, cross-list cs.IT; MSC 05D05, 94A17, 60E15.
+[![verify](https://github.com/moffatstudio/union-closed-constant/actions/workflows/verify.yml/badge.svg)](https://github.com/moffatstudio/union-closed-constant/actions/workflows/verify.yml)
+
+Andrew Moffat, 8 September 2026. Paper: [`paper/paper.pdf`](paper/paper.pdf) (13 pp; source [`paper/paper.tex`](paper/paper.tex)). Preprint, not peer-reviewed. Intended for math.CO (cross-list cs.IT); MSC 05D05, 94A17, 60E15. Not yet on arXiv (endorsement pending); the release [`v1.0`](https://github.com/moffatstudio/union-closed-constant/releases/tag/v1.0) is the version of record, and a Zenodo DOI will be added here when minted.
 
 This repository holds everything needed to check the paper: the code, the raw logs of every run quoted in it, the reports of four referee rounds, an independent re-implementation of the certificate, and the campaign log. Nothing was removed to tidy the story; withdrawn intermediate claims are marked as such where they occur.
+
+## Check it in one minute
+
+```
+pip install -r requirements.txt
+python verify.py --search
+```
+
+`verify.py` recomputes every constant printed in the paper (Appendix A, Table 2, Theorem 5.5) with **two independent evaluators** — the paper's `code/kernel_game.py` and `verification/independent-recertification/evaluator.py`, written from the manuscript alone — and compares each to the printed value: $c_{\mathrm{ceil}}$, $c^{**}$, $w^{**}$, $x^{**}$; calibration on Liu's published optimum to nine digits; the two-point minimum $1.0000733$ at $c = 0.38284$ and $1.0000085$ at $0.38288$; the hiding family's closed form and its limit $2w(1-c)$; $\rho$, $\varepsilon_0$, the Lemma 5.6 bound, the corner ratio $0.9909$ and (F2); agreement of the two evaluators to $10^{-10}$ on random laws; and, with `--search`, a short 4-atom optimiser run that lands on the same minimiser. It exits non-zero on any discrepancy. The same script runs in CI on every push (badge above). The long computations behind Hypothesis 6.1 (5,000 restarts; 5- and 6-atom laws; 97 minutes) are not repeated by `verify.py`; their logs and the scripts that produced them are listed below.
 
 ## What is claimed, and how firmly
 

@@ -6,12 +6,12 @@ below had been produced.
 
 ## My code
 
-- `C:\tmp\recert\indep\evaluator.py` - certificate ratio, kernels `f_liu`, `f_ideal`,
+- `verification/independent-recertification/evaluator.py` (also `code/recert_evaluator.py`) - certificate ratio, kernels `f_liu`, `f_ideal`,
   SLSQP local minimiser (softmax weights, atom locations in [0,1], q in [0,1]).
-- `C:\tmp\recert\indep\search.py` - seeds + multi-restart global search driver.
-- `C:\tmp\recert\indep\calib.py` - Liu calibration.
-- `C:\tmp\recert\indep\closed.py` - closed-form hiding family, two-point family, fixed point.
-- Results: `indep\ideal_n{4,5,6}_c38284.json`.
+- `verification/independent-recertification/search.py` - seeds + multi-restart global search driver.
+- `verification/independent-recertification/calib.py` - Liu calibration.
+- `verification/independent-recertification/closed.py` - closed-form hiding family, two-point family, fixed point.
+- Results: `verification/independent-recertification/ideal_n{4,5,6}_c38284.json`.
 
 Objective implemented (base-2 h; ratio is log-base invariant):
 

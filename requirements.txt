@@ -1,0 +1,5 @@
+# Verified 2026-09-10 with Python 3.12.2
+numpy>=1.26
+scipy>=1.11
+# only verification/referee-checks/lemcheck.py and lemgap.py (50-digit constants):
+mpmath>=1.3

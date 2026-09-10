@@ -18,7 +18,7 @@ Machine rules: single process, dense matrices only (n<=1999 here => <=32MB per m
 """
 import numpy as np
 from scipy.linalg import eigh
-import time, json, sys
+import time, json, sys, os
 
 def h(x):
     x = np.clip(x, 1e-300, 1 - 1e-16)
@@ -32,7 +32,7 @@ def f_ideal(x):
     x = np.asarray(x, float)
     return np.where(x <= 0.5, np.minimum(x, 1-x), np.sqrt(np.maximum(0.0, 0.5 - x**2)))
 
-sys.path.insert(0, r"C:\Users\moffa\Desktop\Research\Mathematics\conjectures\Combinatorics\057_union-closed\code")
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from kernel_game import K_new as K_new_raw, K_liu as K_liu_raw
 
 def K_liu(x, y):

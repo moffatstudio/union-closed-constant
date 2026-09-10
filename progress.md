@@ -67,7 +67,7 @@ eferee\REFEREE{,2,3,4}.md): round 1 found 4 errors/4 gaps (hiding definition nee
   gaps, round 4: **no ERROR, no GAP**; referee reproduced c**, both table columns, Liu to 13 digits, inertia k=2 on 11 grids.
   Independent re-certification (fresh Opus agent, own evaluator from the note alone): calibration on Liu passes, 4-atom min 1.00007334
   at the two-point law, hiding limit 1.000073219 from above, fixed point c**=0.382885260 — no discrepancy (5/6-atom runs in flight).
-  Repo: https://github.com/moffatstudio/union-closed-constant (private). Open: sharp small-entropy lemma (lemma-prover agent).
+  Repo: https://github.com/moffatstudio/union-closed-constant (public since 2026-09-08). Open: sharp small-entropy lemma (lemma-prover agent).
 - 2026-09-08 20:15 — **WRAPPED.** Sharp small-entropy bound proved (lemma-prover agent, refereed: no error): R ≥ 2w[(1−c) − ρE], ρ=18.785,
   ε₀=7.6e-7 > numerical floor 1e-7 ⇒ no window at c=0.38284 (certificate now MORE complete than Liu's). Reach caveat: window reopens
   for c > c** − 1.9e-6. 5,000-restart run: min 1.00007334 (two-point law). Independent re-certification (own evaluator, no repo code):

@@ -1,6 +1,13 @@
 __pycache__/
 *.pyc
-*.pdf
 *.png
+*.stackdump
 liu_fulltext.txt
 paper/docker_pull.log
+paper/vibemathed-entry.html
+# later campaign lanes (separate work, not part of the paper)
+attack-*/
+code/attack-*/
+# compiled PDFs are not tracked except the published paper
+*.pdf
+!paper/paper.pdf

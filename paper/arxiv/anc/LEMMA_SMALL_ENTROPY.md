@@ -217,7 +217,7 @@ better t_0.
 
 ## 4. Numerical exploration
 
-All scripts are in `C:\tmp\lemma\`.
+All scripts are in `verification/small-entropy-lemma/`.
 
 ### 4.1 Verification of every inequality used (`verify.py`, `verify2.py`)
 

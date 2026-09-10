@@ -1,0 +1,22 @@
+cff-version: 1.2.0
+message: "If you use this code or these results, please cite the paper."
+type: software
+title: "union-closed-constant: code, logs and verification for 'The ceiling of the single-letter entropy method for the union-closed sets conjecture, and a protocol that reaches it'"
+authors:
+  - family-names: Moffat
+    given-names: Andrew
+    email: andrewmoffat.business@gmail.com
+    affiliation: Moffat Studio, United Kingdom
+date-released: 2026-09-08
+version: "1.0"
+repository-code: https://github.com/moffatstudio/union-closed-constant
+license: MIT
+preferred-citation:
+  type: article
+  title: "The ceiling of the single-letter entropy method for the union-closed sets conjecture, and a protocol that reaches it"
+  authors:
+    - family-names: Moffat
+      given-names: Andrew
+  year: 2026
+  journal: "arXiv preprint"
+  notes: "arXiv identifier to be added on announcement"

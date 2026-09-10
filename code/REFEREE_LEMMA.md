@@ -1,4 +1,4 @@
-# Referee report: the sharp small-entropy lemma (`C:\tmp\lemma\LEMMA_SMALL_ENTROPY.md`)
+# Referee report: the sharp small-entropy lemma (`code/LEMMA_SMALL_ENTROPY.md`)
 
 **Verdict: the lemma is correct.** I checked every inequality analytically and re-verified every constant and every monotonicity claim independently, including a 50-digit recomputation and an adversarial search designed to break the main bound. I found no error. There is one substantive gap, and it concerns reach in `c`, not the mathematics.
 

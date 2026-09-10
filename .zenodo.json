@@ -7,7 +7,7 @@
       "affiliation": "Moffat Studio, United Kingdom"
     }
   ],
-  "description": "Paper (PDF and LaTeX source), code, raw logs, four referee reports, an independent re-implementation of the certificate, and a one-minute verification script for the results: two unconditional ceiling theorems for the single-letter entropy method on Frankl's union-closed sets conjecture (c_ceil = 0.383099..., c** = 0.382885260...), and a computer-assisted, conditional lower bound c_0 >= 0.38284 on the union-closed constant, improving Liu's 0.382709. Frankl's conjecture itself remains open. Produced with Claude (Anthropic) language-model agents under the author's direction; every intermediate state and every referee-caught error is preserved in the git history and reports.",
+  "description": "Paper (PDF and LaTeX source), code, raw logs, four referee reports, an independent re-implementation of the certificate, a one-minute verification script, and a Lean 4 / Mathlib formalisation (zero sorry, standard axioms only) of the two ceiling theorems, for the results: two unconditional ceiling theorems for the single-letter entropy method on Frankl's union-closed sets conjecture (c_ceil = 0.383099..., c** = 0.382885260...), and a computer-assisted, conditional lower bound c_0 >= 0.38284 on the union-closed constant, improving Liu's 0.382709. Frankl's conjecture itself remains open. Produced with Claude (Anthropic) language-model agents under the author's direction; every intermediate state and every referee-caught error is preserved in the git history and reports.",
   "license": "MIT",
   "keywords": [
     "union-closed sets conjecture",

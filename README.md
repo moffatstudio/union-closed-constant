@@ -1,8 +1,8 @@
 # The ceiling of the single-letter entropy method for the union-closed sets conjecture, and a protocol that reaches it
 
-[![verify](https://github.com/moffatstudio/union-closed-constant/actions/workflows/verify.yml/badge.svg)](https://github.com/moffatstudio/union-closed-constant/actions/workflows/verify.yml)
+[![verify](https://github.com/moffatstudio/union-closed-constant/actions/workflows/verify.yml/badge.svg)](https://github.com/moffatstudio/union-closed-constant/actions/workflows/verify.yml) [![lean](https://github.com/moffatstudio/union-closed-constant/actions/workflows/lean.yml/badge.svg)](https://github.com/moffatstudio/union-closed-constant/actions/workflows/lean.yml)
 
-Andrew Moffat, 8 September 2026. Paper: [`paper/paper.pdf`](paper/paper.pdf) (13 pp; source [`paper/paper.tex`](paper/paper.tex)). Preprint, not peer-reviewed. Intended for math.CO (cross-list cs.IT); MSC 05D05, 94A17, 60E15. Not yet on arXiv (endorsement pending); the release [`v1.0`](https://github.com/moffatstudio/union-closed-constant/releases/tag/v1.0) is the version of record, and a Zenodo DOI will be added here when minted.
+Andrew Moffat, 8 September 2026. Paper: [`paper/paper.pdf`](paper/paper.pdf) (13 pp; source [`paper/paper.tex`](paper/paper.tex)). Preprint, not peer-reviewed. Intended for math.CO (cross-list cs.IT); MSC 05D05, 94A17, 60E15. Not yet on arXiv (endorsement pending); the release [`v1.1`](https://github.com/moffatstudio/union-closed-constant/releases/tag/v1.1) is the version of record (v1.0 = paper; v1.1 adds the Lean formalisation), and a Zenodo DOI will be added here when minted.
 
 This repository holds everything needed to check the paper: the code, the raw logs of every run quoted in it, the reports of four referee rounds, an independent re-implementation of the certificate, and the campaign log. Nothing was removed to tidy the story; withdrawn intermediate claims are marked as such where they occur.
 
@@ -19,9 +19,9 @@ python verify.py --search
 
 | Claim | Where in the paper | Status |
 |---|---|---|
-| **Ceiling.** Every single-letter certificate whose classes contain product laws certifies at most $c_{\mathrm{ceil}} = 1 - h(1/\sqrt2)/\sqrt2 = 0.383099\ldots$ | Theorem 3.1 | **Proved** (short, elementary; `CEILING_THEOREM.md`) |
-| **Refined ceiling.** Every certificate using the i.i.d. protocol whose other classes admit *component hiding* certifies at most $c^{**} = 0.382885260\ldots$ | Theorem 3.4 | **Proved** (`CEILING_THEOREM.md`, refined section) |
-| All classes in Gilmer, AHS, Chase–Lovett, Sawin, Pebody, Yu, Cambie, Liu contain products and admit hiding | Lemma 3.3 | **Proved** |
+| **Ceiling.** Every single-letter certificate whose classes contain product laws certifies at most $c_{\mathrm{ceil}} = 1 - h(1/\sqrt2)/\sqrt2 = 0.383099\ldots$ | Theorem 3.1 | **Proved**; **machine-checked in Lean 4 / Mathlib** — `lean/UnionClosedCeiling/Ceiling.lean`, `product_ceiling` |
+| **Refined ceiling.** Every certificate using the i.i.d. protocol whose other classes admit *component hiding* certifies at most $c^{**} = 0.382885260\ldots$ | Theorem 3.4 | **Proved**; **machine-checked in Lean** — `hiding_bound` (H), `diagonal_bound` (D), `fixed_point_form`, and `refined_ceiling_numeric : c ≤ 0.3829` (`lean/UnionClosedCeiling/Refined.lean`) |
+| All classes in Gilmer, AHS, Chase–Lovett, Sawin, Pebody, Yu, Cambie, Liu contain products and admit hiding | Lemma 3.3 | **Proved**; the i.i.d., all-couplings and mixtures-of-products cases machine-checked in Lean (`Classes.lean`); the maximal-correlation case is paper-only |
 | **Small-entropy bound** $R \ge 2w[(1-c) - \rho E]$ | Theorem 5.5 | **Proved** (`code/LEMMA_SMALL_ENTROPY.md`, refereed in `code/REFEREE_LEMMA.md`) |
 | **New constant:** every finite union-closed family $\ne\{\emptyset\}$ has an element in at least $0.38284\,\lvert\mathcal F\rvert$ members | Theorem 6.2 | **Computer-assisted, conditional** on Hypotheses 5.3 (inertia) and 6.1 (global minimum) — the same kind of hypotheses as Liu's record $0.382709$, with the small-entropy regime now covered unconditionally |
 | Every $c < c^{**}$ is certified under the analogous hypothesis at each weight | Theorem 6.2, last sentence | Conditional, as above |
@@ -54,7 +54,8 @@ The paper's evaluator is `code/kernel_game.py` (function `ratio`; kernel `f_idea
 1. **Referee rounds 1–4** on the manuscript, each by a fresh agent instructed to referee: `code/REFEREE.md`, `REFEREE2.md`, `REFEREE3.md`, `REFEREE4.md`. Round 1 found four errors and four gaps (all fixed: hiding definition, a $2x^2$ slip, stale $\beta=0.19$ claims, the singleton-class hypothesis, the (D) range condition); round 2 found that the first version of the small-entropy lemma dropped a factor $w$ (withdrawn, replaced by Theorem 5.5); round 3 four statement-precision gaps; round 4 no error, no gap. The referee's own check scripts are in `verification/referee-checks/`.
 2. **Small-entropy lemma** proved separately (`code/LEMMA_SMALL_ENTROPY.md`, scripts `verification/small-entropy-lemma/`) and refereed (`code/REFEREE_LEMMA.md`: correct; one reach caveat, now stated in the paper as the $c > c^{**} - 1.9\cdot10^{-6}$ window).
 3. **Independent re-certification** (`code/RECERT.md`): a second agent wrote its own evaluator from the manuscript, calibrated it on Liu's published optimum, and reproduced the two-point minimum $1.0000733414$ at 4, 5 and 6 atoms, the hiding-family limit $1.000073219$ from above, and the fixed point $c^{**}$.
-4. Git history preserves every intermediate state, including the withdrawn $0.38293$–$0.38295$ figures (optimiser misses on the hiding law, explained in Remark 6.3 and `progress.md`).
+4. **Lean formalisation** (`lean/`): Theorems 3.1 and 3.4 and most of Lemma 3.3 are machine-checked in Lean 4 / Mathlib v4.23.0 on a finite model of the framework whose certificate hypothesis is *implied by* the paper's (so the Lean theorems apply to the paper). Zero `sorry`; axioms `propext`, `Classical.choice`, `Quot.sound` only; `bash lean/check.sh` is the gate and runs in CI (badge above). The numerical corollary proved is `c ≤ 0.3829` (< c_ceil = 0.383099, so the refined ceiling formally beats the product one); the exact `c** = 0.382885260…` is a real-number fixed point evaluated in `verify.py`, not in Lean. `lean/README.md` maps every paper statement to its Lean name and lists what is not formalised (Proposition 2.2, the maximal-correlation class, everything conditional).
+5. Git history preserves every intermediate state, including the withdrawn $0.38293$–$0.38295$ figures (optimiser misses on the hiding law, explained in Remark 6.3 and `progress.md`).
 
 The commits are timestamped; the whole campaign ran on 2026-09-08.
 
@@ -67,6 +68,7 @@ The work was carried out by a team of Claude (Anthropic) language-model agents u
 ```
 paper/                paper.tex, paper.pdf, arXiv package (union-closed-arxiv.tar.gz = paper.tex + anc/)
 code/                 evaluator, certification scripts, every log; reports RECERT/REFEREE*/INERTIA/CONCAVITY/ROBUSTNESS/LEMMA
+lean/                 Lean 4 / Mathlib formalisation of Theorems 3.1, 3.4 and Lemma 3.3 (README, SPEC, check.sh)
 verification/         scripts of the independent verifier, the lemma prover and the referee (archived verbatim)
 literature/           transcripts and syntheses of the cited papers, written by the agents; candidate scouting
 CEILING_THEOREM.md    the two ceiling theorems as first written, with proofs

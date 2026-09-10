@@ -89,8 +89,8 @@ eferee\REFEREE{,2,3,4}.md): round 1 found 4 errors/4 gaps (hiding definition nee
   Outcome: **Theorem 3.1** (`product_ceiling`), **Theorem 3.4** in four pieces — (H) `hiding_bound`, (D) `diagonal_bound`,
   `fixed_point_form`, and `refined_ceiling_numeric : c ≤ 3829/10000` — and **Lemma 3.3** for the i.i.d., all-couplings and
   mixtures-of-products classes (`Classes.lean`). 1,037 lines. The numerical corollary needed rigorous entropy bounds at
-  x = 0.6909 (Taylor series of log(1−t) with explicit remainder, 16/16/6 terms, plus Mathlib's `log_two_gt_d9`): the target
-  0.3829 was reached, margin ≈ 1.4·10⁻⁵. Not formalised, and said so in `lean/README.md`: Proposition 2.2 (a hypothesis here, not a
+  x = 0.6909 (Taylor series of log(1−t) with explicit remainder, 16/16/6 terms, plus Mathlib's `log_two_gt_d9` / `log_two_lt_d9`): the target
+  0.3829 was reached, margin ≈ 1.5·10⁻⁵ (exactly 1.474·10⁻⁵). Not formalised, and said so in `lean/README.md`: Proposition 2.2 (a hypothesis here, not a
   theorem), the maximal-correlation class, Sections 4–6, and the exact fixed point c** = 0.382885260… .
   Gate: `lean/check.sh` = `lake build` + `sorry` scan + `#print axioms` scan; passes locally — zero sorry, ten declarations each
   reporting only `propext`, `Classical.choice`, `Quot.sound`. CI: `.github/workflows/lean.yml`, run 34522052221, fresh Ubuntu clone,
@@ -99,4 +99,9 @@ eferee\REFEREE{,2,3,4}.md): round 1 found 4 errors/4 gaps (hiding definition nee
 - 2026-09-10 20:50 — Verification pack (`verification-pack.zip`: the two evaluators, `verify.py`, the one-minute and the four-hour
   launchers, the paper) sent to a colleague for an independent run on their own machine. Its README says explicitly that the pack checks
   the numerical certificate only and that the ceiling proofs are machine-checked in Lean in the repository.
-
+- 2026-09-10 22:55 — **Paper revised, v1.2.** Two Opus agents (paper, docs) then an Opus referee. paper.tex: abstract sentence, intro paragraph after Theorem A,
+  acknowledgements, revised date, **Appendix B** (finite model, verbatim Lean statements with file/line refs, what is not formalised, certificate) and
+  **Appendix C** (complete Lean source, byte-identical to lean/); Sections 2–7 and Appendix A untouched, numbering unchanged; 31 pp, XeLaTeX (fontspec) via
+  Tectonic; arXiv XeLaTeX acceptance left as an open item in SUBMISSION.md. lean/CERTIFICATE.md written (commit 45949fa, toolchain, #print axioms, SHA-256,
+  CI run). All Markdown/metadata updated; arXiv tarball re-cut with anc/lean/. Referee: 28 findings (4 wording errors, stale tarball/status, version drift;
+  the rest nits), all applied. Release **v1.2** (paper.pdf, tarball, verification-pack.zip, LEAN-CERTIFICATE.md). CI verify + lean green.

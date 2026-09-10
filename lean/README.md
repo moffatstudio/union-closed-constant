@@ -2,7 +2,7 @@
 
 Machine-checked versions of the two unconditional results of the paper *The ceiling of the
 single-letter entropy method for the union-closed sets conjecture, and a protocol that reaches
-it* (A. Moffat, 8 September 2026; `../paper/paper.pdf`): Theorem 3.1 (product ceiling) and
+it* (A. Moffat, 8 September 2026, revised 10 September 2026; `../paper/paper.pdf`, Appendices B–C): Theorem 3.1 (product ceiling) and
 Theorem 3.4 (refined ceiling), together with the elementary parts of Lemma 3.3, on a
 faithful **finite** model of the single-letter framework of Section 2.2. Written by a Claude
 (Anthropic) agent from `SPEC.md` and the paper; every statement was checked against the paper
@@ -29,7 +29,7 @@ No `sorry`; the only axioms used are `propext`, `Classical.choice`, `Quot.sound`
 | **Theorem 3.4, inequality (H)** `2w(1-c) ≥ 1` | `hiding_bound` | `Refined.lean` |
 | **Theorem 3.4, inequality (D)** | `diagonal_bound` | `Refined.lean` |
 | Theorem 3.4, the fixed-point form (`G` of eq. (G)) | `fixed_point_form` | `Refined.lean` |
-| Theorem 3.4, the numerical consequence `c ≤ c**` | `refined_ceiling_numeric` (proves `c ≤ 0.3829`) | `Refined.lean` |
+| Theorem 3.4, numerical consequence (paper: `c ≤ c**`; Lean proves the weaker `c ≤ 0.3829`) | `refined_ceiling_numeric` | `Refined.lean` |
 | Lemma 3.3, products: i.i.d. singleton class | `containsProduct_iidClass` | `Classes.lean` |
 | Lemma 3.3, products: all couplings (Sawin) | `containsProduct_allCouplings` | `Classes.lean` |
 | Lemma 3.3, products: mixtures of products (conditionally-i.i.d.) | `containsProduct_mixtureOfProducts` | `Classes.lean` |
@@ -162,3 +162,5 @@ UnionClosedCeiling.lean            imports everything, #print axioms for each ma
 AxiomCheck.lean                    stand-alone axiom check used by check.sh
 check.sh                           build + sorry scan + axiom scan
 ```
+
+Build and documentation files not listed above: `lakefile.toml`, `lean-toolchain`, `lake-manifest.json` (Mathlib pinned to `v4.23.0`), `SPEC.md` (the specification the formalisation was written from), `CERTIFICATE.md` (the certificate of the check: commit, toolchain, axioms, hashes, CI run).

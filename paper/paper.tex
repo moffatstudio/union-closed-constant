@@ -414,7 +414,7 @@ $P_{ij}=m_im_j$ (\texttt{productCoupling}). A protocol is represented by the sin
 $\Pi_{x,y}(0,0)$, i.e.\ by a function $\Pi:\R\to\R\to\R$ subject to the Fr\'echet bounds
 $\max(0,x+y-1)\le\Pi(x,y)\le\min(x,y)$ on $[0,1]^2$ (\texttt{IsProtocol}); Section~\ref{sec:ceiling}
 uses nothing else about protocols, and the facts it does use---$\Pi_{x,0}(0,0)=0$,
-$\Pi_{1,1}(0,0)=1$, $\Pi_{1,y}(0,0)=y$---are derived from those bounds, while $\ent(\Pi)\le1$ holds for every real argument (\texttt{h\_le\_one}, from Mathlib's \texttt{Real.binEntropy\_le\_log\_two})
+$\Pi_{0,y}(0,0)=0$, $\Pi_{1,1}(0,0)=1$, $\Pi_{1,y}(0,0)=y$ (\texttt{protocol\_right\_zero}, \texttt{protocol\_left\_zero}, \texttt{protocol\_one\_one}, \texttt{protocol\_one\_left})---are derived from those bounds, while $\ent(\Pi)\le1$ holds for every real argument (\texttt{h\_le\_one}, from Mathlib's \texttt{Real.binEntropy\_le\_log\_two})
 in the Lean file. A class is a predicate on (arity, atoms, weights, coupling), and the two
 properties of classes used in Section~\ref{sec:ceiling} are \texttt{ContainsProduct} and
 \texttt{AdmitsHiding}, the latter being Definition~\ref{def:hiding}: for all $q,y\in(0,1)$
@@ -497,7 +497,7 @@ The two inequalities of Theorem~\ref{thm:refined}, its fixed-point form and its 
 consequence are \texttt{hiding\_bound} (\eqref{eq:H}), \texttt{diagonal\_bound}
 (\eqref{eq:D}), \texttt{fixed\_point\_form} (the substitution of \eqref{eq:H} into
 \eqref{eq:D}, i.e.\ \eqref{eq:G}) and \texttt{refined\_ceiling\_numeric}, from
-\texttt{UnionClosedCeiling/\allowbreak Refined.lean}, lines 158--164, 287--292, 373--379 and 420--425.
+\texttt{UnionClosedCeiling/\allowbreak Refined.lean}, lines 158--164, 287--292, 373--379 and 420--425. Two statements are wider than in the paper: \texttt{diagonal\_bound} is stated for $x\in(0,1]$ and \texttt{fixed\_point\_form} for $x\in(0,1)$, whereas Theorem~\ref{thm:refined} restricts $x$ to $[\tfrac12,\tfrac1{\sqrt2}]$; the proofs never use that restriction, so the Lean statements imply the paper's.
 They share the section variables
 
 \begin{Verbatim}[fontsize=\footnotesize,formatcom=\leanmono,samepage=false]

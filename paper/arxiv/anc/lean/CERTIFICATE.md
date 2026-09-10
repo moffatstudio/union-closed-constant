@@ -8,7 +8,7 @@ The working tree was clean when the checks below were run; this file is added on
 commit and is not itself part of the hashed set.
 
 **Paper certified against:** A. Moffat, *The ceiling of the single-letter entropy method for the
-union-closed sets conjecture, and a protocol that reaches it*, 8 September 2026 (`../paper/paper.pdf`).
+union-closed sets conjecture, and a protocol that reaches it*, 8 September 2026, revised 10 September 2026 with Appendices B–C (`../paper/paper.pdf`).
 Appendix B of the paper describes the formalisation; Appendix C reproduces the source.
 
 ---
@@ -85,8 +85,9 @@ ok: only propext, Classical.choice, Quot.sound
 ALL CHECKS PASSED
 ```
 
-The one warning is an unused hypothesis binder in an auxiliary lemma (`hidingCoupling_diag`);
-it is a linter note, not a proof obligation.
+The one warning is Lean's linter reporting the hypothesis `hδ0` of the auxiliary lemma
+`hidingCoupling_diag` as unused: it is used only inside the `nlinarith [...]` hint term, which the
+linter does not count. It is a linter note, not a proof obligation.
 
 The build was a replay from the local `.lake` cache. The same gate was run from scratch, on a
 fresh clone with no cache, in continuous integration — see §5.

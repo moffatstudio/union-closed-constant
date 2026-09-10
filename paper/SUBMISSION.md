@@ -24,7 +24,7 @@ Authors: Andrew Moffat
 Primary: math.CO   Cross-list: cs.IT
 MSC: 05D05 (primary); 94A17, 60E15
 License: CC BY 4.0 (recommended)
-Comments: 13 pages + appendices, 2 tables. Code, logs, referee reports and independent re-certification at https://github.com/moffatstudio/union-closed-constant. A Lean 4 formalisation of Theorems 3.1 and 3.4 included as ancillary files (anc/lean/)
+Comments: 31 pages (13-page paper plus Appendices B-C reproducing the Lean formalisation), 2 tables. Code, logs, referee reports and independent re-certification at https://github.com/moffatstudio/union-closed-constant. A Lean 4 formalisation of Theorems 3.1 and 3.4 included as ancillary files (anc/lean/)
 Abstract: (copy from the abstract environment in paper.tex)
 Note for first-time math.CO submitters: arXiv may ask for an endorsement; the endorsement request page gives a code to send to any endorsed math.CO author.
 

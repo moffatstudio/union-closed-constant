@@ -1,8 +1,43 @@
+%!TEX TS-program = xelatex
+%!TEX encoding = UTF-8 Unicode
+% Compile with XeLaTeX (Tectonic): the Lean listings in Appendices B-C are Unicode and use fontspec.
 \documentclass[11pt,a4paper]{article}
 \usepackage[margin=1.05in]{geometry}
 \usepackage{amsmath,amssymb,amsthm}
 \usepackage{booktabs}
 \usepackage{microtype}
+\usepackage{fontspec}
+\usepackage{fancyvrb}
+\usepackage{newunicodechar}
+%% The Lean listings in Appendices B and C contain Unicode mathematical symbols
+%% (ℝ, ∑, ⊗, →, δ, μ, …).  They are set in \leanmono, a monospaced font that
+%% carries them; on systems whose available monospaced font lacks some of them,
+%% those glyphs alone are taken from a fallback font.  The rest of the document
+%% is unaffected.
+\newif\ifleanfallback\leanfallbackfalse
+\IfFontExistsTF{DejaVu Sans Mono}{\newfontfamily\leanmono{DejaVu Sans Mono}}{%
+  \IfFontExistsTF{Consolas}{%
+    \newfontfamily\leanmono{Consolas}%
+    \IfFontExistsTF{Cambria Math}{%
+      \newfontfamily\leanfallbackfont{Cambria Math}\leanfallbacktrue}{}%
+  }{\let\leanmono\ttfamily}%
+}
+\ifleanfallback
+\newunicodechar{𝔼}{{\leanfallbackfont\symbol{120124}}}
+\newunicodechar{ₖ}{{\leanfallbackfont\symbol{8342}}}
+\newunicodechar{ℕ}{{\leanfallbackfont\symbol{8469}}}
+\newunicodechar{ℝ}{{\leanfallbackfont\symbol{8477}}}
+\newunicodechar{↦}{{\leanfallbackfont\symbol{8614}}}
+\newunicodechar{∀}{{\leanfallbackfont\symbol{8704}}}
+\newunicodechar{∃}{{\leanfallbackfont\symbol{8707}}}
+\newunicodechar{∈}{{\leanfallbackfont\symbol{8712}}}
+\newunicodechar{∧}{{\leanfallbackfont\symbol{8743}}}
+\newunicodechar{∼}{{\leanfallbackfont\symbol{8764}}}
+\newunicodechar{⊗}{{\leanfallbackfont\symbol{8855}}}
+\newunicodechar{⊢}{{\leanfallbackfont\symbol{8866}}}
+\newunicodechar{⟨}{{\leanfallbackfont\symbol{10216}}}
+\newunicodechar{⟩}{{\leanfallbackfont\symbol{10217}}}
+\fi
 \usepackage[hidelinks]{hyperref}
 \emergencystretch=1.5em
 \newtheorem{theorem}{Theorem}[section]
@@ -29,13 +64,13 @@
 
 \title{The ceiling of the single-letter entropy method for the union-closed sets conjecture, and a protocol that reaches it}
 \author{Andrew Moffat\thanks{Moffat Studio, United Kingdom. Email: \texttt{andrewmoffat.business@gmail.com}.}}
-\date{8 September 2026}
+\date{8 September 2026; revised 10 September 2026 (Appendices B--C added)}
 
 \begin{document}
 \maketitle
 
 \begin{abstract}
-Gilmer's entropy method for Frankl's union-closed sets conjecture, in the form developed by Sawin, Yu, Cambie and Liu, certifies a constant $c$ (some element lies in at least $c|\F|$ members of every union-closed family $\F$) through a single-letter inequality. The inequality involves a \emph{protocol}, a memoryless rule that couples the two conditional bits, and a \emph{class} of admissible joint laws of the two prefix-conditional probabilities. We prove that every such certificate whose classes contain product laws is bounded by $1-\ent(1/\sqrt2)/\sqrt2=0.383099\ldots$, and that every certificate which uses the i.i.d.\ protocol and whose other classes admit \emph{component hiding} (a property of every class in the literature) is bounded by $c^{**}=0.382885260\ldots$, the joint solution of two explicit adversarial laws. We then construct a conditionally-i.i.d.\ protocol whose kernel has the optimal diagonal and show, by a computer-assisted argument of the type used for the previous record $0.382709$ of Liu, with the small-entropy regime handled by a new analytic bound, that it certifies $c=0.38284$, and, under the analogous hypothesis at each weight, every $c<c^{**}$. The improvement is small, $+1.8\cdot10^{-4}$, and the second theorem shows that it is the last one available to this family of arguments.
+Gilmer's entropy method for Frankl's union-closed sets conjecture, in the form developed by Sawin, Yu, Cambie and Liu, certifies a constant $c$ (some element lies in at least $c|\F|$ members of every union-closed family $\F$) through a single-letter inequality. The inequality involves a \emph{protocol}, a memoryless rule that couples the two conditional bits, and a \emph{class} of admissible joint laws of the two prefix-conditional probabilities. We prove that every such certificate whose classes contain product laws is bounded by $1-\ent(1/\sqrt2)/\sqrt2=0.383099\ldots$, and that every certificate which uses the i.i.d.\ protocol and whose other classes admit \emph{component hiding} (a property of every class in the literature) is bounded by $c^{**}=0.382885260\ldots$, the joint solution of two explicit adversarial laws. We then construct a conditionally-i.i.d.\ protocol whose kernel has the optimal diagonal and show, by a computer-assisted argument of the type used for the previous record $0.382709$ of Liu, with the small-entropy regime handled by a new analytic bound, that it certifies $c=0.38284$, and, under the analogous hypothesis at each weight, every $c<c^{**}$. The improvement is small, $+1.8\cdot10^{-4}$, and the second theorem shows that it is the last one available to this family of arguments. The two ceiling theorems (Theorems~\ref{thm:ceil} and~\ref{thm:refined}) and Lemma~\ref{lem:classes}, with the exception of its maximal-correlation case, have been formalised and machine-checked in Lean~4 with Mathlib; the formal development is included as ancillary material and is described in Appendix~\ref{app:lean}.
 \end{abstract}
 
 \noindent\textit{2020 Mathematics Subject Classification.} Primary 05D05; Secondary 94A17, 60E15.\\
@@ -63,6 +98,17 @@ All of these arguments have the same shape, made explicit by Liu \cite[Definitio
 \begin{theorem}[informal; Theorems~\ref{thm:ceil} and~\ref{thm:refined}]\label{thm:A}
 Every single-letter certificate whose classes contain product laws certifies at most $1-\ent(1/\sqrt2)/\sqrt2=0.383099\ldots$. Every single-letter certificate that uses the i.i.d.\ protocol and whose other classes admit component hiding certifies at most $c^{**}=0.382885260\ldots$. All classes used in \cite{Gilmer,AHS,CL,Sawin,Pebody,Yu,Cambie,Liu} contain product laws and admit hiding.
 \end{theorem}
+
+Both ceiling theorems, together with the parts of Lemma~\ref{lem:classes} that concern the
+i.i.d.\ class, the class of all couplings and the class of mixtures of products, have been
+formalised and machine-checked in Lean~4 with Mathlib, on a finite model of the framework of
+Section~\ref{sec:framework}; the maximal-correlation case of Lemma~\ref{lem:classes} is not
+formalised. The formal development proves, for every certificate satisfying the hypotheses of
+Theorem~\ref{thm:refined} with $c\le\tfrac12$, that $c\le0.3829$: the exact fixed point
+$c^{**}$ is a real number evaluated numerically, whereas the rational bound $0.3829$ is
+proved outright, and since $0.3829<c_{\mathrm{ceil}}=0.3830993\ldots$ it already separates the
+two ceilings formally. The development is included as ancillary material; it is described in
+Appendix~\ref{app:lean} and its complete source is reproduced in Appendix~\ref{app:src}.
 
 Our second contribution is a protocol that reaches this ceiling. Write $x=\Prob(\text{bit}=0)$ for a conditional zero-probability.
 
@@ -339,13 +385,1305 @@ Theorem~\ref{thm:refined} says that the single-letter method, in every form used
 Going beyond $c^{**}$ therefore requires one of two things. Either a \emph{tensorising} constraint on the joint law of the two prefix-conditional probabilities that forbids hiding a tiny atom---maximal correlation does not, as Lemma~\ref{lem:classes} shows, because a tiny atom can be moved at vanishing cost in correlation---or an argument that is not single-letter, for instance one that uses the exact closure hypothesis through $H(A\cup B)\le\log_2|\F|-D\big(\mathrm{law}(A\cup B)\,\|\,\mathrm{Unif}(\F)\big)$ rather than through \eqref{eq:union}. Some evidence that the loss is in the single-letter relaxation rather than in the coupling idea comes from an exact dynamic-programming oracle for prefix-dependent (non-memoryless) couplings on small families: on every family on at most four elements with maximal frequency below $\frac12$, and on all unions of two Hamming layers on $24$ elements, some sequential coupling makes the lower bound in \eqref{eq:chain} exceed $H(A)$. We do not know how to turn this into a proof, because the adversary in the single-letter relaxation chooses the joint law of the two prefixes, which the dynamic programme controls.
 
 \section*{Acknowledgements}
-The literature survey, the transcription of the cited proofs, the numerical computations, including the independent re-implementation of the certificate, and the proof of Theorem~\ref{thm:small} were carried out with Claude (Anthropic) language-model agents under the author's direction; the mathematical claims were checked by the author and, separately, over several rounds by an agent instructed to referee the manuscript. Code, logs, the referee reports and the literature transcripts are available at \url{https://github.com/moffatstudio/union-closed-constant}.
+The literature survey, the transcription of the cited proofs, the numerical computations, including the independent re-implementation of the certificate, and the proof of Theorem~\ref{thm:small} were carried out with Claude (Anthropic) language-model agents under the author's direction; the mathematical claims were checked by the author and, separately, over several rounds by an agent instructed to referee the manuscript. Code, logs, the referee reports and the literature transcripts are available at \url{https://github.com/moffatstudio/union-closed-constant}. The Lean formalisation of Appendices~\ref{app:lean} and~\ref{app:src} was written by a Claude (Anthropic) agent from a written specification and checked against the paper by the author.
 
 \appendix
 \section{Constants}\label{app:const}
 With $\ent$ in bits, $\ent(1/\sqrt2)=0.872429340\ldots$ and $c_{\mathrm{ceil}}=1-\ent(1/\sqrt2)/\sqrt2=0.383099298\ldots$. The fixed point of \eqref{eq:G} is
 \[c^{**}=0.382885260\ldots,\qquad w^{**}=\frac1{2(1-c^{**})}=0.810222\ldots,\qquad x^{**}=0.690908\ldots,\]
 where $x^{**}$ is the minimiser in \eqref{eq:G}, with $\ent(x^{**})=0.892123$, $\ent(x^{**2})=0.998520$ and $x^{**2}+f(x^{**})^2=\frac12$. For comparison, $c_2(w)$ of Proposition~\ref{prop:twoadv}(a) equals $0.382752$ at Liu's weight $w=0.899947$ (minimiser $x=0.6807$), $0.382841$ at $w=0.85$, and $0.382885$ at $w=w^{**}$; the constraint \eqref{eq:H} at $c=0.38284$ reads $w\ge0.81016$, and at $w=0.810222$ the hiding family gives $2w(1-c)=1.000073$. The maximal correlation of the hiding coupling of Lemma~\ref{lem:classes} at $q=1-0.38284$, $y=\frac12$ is $0.081$, $0.025$, $0.0079$, $0.00079$ for $\delta=10^{-2},10^{-3},10^{-4},10^{-6}$. In Theorem~\ref{thm:small}: $\tilde L(t_0)=8.814861$, $\ent(t_0)=0.0529151$, $\rho=18.784815$, $r=(1-w)/w=0.2342296$, $(1-c)-C/(2w)=1.43288\cdot10^{-5}$, $\varepsilon_0=7.62787\cdot10^{-7}$; the ratio $w\Lambda/((1-w)\sqrt{\ent\ent'})$ on $[0,t_0]^2$ is largest at the corner, where it equals $0.9909$, and Lemma~\ref{lem:pointwise} holds up to $t_0=0.00631$.
+
+
+\section{Formal verification of the ceiling theorems}\label{app:lean}
+\sloppy
+Theorem~\ref{thm:ceil}, Theorem~\ref{thm:refined} and the three formalised cases of
+Lemma~\ref{lem:classes} have been checked in Lean~4 with Mathlib. The development is a
+single Lean library, \texttt{UnionClosedCeiling}, of about $1{,}040$ lines; it contains no
+\texttt{sorry}, and every main theorem depends only on Lean's three standard axioms. This
+appendix describes the model, quotes the formal statements, says what is \emph{not}
+formalised, and records the certificate of the check. Appendix~\ref{app:src} reproduces the
+complete source.
+
+\subsection{The finite model}\label{app:lean:model}
+A law $\mu$ on $[0,1]$ is represented by finitely many atoms $a:\mathrm{Fin}\,n\to\R$ in
+$[0,1]$ with weights $m:\mathrm{Fin}\,n\to\R$, $m\ge0$, $\sum_im_i=1$ (\texttt{IsLaw}), with
+$\E_\mu[X]=\sum_im_ia_i$ (\texttt{mean}) and $\E_\mu[\ent(X)]=\sum_im_i\ent(a_i)$
+(\texttt{entropy}). A coupling of $\mu$ with itself is a non-negative matrix whose row sums
+and column sums are $m$ (\texttt{IsCoupling}); the product law is
+$P_{ij}=m_im_j$ (\texttt{productCoupling}). A protocol is represented by the single number
+$\Pi_{x,y}(0,0)$, i.e.\ by a function $\Pi:\R\to\R\to\R$ subject to the Fr\'echet bounds
+$\max(0,x+y-1)\le\Pi(x,y)\le\min(x,y)$ on $[0,1]^2$ (\texttt{IsProtocol}); Section~\ref{sec:ceiling}
+uses nothing else about protocols, and the facts it does use---$\Pi_{x,0}(0,0)=0$,
+$\Pi_{1,1}(0,0)=1$, $\Pi_{1,y}(0,0)=y$---are derived from those bounds, while $\ent(\Pi)\le1$ holds for every real argument (\texttt{h\_le\_one}, from Mathlib's \texttt{Real.binEntropy\_le\_log\_two})
+in the Lean file. A class is a predicate on (arity, atoms, weights, coupling), and the two
+properties of classes used in Section~\ref{sec:ceiling} are \texttt{ContainsProduct} and
+\texttt{AdmitsHiding}, the latter being Definition~\ref{def:hiding}: for all $q,y\in(0,1)$
+there is a threshold $\delta_0>0$ such that for every $\delta\in(0,\delta_0)$ the class
+contains a coupling $P$ of $\mu_{q,y,\delta}$ with itself with $P(y,1)=P(1,y)=0$ and
+$P(y,y)\le\delta^2$. The two adversaries are the finitely supported laws
+$p\,\delta_x+(1-p)\delta_0$ (\texttt{twoAtoms}, \texttt{twoWeights}) and $\mu_{q,y,\delta}$
+(\texttt{hidingAtoms}, \texttt{hidingWeights}), indexed $0\mapsto1$, $1\mapsto0$,
+$2\mapsto y$. Entropy is Mathlib's \texttt{Real.binEntropy} divided by $\log2$, so that
+$\ent(\tfrac12)=1$.
+
+The hypothesis of every theorem is \texttt{Certifies}: for every finitely supported law of
+mean at least $1-c$ and every family of couplings $(P^{(k)})_k$ with $P^{(k)}$ admissible for
+the $k$-th class,
+$C\,\E_\mu[\ent(X)]\le\sum_kw_k\,\E_{P^{(k)}}\big[\ent(\Pi^{(k)}_{X,Y}(0,0))\big]$.
+This is implied by \eqref{eq:cert}: the infimum over a class is at most the value at any
+admissible family, so \eqref{eq:cert} yields \texttt{Certifies} for every such family, and
+every Lean theorem therefore applies verbatim to the paper's certificate. Restricting to
+finitely supported laws also only weakens the hypothesis, hence strengthens the theorems
+proved from it; every adversary of Section~\ref{sec:ceiling} is of that form (two atoms in
+Theorem~\ref{thm:ceil} and in \eqref{eq:D}, three in Definition~\ref{def:hiding}). Where the
+formal hypotheses differ from the paper's they are weaker: the Lean statements assume
+$C\ge1$ where the paper has $C>1$, and they give the i.i.d.\ protocol a class satisfying
+only \texttt{ContainsProduct}, whereas the paper gives it the singleton class
+$\{\mu\otimes\mu\}$, which satisfies that and more. In Theorem~\ref{thm:refined} the
+protocols are indexed by $\mathrm{Fin}(K+1)$ and index $0$ is the i.i.d.\ one, characterised
+by the hypothesis $\Pi^{(0)}_{x,y}(0,0)=xy$. The limit $\delta\to0$ in the proof of
+\eqref{eq:H} is carried out by hand: $\delta$ is chosen below the hiding threshold of each of
+the finitely many classes and below $c(1-2qw_0)$, which yields the contradiction directly.
+
+\subsection{The statements}\label{app:lean:stmts}
+The following are copied from the sources; only the statements are shown, the proofs are in
+Appendix~\ref{app:src}. Definitions, from \texttt{UnionClosedCeiling/\allowbreak Framework.lean}, lines
+61--63, 122--128, 131--133 and 205--211:
+
+\begin{Verbatim}[fontsize=\footnotesize,formatcom=\leanmono,samepage=false]
+def IsProtocol (Prot : ℝ → ℝ → ℝ) : Prop :=
+  ∀ x y, x ∈ Set.Icc (0:ℝ) 1 → y ∈ Set.Icc (0:ℝ) 1 →
+    max 0 (x + y - 1) ≤ Prot x y ∧ Prot x y ≤ min x y
+\end{Verbatim}
+\begin{Verbatim}[fontsize=\footnotesize,formatcom=\leanmono,samepage=false]
+def Certifies (Prot : Fin K → ℝ → ℝ → ℝ) (w : Fin K → ℝ)
+    (C : Fin K → ∀ n : ℕ, (Fin n → ℝ) → (Fin n → ℝ) → (Fin n → Fin n → ℝ) → Prop)
+    (Cc c : ℝ) : Prop :=
+  ∀ (n : ℕ) (a m : Fin n → ℝ), IsLaw a m → 1 - c ≤ mean a m →
+    ∀ P : Fin K → (Fin n → Fin n → ℝ),
+      (∀ k, IsCoupling m (P k) ∧ C k n a m (P k)) →
+      Cc * entropy a m ≤ ∑ k, w k * expect a (P k) (fun x y => h (Prot k x y))
+\end{Verbatim}
+\begin{Verbatim}[fontsize=\footnotesize,formatcom=\leanmono,samepage=false]
+def ContainsProduct (C : ∀ n : ℕ, (Fin n → ℝ) → (Fin n → ℝ) → (Fin n → Fin n → ℝ) → Prop) :
+    Prop :=
+  ∀ (n : ℕ) (a m : Fin n → ℝ), IsLaw a m → C n a m (productCoupling m)
+\end{Verbatim}
+\begin{Verbatim}[fontsize=\footnotesize,formatcom=\leanmono,samepage=false]
+def AdmitsHiding (C : ∀ n : ℕ, (Fin n → ℝ) → (Fin n → ℝ) → (Fin n → Fin n → ℝ) → Prop) :
+    Prop :=
+  ∀ q y : ℝ, q ∈ Set.Ioo (0:ℝ) 1 → y ∈ Set.Ioo (0:ℝ) 1 →
+    ∃ δ₀ > (0:ℝ), ∀ δ : ℝ, 0 < δ → δ < δ₀ →
+      ∃ P : Fin 3 → Fin 3 → ℝ, IsCoupling (hidingWeights q δ) P ∧
+        C 3 (hidingAtoms y) (hidingWeights q δ) P ∧
+        P 2 0 = 0 ∧ P 0 2 = 0 ∧ P 2 2 ≤ δ^2
+\end{Verbatim}
+
+Theorem~\ref{thm:ceil} is \texttt{product\_ceiling}, from
+\texttt{UnionClosedCeiling/\allowbreak Ceiling.lean}, lines 36--42 (the conclusion is the
+contrapositive of the statement in the text):
+
+\begin{Verbatim}[fontsize=\footnotesize,formatcom=\leanmono,samepage=false]
+theorem product_ceiling {K : ℕ} {Prot : Fin K → ℝ → ℝ → ℝ} {w : Fin K → ℝ}
+    {C : Fin K → ∀ n : ℕ, (Fin n → ℝ) → (Fin n → ℝ) → (Fin n → Fin n → ℝ) → Prop}
+    {Cc c : ℝ}
+    (hProt : ∀ k, IsProtocol (Prot k)) (hw : ∀ k, 0 ≤ w k) (hw1 : ∑ k, w k = 1)
+    (hC : ∀ k, ContainsProduct (C k)) (hCc : 1 ≤ Cc)
+    (hcert : Certifies Prot w C Cc c) :
+    c ≤ 1 - h (1 / Real.sqrt 2) / Real.sqrt 2
+\end{Verbatim}
+
+The two inequalities of Theorem~\ref{thm:refined}, its fixed-point form and its numerical
+consequence are \texttt{hiding\_bound} (\eqref{eq:H}), \texttt{diagonal\_bound}
+(\eqref{eq:D}), \texttt{fixed\_point\_form} (the substitution of \eqref{eq:H} into
+\eqref{eq:D}, i.e.\ \eqref{eq:G}) and \texttt{refined\_ceiling\_numeric}, from
+\texttt{UnionClosedCeiling/\allowbreak Refined.lean}, lines 158--164, 287--292, 373--379 and 420--425.
+They share the section variables
+
+\begin{Verbatim}[fontsize=\footnotesize,formatcom=\leanmono,samepage=false]
+variable {K : ℕ} {Prot : Fin (K+1) → ℝ → ℝ → ℝ} {w : Fin (K+1) → ℝ}
+  {C : Fin (K+1) → ∀ n : ℕ, (Fin n → ℝ) → (Fin n → ℝ) → (Fin n → Fin n → ℝ) → Prop}
+  {Cc c : ℝ}
+\end{Verbatim}
+
+\begin{Verbatim}[fontsize=\footnotesize,formatcom=\leanmono,samepage=false]
+theorem hiding_bound
+    (hProt : ∀ k, IsProtocol (Prot k)) (hiid : ∀ x y, Prot 0 x y = x * y)
+    (hw : ∀ k, 0 ≤ w k) (hw1 : ∑ k, w k = 1)
+    (hC0 : ContainsProduct (C 0)) (hChide : ∀ k, k ≠ 0 → AdmitsHiding (C k))
+    (hCc : 1 ≤ Cc) (hc0 : 0 < c) (hc1 : c < 1)
+    (hcert : Certifies Prot w C Cc c) :
+    1 ≤ 2 * w 0 * (1 - c)
+\end{Verbatim}
+\begin{Verbatim}[fontsize=\footnotesize,formatcom=\leanmono,samepage=false]
+theorem diagonal_bound
+    (hProt : ∀ k, IsProtocol (Prot k)) (hiid : ∀ x y, Prot 0 x y = x * y)
+    (hw : ∀ k, 0 ≤ w k) (hw1 : ∑ k, w k = 1) (hC : ∀ k, ContainsProduct (C k))
+    (hCc : 1 ≤ Cc) (hc1 : c < 1) (hcert : Certifies Prot w C Cc c)
+    {x : ℝ} (hx : x ∈ Set.Ioc (0:ℝ) 1) (hcond : h x ≤ w 0 * h (x^2) + 1 - w 0) :
+    c ≤ 1 - x * h x / (w 0 * h (x^2) + 1 - w 0)
+\end{Verbatim}
+\begin{Verbatim}[fontsize=\footnotesize,formatcom=\leanmono,samepage=false]
+theorem fixed_point_form
+    (hProt : ∀ k, IsProtocol (Prot k)) (hiid : ∀ x y, Prot 0 x y = x * y)
+    (hw : ∀ k, 0 ≤ w k) (hw1 : ∑ k, w k = 1) (hC : ∀ k, ContainsProduct (C k))
+    (hChide : ∀ k, k ≠ 0 → AdmitsHiding (C k))
+    (hCc : 1 ≤ Cc) (hc0 : 0 < c) (hchalf : c ≤ 1/2) (hcert : Certifies Prot w C Cc c)
+    {x : ℝ} (hx : x ∈ Set.Ioo (0:ℝ) 1) (hmono : h x ≤ h (x^2)) :
+    c ≤ 1 - x * h x / (1 - (1 - h (x^2)) / (2 * (1 - c)))
+\end{Verbatim}
+\begin{Verbatim}[fontsize=\footnotesize,formatcom=\leanmono,samepage=false]
+theorem refined_ceiling_numeric
+    (hProt : ∀ k, IsProtocol (Prot k)) (hiid : ∀ x y, Prot 0 x y = x * y)
+    (hw : ∀ k, 0 ≤ w k) (hw1 : ∑ k, w k = 1) (hC : ∀ k, ContainsProduct (C k))
+    (hChide : ∀ k, k ≠ 0 → AdmitsHiding (C k))
+    (hCc : 1 ≤ Cc) (hc0 : 0 < c) (hchalf : c ≤ 1/2) (hcert : Certifies Prot w C Cc c) :
+    c ≤ 3829/10000
+\end{Verbatim}
+
+The five formalised statements of Lemma~\ref{lem:classes} (three classes: products for all three, hiding for two) are the following, from
+\texttt{UnionClosedCeiling/\allowbreak Classes.lean}, lines 54, 51, 57, 131 and 141 in the order
+shown, where \texttt{iidClass} is the singleton class
+$\{\mu\otimes\mu\}$, \texttt{allCouplings} is Sawin's class and \texttt{mixtureOfProducts}
+is the class $\cC_3$ of \eqref{eq:twoprod}:
+
+\begin{Verbatim}[fontsize=\footnotesize,formatcom=\leanmono,samepage=false]
+lemma containsProduct_iidClass : ContainsProduct iidClass
+lemma containsProduct_allCouplings : ContainsProduct allCouplings
+lemma containsProduct_mixtureOfProducts : ContainsProduct mixtureOfProducts
+lemma admitsHiding_allCouplings : AdmitsHiding allCouplings
+lemma admitsHiding_mixtureOfProducts : AdmitsHiding mixtureOfProducts
+\end{Verbatim}
+
+\subsection{What is not formalised}\label{app:lean:gaps}
+Proposition~\ref{prop:cert} itself is not formalised: Gilmer's argument, the chain rule and
+the reduction to union-closed families are outside the scope of the development, and the
+certificate is a hypothesis there. The maximal-correlation classes of Lemma~\ref{lem:classes}
+are not formalised either: their hiding witness rests on the continuity of singular values in
+the matrix entries, a genuinely different argument. Sections~\ref{sec:protocol}--\ref{sec:numerics}
+are outside the scope entirely: the protocol $\Pi^{\id}$, the cardinality reduction, the
+small-entropy bound, the numerics and everything conditional on
+Hypotheses~\ref{hyp:inertia} and~\ref{hyp:global}, Theorem~\ref{thm:main} included.
+
+Finally, the exact constant $c^{**}=0.382885260\ldots$ is not computed as a fixed point; the
+formal statement is \texttt{refined\_ceiling\_numeric}, $c\le3829/10000$. Its proof is the
+paper's: \texttt{fixed\_point\_form} at $x=0.6909$ gives, after clearing the denominator,
+$x\,\ent(x)\le(1-c)-(1-\ent(x^2))/2$, which is contradicted by $c>0.3829$ together with the
+rigorous bounds
+\[0.892131\le\ent(0.6909)\le0.8921319,\qquad 0.9985182\le\ent(0.6909^2)\le0.998519\]
+(the lemmas \texttt{hx\_lower}, \texttt{hx\_upper}, \texttt{hx2\_lower},
+\texttt{hx2\_upper} of \texttt{Refined.lean}, the last two stated at
+$0.6909^2=0.47734281$; the true values are $0.89213183\ldots$ and $0.99851828\ldots$). Those
+bounds come from Taylor bounds on $\log(1-t)$ with Mathlib's explicit remainder
+\texttt{Real.abs\_log\_sub\_add\_sum\_range\_le} ($16$, $16$ and $6$ terms for
+$\log0.6909$, $\log0.6182$ and $\log1.04531438$ respectively) together with Mathlib's
+\texttt{Real.log\_two\_gt\_d9} and \texttt{Real.log\_two\_lt\_d9}. Since
+$0.3829<c_{\mathrm{ceil}}=0.3830993\ldots$, the formal statement already shows that the
+refined ceiling lies strictly below the product ceiling; the margin between $0.3829$ and
+$c^{**}$ is $\approx1.5\cdot10^{-5}$.
+
+\subsection{The certificate}\label{app:lean:check}
+The development builds with Lean~4.23.0 (\texttt{leanprover/lean4:v4.23.0}) against Mathlib
+pinned at tag \texttt{v4.23.0}, commit \texttt{37df177aaa770670452312393d4e84aaad56e7b6}. The
+gate script \texttt{check.sh} (Appendix~\ref{app:src} lists the library sources; the script
+itself is in the ancillary directory) runs \texttt{lake build}, scans the build output and
+the sources for \texttt{sorry}, and runs \texttt{lake env lean AxiomCheck.lean}, requiring
+that every checked declaration report no axioms beyond \texttt{propext},
+\texttt{Classical.choice} and \texttt{Quot.sound}; it exits $0$ only if all three pass. It
+does pass, with the \texttt{\#print axioms} output
+
+\begin{Verbatim}[fontsize=\scriptsize,formatcom=\leanmono,samepage=false]
+'UnionClosedCeiling.product_ceiling' depends on axioms: [propext, Classical.choice, Quot.sound]
+'UnionClosedCeiling.hiding_bound' depends on axioms: [propext, Classical.choice, Quot.sound]
+'UnionClosedCeiling.diagonal_bound' depends on axioms: [propext, Classical.choice, Quot.sound]
+'UnionClosedCeiling.fixed_point_form' depends on axioms: [propext, Classical.choice, Quot.sound]
+'UnionClosedCeiling.refined_ceiling_numeric' depends on axioms: [propext, Classical.choice, Quot.sound]
+'UnionClosedCeiling.containsProduct_iidClass' depends on axioms: [propext, Classical.choice, Quot.sound]
+'UnionClosedCeiling.containsProduct_allCouplings' depends on axioms: [propext, Classical.choice, Quot.sound]
+'UnionClosedCeiling.containsProduct_mixtureOfProducts' depends on axioms: [propext, Classical.choice, Quot.sound]
+'UnionClosedCeiling.admitsHiding_allCouplings' depends on axioms: [propext, Classical.choice, Quot.sound]
+'UnionClosedCeiling.admitsHiding_mixtureOfProducts' depends on axioms: [propext, Classical.choice, Quot.sound]
+\end{Verbatim}
+
+The same gate runs in GitHub Actions on a fresh Ubuntu clone, where it takes 2\,min\,20\,s.
+The code is the ancillary directory \texttt{anc/lean/} of the arXiv package and the directory
+\texttt{lean/} of the repository \url{https://github.com/moffatstudio/union-closed-constant};
+from a fresh clone of either,
+\[\texttt{lake exe cache get \&\& lake build \&\& bash check.sh}\]
+reproduces the check.
+
+
+\section{Lean source}\label{app:src}
+The complete source of the library described in Appendix~\ref{app:lean}, in build order. The
+same files are the ancillary material of this submission; the listings below are copies of
+them, character for character. (The text layer of the PDF is not a faithful copy: the listing font maps the ASCII hyphen and the middle dot to typographic variants, so the source should be taken from \texttt{anc/lean/}, not copied out of the PDF.)
+
+\subsection{\texttt{UnionClosedCeiling/Entropy.lean}}
+\begin{Verbatim}[fontsize=\scriptsize,formatcom=\leanmono,samepage=false]
+import Mathlib.Analysis.SpecialFunctions.BinaryEntropy
+
+/-!
+# Binary entropy in bits
+
+The paper writes `ent` for the binary entropy function measured in **bits**,
+`ent(p) = -p log₂ p - (1-p) log₂ (1-p)`, normalised so that `ent(1/2) = 1`.
+Mathlib's `Real.binEntropy` is the same function in *nats*, so we set
+`h p = Real.binEntropy p / Real.log 2`.
+
+Facts proved here (all of them are used later):
+`h_zero`, `h_one`, `h_nonneg`, `h_pos`, `h_le_one`.
+-/
+
+namespace UnionClosedCeiling
+
+open Real
+
+/-- Binary entropy in bits: `h p = -p log₂ p - (1-p) log₂ (1-p)`.
+This is the paper's `ent`. -/
+noncomputable def h (p : ℝ) : ℝ := Real.binEntropy p / Real.log 2
+
+lemma log_two_pos : (0:ℝ) < Real.log 2 := Real.log_pos (by norm_num)
+
+@[simp] lemma h_zero : h 0 = 0 := by simp [h]
+
+@[simp] lemma h_one : h 1 = 0 := by simp [h]
+
+@[simp] lemma h_half : h (1/2) = 1 := by
+  have : (1:ℝ)/2 = (2:ℝ)⁻¹ := by norm_num
+  simp [h, this, Real.binEntropy_two_inv, div_self (ne_of_gt log_two_pos)]
+
+/-- `h` is nonnegative on `[0,1]`. -/
+lemma h_nonneg {p : ℝ} (hp₀ : 0 ≤ p) (hp₁ : p ≤ 1) : 0 ≤ h p :=
+  div_nonneg (Real.binEntropy_nonneg hp₀ hp₁) (le_of_lt log_two_pos)
+
+/-- `h` is strictly positive on `(0,1)`. -/
+lemma h_pos {p : ℝ} (hp₀ : 0 < p) (hp₁ : p < 1) : 0 < h p :=
+  div_pos (Real.binEntropy_pos hp₀ hp₁) log_two_pos
+
+/-- `h p ≤ 1` for every real `p`: the paper's `ent(·) ≤ 1`. -/
+lemma h_le_one (p : ℝ) : h p ≤ 1 := by
+  unfold h
+  rw [div_le_one log_two_pos]
+  exact Real.binEntropy_le_log_two
+
+end UnionClosedCeiling
+\end{Verbatim}
+
+\subsection{\texttt{UnionClosedCeiling/Framework.lean}}
+\begin{Verbatim}[fontsize=\scriptsize,formatcom=\leanmono,samepage=false]
+import UnionClosedCeiling.Entropy
+
+/-!
+# The single-letter framework (finite model)
+
+This file sets up a faithful **finite** model of the framework of Section 2.2 of the paper:
+laws on `[0,1]` with finite support, couplings of such a law with itself, protocols
+(represented by their value `Prot_{x,y}(0,0)`, which is all Section 3 uses about them),
+classes of couplings, and the certificate inequality (cert).
+
+## Modelling choices
+
+* A law `μ` is given by atoms `a : Fin n → ℝ` in `[0,1]` and weights `m : Fin n → ℝ`
+  summing to `1`.  All the adversarial laws used in Section 3 (two-point laws and the
+  hiding law of Definition 3.2) are of this form, so restricting to finitely supported
+  laws only *weakens* the certificate hypothesis, i.e. strengthens the theorems.
+* A protocol is modelled by the function `Prot : ℝ → ℝ → ℝ`, `Prot x y = Prot_{x,y}(0,0)`,
+  subject to the Fréchet bounds `max 0 (x+y-1) ≤ Prot x y ≤ min x y`.  Section 3 uses
+  nothing else about protocols.
+* **`Certifies` is implied by the paper's inequality (cert).**  (cert) reads
+  `∑ₖ wₖ inf_{P ∈ Cₖ(μ)} 𝔼_P[ent(Prot⁽ᵏ⁾(X,Y))] ≥ C 𝔼_μ[ent X]`; since the infimum is at
+  most the value at any particular admissible family `(P k)`, (cert) implies the
+  statement `Certifies` below for every choice of admissible couplings.  Hence every
+  theorem proved from `Certifies` applies verbatim to the paper's certificate.
+-/
+
+namespace UnionClosedCeiling
+
+open Finset
+
+variable {n : ℕ}
+
+/-- `a` are atoms in `[0,1]` and `m` are probability weights: a finitely supported law on `[0,1]`. -/
+def IsLaw (a m : Fin n → ℝ) : Prop :=
+  (∀ i, a i ∈ Set.Icc (0:ℝ) 1) ∧ (∀ i, 0 ≤ m i) ∧ ∑ i, m i = 1
+
+/-- The mean `𝔼_μ[X]` of the law. -/
+noncomputable def mean (a m : Fin n → ℝ) : ℝ := ∑ i, m i * a i
+
+/-- The entropy `𝔼_μ[ent X]` of the law, in bits. -/
+noncomputable def entropy (a m : Fin n → ℝ) : ℝ := ∑ i, m i * h (a i)
+
+/-- `P` is a coupling of the law with weights `m` with itself. -/
+def IsCoupling (m : Fin n → ℝ) (P : Fin n → Fin n → ℝ) : Prop :=
+  (∀ i j, 0 ≤ P i j) ∧ (∀ i, ∑ j, P i j = m i) ∧ (∀ j, ∑ i, P i j = m j)
+
+/-- `𝔼_{(X,Y) ∼ P}[f X Y]`. -/
+noncomputable def expect (a : Fin n → ℝ) (P : Fin n → Fin n → ℝ) (f : ℝ → ℝ → ℝ) : ℝ :=
+  ∑ i, ∑ j, P i j * f (a i) (a j)
+
+/-- The product coupling `μ ⊗ μ`. -/
+def productCoupling (m : Fin n → ℝ) : Fin n → Fin n → ℝ := fun i j => m i * m j
+
+lemma isCoupling_productCoupling {m : Fin n → ℝ} (hm : ∀ i, 0 ≤ m i) (hs : ∑ i, m i = 1) :
+    IsCoupling m (productCoupling m) := by
+  refine ⟨fun i j => mul_nonneg (hm i) (hm j), fun i => ?_, fun j => ?_⟩
+  · simp [productCoupling, ← Finset.mul_sum, hs]
+  · simp [productCoupling, ← Finset.sum_mul, hs]
+
+/-- A protocol, represented by `Prot x y = Prot_{x,y}(0,0)`, constrained by the Fréchet bounds. -/
+def IsProtocol (Prot : ℝ → ℝ → ℝ) : Prop :=
+  ∀ x y, x ∈ Set.Icc (0:ℝ) 1 → y ∈ Set.Icc (0:ℝ) 1 →
+    max 0 (x + y - 1) ≤ Prot x y ∧ Prot x y ≤ min x y
+
+section ProtocolFacts
+
+variable {Prot : ℝ → ℝ → ℝ} (hProt : IsProtocol Prot)
+include hProt
+
+/-- "Pairs containing the atom `0` carry no entropy": `Prot x 0 = 0`. -/
+lemma protocol_right_zero {x : ℝ} (hx : x ∈ Set.Icc (0:ℝ) 1) : Prot x 0 = 0 := by
+  obtain ⟨hl, hu⟩ := hProt x 0 hx ⟨le_refl 0, by norm_num⟩
+  have h1 : (0:ℝ) ≤ Prot x 0 := le_trans (le_max_left _ _) hl
+  have h2 : Prot x 0 ≤ 0 := le_trans hu (min_le_right _ _)
+  linarith
+
+lemma protocol_left_zero {y : ℝ} (hy : y ∈ Set.Icc (0:ℝ) 1) : Prot 0 y = 0 := by
+  obtain ⟨hl, hu⟩ := hProt 0 y ⟨le_refl 0, by norm_num⟩ hy
+  have h1 : (0:ℝ) ≤ Prot 0 y := le_trans (le_max_left _ _) hl
+  have h2 : Prot 0 y ≤ 0 := le_trans hu (min_le_left _ _)
+  linarith
+
+/-- On the pair `(1,1)` both bits are surely `0`: `Prot 1 1 = 1`. -/
+lemma protocol_one_one : Prot 1 1 = 1 := by
+  obtain ⟨hl, hu⟩ := hProt 1 1 ⟨by norm_num, le_refl 1⟩ ⟨by norm_num, le_refl 1⟩
+  have h1 : (1:ℝ) ≤ Prot 1 1 := by
+    have : (1:ℝ) ≤ max 0 (1 + 1 - 1) := by norm_num
+    linarith [le_trans this hl]
+  have h2 : Prot 1 1 ≤ 1 := le_trans hu (min_le_left _ _)
+  linarith
+
+/-- On the pair `(1,y)` one bit is surely `0`, so the union bit equals the other bit. -/
+lemma protocol_one_left {y : ℝ} (hy : y ∈ Set.Icc (0:ℝ) 1) : Prot 1 y = y := by
+  obtain ⟨hl, hu⟩ := hProt 1 y ⟨by norm_num, le_refl 1⟩ hy
+  have h1 : y ≤ Prot 1 y := by
+    have : y ≤ max 0 (1 + y - 1) := by
+      have := le_max_right (0:ℝ) (1 + y - 1); linarith
+    linarith [le_trans this hl]
+  have h2 : Prot 1 y ≤ y := le_trans hu (min_le_right _ _)
+  linarith
+
+lemma protocol_one_right {x : ℝ} (hx : x ∈ Set.Icc (0:ℝ) 1) : Prot x 1 = x := by
+  obtain ⟨hl, hu⟩ := hProt x 1 hx ⟨by norm_num, le_refl 1⟩
+  have h1 : x ≤ Prot x 1 := by
+    have : x ≤ max 0 (x + 1 - 1) := by
+      have := le_max_right (0:ℝ) (x + 1 - 1); linarith
+    linarith [le_trans this hl]
+  have h2 : Prot x 1 ≤ x := le_trans hu (min_le_left _ _)
+  linarith
+
+end ProtocolFacts
+
+variable {K : ℕ}
+
+/-- The certificate inequality (cert) of Proposition 2.2, in the form we use:
+for every finitely supported law of mean at least `1 - c` and every admissible family
+of couplings `P k` (one in each class `C k`), the weighted average of the protocol
+entropies dominates `Cc` times the entropy of the law.
+
+This is **implied by** the paper's (cert), whose left-hand side is an infimum over the
+class, hence at most the value at the chosen `P k`. -/
+def Certifies (Prot : Fin K → ℝ → ℝ → ℝ) (w : Fin K → ℝ)
+    (C : Fin K → ∀ n : ℕ, (Fin n → ℝ) → (Fin n → ℝ) → (Fin n → Fin n → ℝ) → Prop)
+    (Cc c : ℝ) : Prop :=
+  ∀ (n : ℕ) (a m : Fin n → ℝ), IsLaw a m → 1 - c ≤ mean a m →
+    ∀ P : Fin K → (Fin n → Fin n → ℝ),
+      (∀ k, IsCoupling m (P k) ∧ C k n a m (P k)) →
+      Cc * entropy a m ≤ ∑ k, w k * expect a (P k) (fun x y => h (Prot k x y))
+
+/-- The class `C` contains the product law `μ ⊗ μ` for every law `μ`. -/
+def ContainsProduct (C : ∀ n : ℕ, (Fin n → ℝ) → (Fin n → ℝ) → (Fin n → Fin n → ℝ) → Prop) :
+    Prop :=
+  ∀ (n : ℕ) (a m : Fin n → ℝ), IsLaw a m → C n a m (productCoupling m)
+
+/-! ### The two-point adversary `p δ_x + (1-p) δ_0` -/
+
+/-- Atoms of the two-point law: `x` and `0`. -/
+def twoAtoms (x : ℝ) : Fin 2 → ℝ := ![x, 0]
+
+/-- Weights of the two-point law: `p` and `1-p`. -/
+def twoWeights (p : ℝ) : Fin 2 → ℝ := ![p, 1 - p]
+
+lemma isLaw_two {x p : ℝ} (hx : x ∈ Set.Icc (0:ℝ) 1) (hp₀ : 0 ≤ p) (hp₁ : p ≤ 1) :
+    IsLaw (twoAtoms x) (twoWeights p) := by
+  refine ⟨?_, ?_, ?_⟩
+  · intro i; fin_cases i
+    · exact hx
+    · simp [twoAtoms, Set.mem_Icc]
+  · intro i; fin_cases i
+    · exact hp₀
+    · show (0:ℝ) ≤ 1 - p
+      linarith
+  · simp [twoWeights, Fin.sum_univ_two]
+
+lemma mean_two {x p : ℝ} : mean (twoAtoms x) (twoWeights p) = p * x := by
+  simp [mean, twoAtoms, twoWeights, Fin.sum_univ_two]
+
+lemma entropy_two {x p : ℝ} : entropy (twoAtoms x) (twoWeights p) = p * h x := by
+  simp [entropy, twoAtoms, twoWeights, Fin.sum_univ_two]
+
+/-- Under the product coupling, the two-point law puts all the entropy on the diagonal
+cell `(x,x)`: every other cell contains the atom `0`. -/
+lemma expect_two_product {Prot : ℝ → ℝ → ℝ} (hProt : IsProtocol Prot) {x p : ℝ}
+    (hx : x ∈ Set.Icc (0:ℝ) 1) :
+    expect (twoAtoms x) (productCoupling (twoWeights p)) (fun u v => h (Prot u v))
+      = p * p * h (Prot x x) := by
+  have h0 : (0:ℝ) ∈ Set.Icc (0:ℝ) 1 := ⟨le_refl 0, by norm_num⟩
+  simp [expect, productCoupling, twoAtoms, twoWeights, Fin.sum_univ_two,
+    protocol_right_zero hProt hx, protocol_left_zero hProt hx, protocol_right_zero hProt h0]
+
+/-! ### The hiding adversary `μ_{q,y,δ}` (Definition 3.2)
+
+`μ_{q,y,δ} = q δ₁ + (1-q)[(1-δ) δ₀ + δ δ_y]`, with index `0 ↦ 1`, `1 ↦ 0`, `2 ↦ y`. -/
+
+/-- Atoms of the hiding law: `1`, `0`, `y`. -/
+def hidingAtoms (y : ℝ) : Fin 3 → ℝ := ![1, 0, y]
+
+/-- Weights of the hiding law: `q`, `(1-q)(1-δ)`, `(1-q)δ`. -/
+def hidingWeights (q δ : ℝ) : Fin 3 → ℝ := ![q, (1-q)*(1-δ), (1-q)*δ]
+
+lemma isLaw_hiding {q y δ : ℝ} (hq₀ : 0 ≤ q) (hq₁ : q ≤ 1) (hδ₀ : 0 ≤ δ) (hδ₁ : δ ≤ 1)
+    (hy : y ∈ Set.Icc (0:ℝ) 1) : IsLaw (hidingAtoms y) (hidingWeights q δ) := by
+  refine ⟨?_, ?_, ?_⟩
+  · intro i; fin_cases i
+    · simp [hidingAtoms, Set.mem_Icc]
+    · simp [hidingAtoms, Set.mem_Icc]
+    · exact hy
+  · intro i; fin_cases i
+    · exact hq₀
+    · exact mul_nonneg (by linarith) (by linarith)
+    · exact mul_nonneg (by linarith) hδ₀
+  · simp [hidingWeights, Fin.sum_univ_three]; ring
+
+lemma mean_hiding {q y δ : ℝ} :
+    mean (hidingAtoms y) (hidingWeights q δ) = q + (1-q)*δ*y := by
+  simp [mean, hidingAtoms, hidingWeights, Fin.sum_univ_three]
+
+lemma entropy_hiding {q y δ : ℝ} :
+    entropy (hidingAtoms y) (hidingWeights q δ) = (1-q)*δ * h y := by
+  simp [entropy, hidingAtoms, hidingWeights, Fin.sum_univ_three]
+
+/-- The class `C` admits hiding (Definition 3.2): for all `q, y ∈ (0,1)` and all
+sufficiently small `δ > 0` it contains a coupling of `μ_{q,y,δ}` with itself that puts
+no mass on `(y,1)` and `(1,y)` and mass at most `δ²` on `(y,y)`. -/
+def AdmitsHiding (C : ∀ n : ℕ, (Fin n → ℝ) → (Fin n → ℝ) → (Fin n → Fin n → ℝ) → Prop) :
+    Prop :=
+  ∀ q y : ℝ, q ∈ Set.Ioo (0:ℝ) 1 → y ∈ Set.Ioo (0:ℝ) 1 →
+    ∃ δ₀ > (0:ℝ), ∀ δ : ℝ, 0 < δ → δ < δ₀ →
+      ∃ P : Fin 3 → Fin 3 → ℝ, IsCoupling (hidingWeights q δ) P ∧
+        C 3 (hidingAtoms y) (hidingWeights q δ) P ∧
+        P 2 0 = 0 ∧ P 0 2 = 0 ∧ P 2 2 ≤ δ^2
+
+/-- Value of the hiding law under a hiding coupling: at most `δ²`. -/
+lemma expect_hiding_le {Prot : ℝ → ℝ → ℝ} (hProt : IsProtocol Prot) {q y δ : ℝ}
+    (hy : y ∈ Set.Icc (0:ℝ) 1) {P : Fin 3 → Fin 3 → ℝ}
+    (hP : IsCoupling (hidingWeights q δ) P)
+    (h20 : P 2 0 = 0) (h02 : P 0 2 = 0) (h22 : P 2 2 ≤ δ^2) :
+    expect (hidingAtoms y) P (fun u v => h (Prot u v)) ≤ δ^2 := by
+  have h0 : (0:ℝ) ∈ Set.Icc (0:ℝ) 1 := ⟨le_refl 0, by norm_num⟩
+  have h1 : (1:ℝ) ∈ Set.Icc (0:ℝ) 1 := ⟨by norm_num, le_refl 1⟩
+  have hnn := hP.1
+  have hkey : expect (hidingAtoms y) P (fun u v => h (Prot u v)) = P 2 2 * h (Prot y y) := by
+    simp [expect, hidingAtoms, Fin.sum_univ_three, h20, h02,
+      protocol_right_zero hProt h1, protocol_right_zero hProt hy, protocol_right_zero hProt h0,
+      protocol_left_zero hProt h1, protocol_left_zero hProt hy,
+      protocol_one_one hProt]
+  rw [hkey]
+  calc P 2 2 * h (Prot y y) ≤ P 2 2 * 1 :=
+        mul_le_mul_of_nonneg_left (h_le_one _) (hnn 2 2)
+    _ = P 2 2 := by ring
+    _ ≤ δ^2 := h22
+
+/-- Value of the hiding law under the **product** coupling, for the i.i.d. protocol
+`Prot x y = x y`: exactly `2q(1-q)δ ent(y) + (1-q)²δ² ent(y²)`. -/
+lemma expect_hiding_product_iid {q y δ : ℝ} :
+    expect (hidingAtoms y) (productCoupling (hidingWeights q δ)) (fun u v => h (u * v))
+      = 2*q*((1-q)*δ) * h y + ((1-q)*δ)^2 * h (y^2) := by
+  have h1y : (1:ℝ) * y = y := one_mul y
+  have hy1 : y * (1:ℝ) = y := mul_one y
+  have hyy : y * y = y^2 := (sq y).symm
+  simp [expect, productCoupling, hidingAtoms, hidingWeights, Fin.sum_univ_three,
+    h1y, hyy]
+  ring
+
+end UnionClosedCeiling
+\end{Verbatim}
+
+\subsection{\texttt{UnionClosedCeiling/Ceiling.lean}}
+\begin{Verbatim}[fontsize=\scriptsize,formatcom=\leanmono,samepage=false]
+import UnionClosedCeiling.Framework
+
+/-!
+# Theorem 3.1 — the product ceiling
+
+> **Theorem (product ceiling).**  Suppose every class `C_k(μ)` in (cert) contains the
+> product law `μ ⊗ μ` for every `μ`.  Then (cert) fails for every
+> `c > c_ceil := 1 - ent(1/√2)/√2 = 0.3830993…`.
+
+Formal contrapositive: if the certificate holds for `c` with `C > 1` (we only use
+`C ≥ 1`), then `c ≤ 1 - ent(1/√2)/√2`.
+
+The proof only uses `ent ≤ 1` on the diagonal cell — **not** `ent(x*²) = 1`.
+-/
+
+namespace UnionClosedCeiling
+
+open Finset
+
+/-- The ceiling constant `c_ceil = 1 - ent(1/√2)/√2 = 0.3830993…`. -/
+noncomputable def cCeil : ℝ := 1 - h (1 / Real.sqrt 2) / Real.sqrt 2
+
+lemma one_lt_sqrt_two : (1:ℝ) < Real.sqrt 2 := by
+  nlinarith [Real.sq_sqrt (by norm_num : (0:ℝ) ≤ 2), Real.sqrt_nonneg 2]
+
+lemma sqrt_two_pos : (0:ℝ) < Real.sqrt 2 := lt_trans one_pos one_lt_sqrt_two
+
+/-- `x* = 1/√2` lies in `(0,1)`. -/
+lemma xstar_mem : (1 / Real.sqrt 2) ∈ Set.Ioo (0:ℝ) 1 := by
+  constructor
+  · positivity
+  · rw [div_lt_one sqrt_two_pos]; exact one_lt_sqrt_two
+
+/-- **Theorem 3.1 (product ceiling).**  If every class contains the product law and the
+certificate (cert) holds for `c` with constant `Cc ≥ 1`, then `c ≤ 1 - ent(1/√2)/√2`. -/
+theorem product_ceiling {K : ℕ} {Prot : Fin K → ℝ → ℝ → ℝ} {w : Fin K → ℝ}
+    {C : Fin K → ∀ n : ℕ, (Fin n → ℝ) → (Fin n → ℝ) → (Fin n → Fin n → ℝ) → Prop}
+    {Cc c : ℝ}
+    (hProt : ∀ k, IsProtocol (Prot k)) (hw : ∀ k, 0 ≤ w k) (hw1 : ∑ k, w k = 1)
+    (hC : ∀ k, ContainsProduct (C k)) (hCc : 1 ≤ Cc)
+    (hcert : Certifies Prot w C Cc c) :
+    c ≤ 1 - h (1 / Real.sqrt 2) / Real.sqrt 2 := by
+  by_contra hcon
+  push_neg at hcon
+  set x := 1 / Real.sqrt 2 with hxdef
+  obtain ⟨hx0, hx1⟩ := xstar_mem
+  have hxIcc : x ∈ Set.Icc (0:ℝ) 1 := ⟨le_of_lt hx0, le_of_lt hx1⟩
+  have hhx : 0 < h x := h_pos hx0 hx1
+  -- `(1-c)·√2 < ent(x*)`
+  have hkey : (1 - c) * Real.sqrt 2 < h x := by
+    have : 1 - h x / Real.sqrt 2 < c := hcon
+    have h2 : 1 - c < h x / Real.sqrt 2 := by linarith
+    calc (1 - c) * Real.sqrt 2 < (h x / Real.sqrt 2) * Real.sqrt 2 := by
+          exact mul_lt_mul_of_pos_right h2 sqrt_two_pos
+      _ = h x := by field_simp
+  -- choose `p` strictly between `max 0 ((1-c)√2)` and `ent(x*)`
+  set L : ℝ := max 0 ((1 - c) * Real.sqrt 2) with hLdef
+  have hL : L < h x := max_lt hhx hkey
+  have hL0 : 0 ≤ L := le_max_left _ _
+  set p : ℝ := (L + h x) / 2 with hpdef
+  have hpL : L < p := by simp only [hpdef]; linarith
+  have hph : p < h x := by simp only [hpdef]; linarith
+  have hp0 : 0 < p := lt_of_le_of_lt hL0 hpL
+  have hp1 : p ≤ 1 := le_of_lt (lt_of_lt_of_le hph (h_le_one x))
+  -- the two-point law `p δ_{x*} + (1-p) δ_0` has mean `p x* ≥ 1 - c`
+  have hlaw : IsLaw (twoAtoms x) (twoWeights p) := isLaw_two hxIcc (le_of_lt hp0) hp1
+  have hmean : 1 - c ≤ mean (twoAtoms x) (twoWeights p) := by
+    rw [mean_two]
+    have h1 : (1 - c) * Real.sqrt 2 < p := lt_of_le_of_lt (le_max_right _ _) hpL
+    have h2 : 1 - c ≤ p / Real.sqrt 2 := by
+      rw [le_div_iff₀ sqrt_two_pos]; linarith
+    calc 1 - c ≤ p / Real.sqrt 2 := h2
+      _ = p * x := by rw [hxdef]; ring
+  -- present the product coupling to every class
+  have hcoup : ∀ k, IsCoupling (twoWeights p) (productCoupling (twoWeights p)) ∧
+      C k 2 (twoAtoms x) (twoWeights p) (productCoupling (twoWeights p)) := by
+    intro k
+    exact ⟨isCoupling_productCoupling hlaw.2.1 hlaw.2.2, hC k 2 _ _ hlaw⟩
+  have hmain := hcert 2 (twoAtoms x) (twoWeights p) hlaw hmean
+    (fun _ => productCoupling (twoWeights p)) hcoup
+  rw [entropy_two] at hmain
+  -- every term is at most `w k * p²`
+  have hsum : ∑ k, w k * expect (twoAtoms x) (productCoupling (twoWeights p))
+      (fun u v => h (Prot k u v)) ≤ p * p := by
+    have hterm : ∀ k ∈ (univ : Finset (Fin K)),
+        w k * expect (twoAtoms x) (productCoupling (twoWeights p))
+          (fun u v => h (Prot k u v)) ≤ w k * (p * p) := by
+      intro k _
+      rw [expect_two_product (hProt k) hxIcc]
+      refine mul_le_mul_of_nonneg_left ?_ (hw k)
+      have := h_le_one (Prot k x x)
+      nlinarith [mul_pos hp0 hp0]
+    calc ∑ k, w k * expect (twoAtoms x) (productCoupling (twoWeights p))
+            (fun u v => h (Prot k u v))
+        ≤ ∑ k, w k * (p * p) := Finset.sum_le_sum hterm
+      _ = p * p := by rw [← Finset.sum_mul, hw1, one_mul]
+  -- hence `p ent(x*) ≤ Cc p ent(x*) ≤ p²`, so `ent(x*) ≤ p`, contradiction
+  have h1 : p * h x ≤ Cc * (p * h x) := by nlinarith [mul_nonneg (le_of_lt hp0) (le_of_lt hhx)]
+  have h2 : p * h x ≤ p * p := le_trans h1 (le_trans hmain hsum)
+  have h3 : h x ≤ p := le_of_mul_le_mul_left (by linarith) hp0
+  linarith
+\end{Verbatim}
+
+\subsection{\texttt{UnionClosedCeiling/Refined.lean}}
+\begin{Verbatim}[fontsize=\scriptsize,formatcom=\leanmono,samepage=false]
+import UnionClosedCeiling.Framework
+import Mathlib.Analysis.SpecialFunctions.Log.Deriv
+import Mathlib.Analysis.Complex.ExponentialBounds
+
+/-!
+# Theorem 3.4 — the refined ceiling
+
+> **Theorem (refined ceiling).**  Suppose (cert) uses the i.i.d. protocol with its
+> singleton class `{μ ⊗ μ}` and weight `w ∈ [0,1]`, and that every other class contains
+> the product law and admits hiding.  Then
+> `2w(1-c) ≥ 1` and `c ≤ 1 - x ent(x)/(w ent(x²) + 1 - w)` for every `x` with
+> `ent(x) ≤ w ent(x²) + 1 - w`.  Consequently `c ≤ c** = 0.382885260…`.
+
+Formalised here: the two inequalities (H) = `hiding_bound` and (D) = `diagonal_bound`,
+the exact fixed-point form `fixed_point_form` they combine into, and the numerical
+corollary `refined_ceiling_numeric` (`c ≤ 0.3829`, which already lies below the product
+ceiling `c_ceil = 0.3830993…`).
+
+Protocol `0` is the i.i.d. one.  The hypothesis on its class is only
+`ContainsProduct (C 0)`, which is weaker than the paper's singleton class, so the
+theorems are correspondingly stronger.
+-/
+
+namespace UnionClosedCeiling
+
+open Finset
+
+/-! ### Rigorous numerical bounds on the binary entropy at `x = 0.6909`
+
+All bounds come from the Taylor series of `log (1-t)` with the explicit remainder
+`Real.abs_log_sub_add_sum_range_le`, together with Mathlib's `log 2` bounds. -/
+
+lemma binEntropy_eq' (p : ℝ) :
+    Real.binEntropy p = -(p * Real.log p) - (1 - p) * Real.log (1 - p) := by
+  simp [Real.binEntropy, Real.log_inv]; ring
+
+lemma h_eq (p : ℝ) : h p = (-(p * Real.log p) - (1 - p) * Real.log (1 - p)) / Real.log 2 := by
+  rw [h, binEntropy_eq']
+
+/-- `log 0.6909 ∈ [-0.36976019, -0.36976018]`. -/
+lemma log_6909 : (-0.36976019 : ℝ) ≤ Real.log (6909/10000) ∧
+    Real.log (6909/10000) ≤ -0.36976018 := by
+  have ht : |(3091/10000 : ℝ)| < 1 := by rw [abs_lt]; norm_num
+  have key := Real.abs_log_sub_add_sum_range_le ht 16
+  rw [abs_le] at key
+  obtain ⟨k1, k2⟩ := key
+  have h1 : (1:ℝ) - 3091/10000 = 6909/10000 := by norm_num
+  rw [h1] at k1 k2
+  rw [abs_of_pos (by norm_num : (0:ℝ) < 3091/10000)] at k1 k2
+  have hA : (∑ i ∈ Finset.range 16, ((3091:ℝ)/10000) ^ (i + 1) / (i + 1))
+      + ((3091:ℝ)/10000) ^ (16 + 1) / (1 - 3091/10000) ≤ 0.36976019 := by
+    norm_num [Finset.sum_range_succ]
+  have hB : (0.36976018 : ℝ) ≤ (∑ i ∈ Finset.range 16, ((3091:ℝ)/10000) ^ (i + 1) / (i + 1))
+      - ((3091:ℝ)/10000) ^ (16 + 1) / (1 - 3091/10000) := by
+    norm_num [Finset.sum_range_succ]
+  exact ⟨by linarith, by linarith⟩
+
+/-- `log 0.6182 ∈ [-0.48094337, -0.48094311]`. -/
+lemma log_6182 : (-0.48094337 : ℝ) ≤ Real.log (6182/10000) ∧
+    Real.log (6182/10000) ≤ -0.48094311 := by
+  have ht : |(3818/10000 : ℝ)| < 1 := by rw [abs_lt]; norm_num
+  have key := Real.abs_log_sub_add_sum_range_le ht 16
+  rw [abs_le] at key
+  obtain ⟨k1, k2⟩ := key
+  have h1 : (1:ℝ) - 3818/10000 = 6182/10000 := by norm_num
+  rw [h1] at k1 k2
+  rw [abs_of_pos (by norm_num : (0:ℝ) < 3818/10000)] at k1 k2
+  have hA : (∑ i ∈ Finset.range 16, ((3818:ℝ)/10000) ^ (i + 1) / (i + 1))
+      + ((3818:ℝ)/10000) ^ (16 + 1) / (1 - 3818/10000) ≤ 0.48094337 := by
+    norm_num [Finset.sum_range_succ]
+  have hB : (0.48094311 : ℝ) ≤ (∑ i ∈ Finset.range 16, ((3818:ℝ)/10000) ^ (i + 1) / (i + 1))
+      - ((3818:ℝ)/10000) ^ (16 + 1) / (1 - 3818/10000) := by
+    norm_num [Finset.sum_range_succ]
+  exact ⟨by linarith, by linarith⟩
+
+/-- `log 1.04531438 ∈ [0.04431768, 0.04431769]`. -/
+lemma log_104531438 : (0.04431768 : ℝ) ≤ Real.log (104531438/100000000) ∧
+    Real.log (104531438/100000000) ≤ 0.04431769 := by
+  have ht : |(-4531438/100000000 : ℝ)| < 1 := by rw [abs_lt]; norm_num
+  have key := Real.abs_log_sub_add_sum_range_le ht 6
+  rw [abs_le] at key
+  obtain ⟨k1, k2⟩ := key
+  have h1 : (1:ℝ) - (-4531438/100000000) = 104531438/100000000 := by norm_num
+  rw [h1] at k1 k2
+  rw [abs_of_neg (by norm_num : (-4531438/100000000 : ℝ) < 0)] at k1 k2
+  have hA : (∑ i ∈ Finset.range 6, ((-4531438:ℝ)/100000000) ^ (i + 1) / (i + 1))
+      + (-((-4531438:ℝ)/100000000)) ^ (6 + 1) / (1 - -((-4531438:ℝ)/100000000))
+      ≤ -0.04431768 := by
+    norm_num [Finset.sum_range_succ]
+  have hB : (-0.04431769 : ℝ) ≤
+      (∑ i ∈ Finset.range 6, ((-4531438:ℝ)/100000000) ^ (i + 1) / (i + 1))
+      - (-((-4531438:ℝ)/100000000)) ^ (6 + 1) / (1 - -((-4531438:ℝ)/100000000)) := by
+    norm_num [Finset.sum_range_succ]
+  exact ⟨by linarith, by linarith⟩
+
+lemma log_3091 : Real.log (3091/10000) = Real.log (6182/10000) - Real.log 2 := by
+  rw [show (3091:ℝ)/10000 = (6182/10000)/2 by norm_num,
+    Real.log_div (by norm_num) (by norm_num)]
+
+lemma log_52265719 :
+    Real.log (52265719/100000000) = Real.log (104531438/100000000) - Real.log 2 := by
+  rw [show (52265719:ℝ)/100000000 = (104531438/100000000)/2 by norm_num,
+    Real.log_div (by norm_num) (by norm_num)]
+
+lemma log_47734281 : Real.log (47734281/100000000) = 2 * Real.log (6909/10000) := by
+  rw [show (47734281:ℝ)/100000000 = (6909/10000)^2 by norm_num, Real.log_pow]
+  norm_num
+
+lemma xsq_eq : ((6909:ℝ)/10000)^2 = 47734281/100000000 := by norm_num
+
+/-- `ent(0.6909) ≥ 0.892131`. -/
+lemma hx_lower : (892131/1000000 : ℝ) ≤ h (6909/10000) := by
+  rw [h_eq, le_div_iff₀ log_two_pos]
+  norm_num [log_3091]
+  linarith [log_6909.1, log_6909.2, log_6182.1, log_6182.2,
+    Real.log_two_gt_d9, Real.log_two_lt_d9]
+
+/-- `ent(0.6909) ≤ 0.8921319`. -/
+lemma hx_upper : h (6909/10000) ≤ (8921319/10000000 : ℝ) := by
+  rw [h_eq, div_le_iff₀ log_two_pos]
+  norm_num [log_3091]
+  linarith [log_6909.1, log_6909.2, log_6182.1, log_6182.2,
+    Real.log_two_gt_d9, Real.log_two_lt_d9]
+
+/-- `ent(0.6909²) ≥ 0.9985182`. -/
+lemma hx2_lower : (9985182/10000000 : ℝ) ≤ h (47734281/100000000) := by
+  rw [h_eq, le_div_iff₀ log_two_pos]
+  norm_num [log_52265719, log_47734281]
+  linarith [log_6909.1, log_6909.2, log_104531438.1, log_104531438.2,
+    Real.log_two_gt_d9, Real.log_two_lt_d9]
+
+/-- `ent(0.6909²) ≤ 0.998519`. -/
+lemma hx2_upper : h (47734281/100000000) ≤ (998519/1000000 : ℝ) := by
+  rw [h_eq, div_le_iff₀ log_two_pos]
+  norm_num [log_52265719, log_47734281]
+  linarith [log_6909.1, log_6909.2, log_104531438.1, log_104531438.2,
+    Real.log_two_gt_d9, Real.log_two_lt_d9]
+
+/-! ### The two inequalities of Theorem 3.4
+
+Throughout, protocols are indexed by `Fin (K+1)` (so there is at least one), index `0`
+is the i.i.d. protocol `Π⁰_{x,y}(0,0) = xy`. -/
+
+variable {K : ℕ} {Prot : Fin (K+1) → ℝ → ℝ → ℝ} {w : Fin (K+1) → ℝ}
+  {C : Fin (K+1) → ∀ n : ℕ, (Fin n → ℝ) → (Fin n → ℝ) → (Fin n → Fin n → ℝ) → Prop}
+  {Cc c : ℝ}
+
+lemma weight_zero_le_one (hw : ∀ k, 0 ≤ w k) (hw1 : ∑ k, w k = 1) : w 0 ≤ 1 := by
+  calc w 0 ≤ ∑ k, w k := Finset.single_le_sum (fun i _ => hw i) (Finset.mem_univ 0)
+    _ = 1 := hw1
+/-- **Inequality (H) of Theorem 3.4 (component hiding).**
+
+> Dividing by `𝔼[ent X] = (1-q) δ ent(y)` and letting `δ → 0`, (cert) forces `2 w q ≥ C > 1`.
+> Hence `2w(1-c) ≥ 1` is necessary.
+
+The limit `δ → 0` is done by hand: `δ` is chosen below the hiding threshold of every class
+and below `c (1 - 2 q w₀)`. -/
+theorem hiding_bound
+    (hProt : ∀ k, IsProtocol (Prot k)) (hiid : ∀ x y, Prot 0 x y = x * y)
+    (hw : ∀ k, 0 ≤ w k) (hw1 : ∑ k, w k = 1)
+    (hC0 : ContainsProduct (C 0)) (hChide : ∀ k, k ≠ 0 → AdmitsHiding (C k))
+    (hCc : 1 ≤ Cc) (hc0 : 0 < c) (hc1 : c < 1)
+    (hcert : Certifies Prot w C Cc c) :
+    1 ≤ 2 * w 0 * (1 - c) := by
+  by_contra hcon
+  push_neg at hcon
+  obtain ⟨q, hqdef⟩ : ∃ q : ℝ, q = 1 - c := ⟨1 - c, rfl⟩
+  have hq0 : 0 < q := by rw [hqdef]; linarith
+  have hq1 : q < 1 := by rw [hqdef]; linarith
+  have hw0 : 0 ≤ w 0 := hw 0
+  have hcon' : 2 * w 0 * q < 1 := by rw [hqdef]; linarith
+  have hgap : 0 < 1 - 2 * q * w 0 := by nlinarith
+  -- every non-i.i.d. class supplies a hiding coupling below its own threshold `d k`
+  have hex : ∀ k : Fin (K+1), ∃ e : ℝ, 0 < e ∧ ∀ δ : ℝ, 0 < δ → δ < e → k ≠ 0 →
+      ∃ P : Fin 3 → Fin 3 → ℝ, IsCoupling (hidingWeights q δ) P ∧
+        C k 3 (hidingAtoms (1/2)) (hidingWeights q δ) P ∧
+        P 2 0 = 0 ∧ P 0 2 = 0 ∧ P 2 2 ≤ δ^2 := by
+    intro k
+    by_cases hk : k = 0
+    · exact ⟨1, one_pos, fun δ _ _ hk0 => absurd hk hk0⟩
+    · obtain ⟨e, he, hprop⟩ := hChide k hk q (1/2) ⟨hq0, hq1⟩ ⟨by norm_num, by norm_num⟩
+      exact ⟨e, he, fun δ hδ hδd _ => hprop δ hδ hδd⟩
+  choose d hd hdprop using hex
+  -- one `δ` small enough for all of them, and small enough to force the contradiction
+  obtain ⟨δ, hδpos, hδd, hδsmall, hδ1⟩ :
+      ∃ δ : ℝ, 0 < δ ∧ (∀ k, δ < d k) ∧ δ < c * (1 - 2*q*w 0) ∧ δ ≤ 1 := by
+    obtain ⟨δ₀, hδ₀, hδ₀le⟩ : ∃ e : ℝ, 0 < e ∧ ∀ k, e ≤ d k :=
+      ⟨Finset.univ.inf' Finset.univ_nonempty d,
+        (Finset.lt_inf'_iff Finset.univ_nonempty).2 (fun i _ => hd i),
+        fun k => Finset.inf'_le d (Finset.mem_univ k)⟩
+    refine ⟨min (δ₀/2) (min (c * (1 - 2*q*w 0) / 2) (1/4)), ?_, ?_, ?_, ?_⟩
+    · exact lt_min (by linarith) (lt_min (div_pos (mul_pos hc0 hgap) two_pos) (by norm_num))
+    · intro k
+      calc min (δ₀/2) (min (c * (1 - 2*q*w 0) / 2) (1/4)) ≤ δ₀/2 := min_le_left _ _
+        _ < δ₀ := by linarith
+        _ ≤ d k := hδ₀le k
+    · calc min (δ₀/2) (min (c * (1 - 2*q*w 0) / 2) (1/4)) ≤ c * (1 - 2*q*w 0) / 2 :=
+          le_trans (min_le_right _ _) (min_le_left _ _)
+        _ < c * (1 - 2*q*w 0) := by nlinarith
+    · calc min (δ₀/2) (min (c * (1 - 2*q*w 0) / 2) (1/4)) ≤ 1/4 :=
+          le_trans (min_le_right _ _) (min_le_right _ _)
+        _ ≤ 1 := by norm_num
+  -- the hiding law `μ_{q,1/2,δ}`
+  have hyIcc : (1/2 : ℝ) ∈ Set.Icc (0:ℝ) 1 := ⟨by norm_num, by norm_num⟩
+  have hlaw : IsLaw (hidingAtoms (1/2)) (hidingWeights q δ) :=
+    isLaw_hiding (le_of_lt hq0) (le_of_lt hq1) (le_of_lt hδpos) hδ1 hyIcc
+  have hmean : 1 - c ≤ mean (hidingAtoms (1/2)) (hidingWeights q δ) := by
+    rw [mean_hiding]
+    have hpos : 0 < (1-q)*δ := mul_pos (by linarith) hδpos
+    rw [hqdef] at hpos ⊢
+    nlinarith
+  -- product coupling for the i.i.d. protocol, a hiding coupling for the others
+  have hPex : ∀ k : Fin (K+1), ∃ Pk : Fin 3 → Fin 3 → ℝ,
+      IsCoupling (hidingWeights q δ) Pk ∧ C k 3 (hidingAtoms (1/2)) (hidingWeights q δ) Pk ∧
+      (k ≠ 0 → expect (hidingAtoms (1/2)) Pk (fun u v => h (Prot k u v)) ≤ δ^2) ∧
+      (k = 0 → Pk = productCoupling (hidingWeights q δ)) := by
+    intro k
+    by_cases hk : k = 0
+    · subst hk
+      exact ⟨productCoupling (hidingWeights q δ),
+        isCoupling_productCoupling hlaw.2.1 hlaw.2.2, hC0 3 _ _ hlaw,
+        fun hne => absurd rfl hne, fun _ => rfl⟩
+    · obtain ⟨P, hP1, hP2, h20, h02, h22⟩ := hdprop k δ hδpos (hδd k) hk
+      exact ⟨P, hP1, hP2,
+        fun _ => expect_hiding_le (hProt k) hyIcc hP1 h20 h02 h22, fun he => absurd he hk⟩
+  choose P hP1 hP2 hP3 hP4 using hPex
+  have hmain := hcert 3 (hidingAtoms (1/2)) (hidingWeights q δ) hlaw hmean P
+    (fun k => ⟨hP1 k, hP2 k⟩)
+  rw [entropy_hiding] at hmain
+  -- the i.i.d. term is exactly `2q(1-q)δ ent(y) + (1-q)²δ² ent(y²)`
+  have hzero : expect (hidingAtoms (1/2)) (P 0) (fun u v => h (Prot 0 u v))
+      = 2*q*((1-q)*δ) * h (1/2) + ((1-q)*δ)^2 * h ((1/2:ℝ)^2) := by
+    rw [hP4 0 rfl]
+    simp only [hiid]
+    exact expect_hiding_product_iid
+  -- every other term is at most `δ²`
+  have hrest : ∑ k ∈ Finset.univ.erase (0 : Fin (K+1)),
+      w k * expect (hidingAtoms (1/2)) (P k) (fun u v => h (Prot k u v))
+      ≤ (1 - w 0) * δ^2 := by
+    have hb : ∀ k ∈ Finset.univ.erase (0 : Fin (K+1)),
+        w k * expect (hidingAtoms (1/2)) (P k) (fun u v => h (Prot k u v)) ≤ w k * δ^2 :=
+      fun k hk => mul_le_mul_of_nonneg_left (hP3 k (Finset.ne_of_mem_erase hk)) (hw k)
+    have hs : ∑ k ∈ Finset.univ.erase (0 : Fin (K+1)), w k = 1 - w 0 := by
+      have := Finset.add_sum_erase Finset.univ w (Finset.mem_univ (0 : Fin (K+1)))
+      rw [hw1] at this; linarith
+    calc ∑ k ∈ Finset.univ.erase (0 : Fin (K+1)),
+          w k * expect (hidingAtoms (1/2)) (P k) (fun u v => h (Prot k u v))
+        ≤ ∑ k ∈ Finset.univ.erase (0 : Fin (K+1)), w k * δ^2 := Finset.sum_le_sum hb
+      _ = (1 - w 0) * δ^2 := by rw [← Finset.sum_mul, hs]
+  have hsplit : ∑ k, w k * expect (hidingAtoms (1/2)) (P k) (fun u v => h (Prot k u v))
+      = w 0 * expect (hidingAtoms (1/2)) (P 0) (fun u v => h (Prot 0 u v))
+        + ∑ k ∈ Finset.univ.erase (0 : Fin (K+1)),
+            w k * expect (hidingAtoms (1/2)) (P k) (fun u v => h (Prot k u v)) :=
+    (Finset.add_sum_erase Finset.univ _ (Finset.mem_univ (0 : Fin (K+1)))).symm
+  rw [hsplit, hzero] at hmain
+  have hhalf : h (1/2 : ℝ) = 1 := h_half
+  have hquarter : h ((1/2:ℝ)^2) ≤ 1 := h_le_one _
+  have hcq : (1 : ℝ) - q = c := by rw [hqdef]; ring
+  rw [hhalf, hcq] at hmain
+  -- arithmetic: `Cc c δ ≤ 2 q w₀ c δ + δ²`, contradicting `δ < c (1 - 2 q w₀)`
+  have hsum2 : Cc * (c * δ * 1) ≤
+      w 0 * (2*q*(c*δ) * 1 + (c*δ)^2 * h ((1/2:ℝ)^2)) + (1 - w 0) * δ^2 := by
+    linarith [hmain, hrest]
+  have hA : (c*δ)^2 * h ((1/2:ℝ)^2) ≤ δ^2 := by
+    have e1 : (c*δ)^2 * h ((1/2:ℝ)^2) ≤ (c*δ)^2 := by
+      nlinarith [mul_nonneg (sq_nonneg (c*δ)) (sub_nonneg.2 hquarter)]
+    have e2 : (c*δ)^2 ≤ δ^2 := by
+      nlinarith [mul_nonneg (sq_nonneg δ) (by nlinarith : (0:ℝ) ≤ 1 - c^2)]
+    linarith
+  have hstep : Cc * (c * δ) ≤ 2*q*w 0*(c*δ) + δ^2 := by
+    linarith [hsum2, mul_nonneg hw0 (sub_nonneg.2 hA)]
+  have h1 : c * δ ≤ 2*q*w 0*(c*δ) + δ^2 := by
+    linarith [hstep, mul_nonneg (sub_nonneg.2 hCc) (le_of_lt (mul_pos hc0 hδpos))]
+  have hfin : c ≤ 2*q*w 0*c + δ := by
+    by_contra hno
+    push_neg at hno
+    have hprod : 0 < (c - 2*q*w 0*c - δ) * δ :=
+      mul_pos (by linarith) hδpos
+    linarith [h1, hprod]
+  linarith [hfin, hδsmall]
+
+/-- **Inequality (D) of Theorem 3.4 (the diagonal adversary).**
+
+> Present the product law to every class at `μ = p δ_x + (1-p) δ_0`.  The i.i.d. term
+> equals `p² ent(x²)` and every other term is at most `p²`, so (cert) forces
+> `c ≤ 1 - x ent(x)/(w ent(x²) + 1 - w)`. -/
+theorem diagonal_bound
+    (hProt : ∀ k, IsProtocol (Prot k)) (hiid : ∀ x y, Prot 0 x y = x * y)
+    (hw : ∀ k, 0 ≤ w k) (hw1 : ∑ k, w k = 1) (hC : ∀ k, ContainsProduct (C k))
+    (hCc : 1 ≤ Cc) (hc1 : c < 1) (hcert : Certifies Prot w C Cc c)
+    {x : ℝ} (hx : x ∈ Set.Ioc (0:ℝ) 1) (hcond : h x ≤ w 0 * h (x^2) + 1 - w 0) :
+    c ≤ 1 - x * h x / (w 0 * h (x^2) + 1 - w 0) := by
+  obtain ⟨hx0, hx1⟩ := hx
+  rcases eq_or_lt_of_le hx1 with hxe | hxlt
+  · subst hxe
+    simp only [h_one, mul_zero, zero_div, sub_zero]
+    linarith
+  · have hxIcc : x ∈ Set.Icc (0:ℝ) 1 := ⟨le_of_lt hx0, hx1⟩
+    obtain ⟨D, hDdef⟩ : ∃ D : ℝ, D = w 0 * h (x^2) + 1 - w 0 := ⟨_, rfl⟩
+    have hhx : 0 < h x := h_pos hx0 hxlt
+    have hcond' : h x ≤ D := by rw [hDdef]; exact hcond
+    have hDpos : 0 < D := lt_of_lt_of_le hhx hcond'
+    rw [← hDdef]
+    by_contra hcon
+    push_neg at hcon
+    -- `p*` and a slightly smaller `p`
+    obtain ⟨ps, hpsdef⟩ : ∃ ps : ℝ, ps = h x / D := ⟨_, rfl⟩
+    have hps0 : 0 < ps := by rw [hpsdef]; exact div_pos hhx hDpos
+    have hps1 : ps ≤ 1 := by rw [hpsdef, div_le_one hDpos]; exact hcond'
+    have hxps : 1 - c < x * ps := by
+      have hxx : x * h x / D = x * ps := by rw [hpsdef]; ring
+      rw [hxx] at hcon; linarith
+    obtain ⟨p, hplt, hp0, hpx⟩ : ∃ p : ℝ, p < ps ∧ 0 < p ∧ 1 - c ≤ p * x := by
+      refine ⟨max ((1-c)/x) (ps/2), max_lt ?_ (by linarith), ?_, ?_⟩
+      · rw [div_lt_iff₀ hx0]; nlinarith
+      · exact lt_of_lt_of_le (by linarith : (0:ℝ) < ps/2) (le_max_right _ _)
+      · have hle : (1-c)/x ≤ max ((1-c)/x) (ps/2) := le_max_left _ _
+        rw [div_le_iff₀ hx0] at hle; linarith
+    have hp1 : p ≤ 1 := le_of_lt (lt_of_lt_of_le hplt hps1)
+    have hlaw : IsLaw (twoAtoms x) (twoWeights p) := isLaw_two hxIcc (le_of_lt hp0) hp1
+    have hmean : 1 - c ≤ mean (twoAtoms x) (twoWeights p) := by rw [mean_two]; exact hpx
+    have hmain := hcert 2 (twoAtoms x) (twoWeights p) hlaw hmean
+      (fun _ => productCoupling (twoWeights p))
+      (fun k => ⟨isCoupling_productCoupling hlaw.2.1 hlaw.2.2, hC k 2 _ _ hlaw⟩)
+    rw [entropy_two] at hmain
+    have hzero : expect (twoAtoms x) (productCoupling (twoWeights p))
+        (fun u v => h (Prot 0 u v)) = p * p * h (x^2) := by
+      have hxx : x * x = x^2 := by ring
+      rw [expect_two_product (hProt 0) hxIcc, hiid, hxx]
+    have hrest : ∑ k ∈ Finset.univ.erase (0 : Fin (K+1)), w k *
+        expect (twoAtoms x) (productCoupling (twoWeights p)) (fun u v => h (Prot k u v))
+        ≤ (1 - w 0) * (p * p) := by
+      have hb : ∀ k ∈ Finset.univ.erase (0 : Fin (K+1)), w k *
+          expect (twoAtoms x) (productCoupling (twoWeights p)) (fun u v => h (Prot k u v))
+          ≤ w k * (p * p) := by
+        intro k _
+        rw [expect_two_product (hProt k) hxIcc]
+        refine mul_le_mul_of_nonneg_left ?_ (hw k)
+        nlinarith [h_le_one (Prot k x x), mul_pos hp0 hp0]
+      have hs : ∑ k ∈ Finset.univ.erase (0 : Fin (K+1)), w k = 1 - w 0 := by
+        have := Finset.add_sum_erase Finset.univ w (Finset.mem_univ (0 : Fin (K+1)))
+        rw [hw1] at this; linarith
+      calc ∑ k ∈ Finset.univ.erase (0 : Fin (K+1)), w k *
+            expect (twoAtoms x) (productCoupling (twoWeights p)) (fun u v => h (Prot k u v))
+          ≤ ∑ k ∈ Finset.univ.erase (0 : Fin (K+1)), w k * (p * p) := Finset.sum_le_sum hb
+        _ = (1 - w 0) * (p * p) := by rw [← Finset.sum_mul, hs]
+    have hsplit : ∑ k, w k *
+        expect (twoAtoms x) (productCoupling (twoWeights p)) (fun u v => h (Prot k u v))
+        = w 0 * expect (twoAtoms x) (productCoupling (twoWeights p))
+            (fun u v => h (Prot 0 u v))
+          + ∑ k ∈ Finset.univ.erase (0 : Fin (K+1)), w k *
+              expect (twoAtoms x) (productCoupling (twoWeights p))
+                (fun u v => h (Prot k u v)) :=
+      (Finset.add_sum_erase Finset.univ _ (Finset.mem_univ (0 : Fin (K+1)))).symm
+    rw [hsplit, hzero] at hmain
+    have hfin : p * h x ≤ p * p * D := by
+      have e1 : Cc * (p * h x) ≤ w 0 * (p * p * h (x^2)) + (1 - w 0) * (p * p) := by
+        linarith [hmain, hrest]
+      have e2 : w 0 * (p * p * h (x^2)) + (1 - w 0) * (p * p) = p * p * D := by
+        rw [hDdef]; ring
+      linarith [e1, e2, mul_nonneg (sub_nonneg.2 hCc)
+        (mul_nonneg (le_of_lt hp0) (le_of_lt hhx))]
+    have h3 : h x ≤ p * D := by
+      by_contra hno
+      push_neg at hno
+      have hlt : p * (p * D) < p * h x := mul_lt_mul_of_pos_left hno hp0
+      linarith [hfin, hlt]
+    have h4 : ps ≤ p := by rw [hpsdef, div_le_iff₀ hDpos]; exact h3
+    linarith
+
+/-- **The fixed-point form of Theorem 3.4.**  Substituting the bound (H) `w₀ ≥ 1/(2(1-c))`
+into (D), whose right-hand side is decreasing in `w₀`. -/
+theorem fixed_point_form
+    (hProt : ∀ k, IsProtocol (Prot k)) (hiid : ∀ x y, Prot 0 x y = x * y)
+    (hw : ∀ k, 0 ≤ w k) (hw1 : ∑ k, w k = 1) (hC : ∀ k, ContainsProduct (C k))
+    (hChide : ∀ k, k ≠ 0 → AdmitsHiding (C k))
+    (hCc : 1 ≤ Cc) (hc0 : 0 < c) (hchalf : c ≤ 1/2) (hcert : Certifies Prot w C Cc c)
+    {x : ℝ} (hx : x ∈ Set.Ioo (0:ℝ) 1) (hmono : h x ≤ h (x^2)) :
+    c ≤ 1 - x * h x / (1 - (1 - h (x^2)) / (2 * (1 - c))) := by
+  obtain ⟨hx0, hx1⟩ := hx
+  have hc1 : c < 1 := by linarith
+  have hH := hiding_bound hProt hiid hw hw1 (hC 0) hChide hCc hc0 hc1 hcert
+  have hw0 : 0 ≤ w 0 := hw 0
+  have hw01 : w 0 ≤ 1 := weight_zero_le_one hw hw1
+  have hx2p : (0:ℝ) < x^2 := by positivity
+  have hx2l : x^2 < 1 := by nlinarith
+  have hB0 : 0 < h (x^2) := h_pos hx2p hx2l
+  have hB1 : h (x^2) ≤ 1 := h_le_one _
+  have hcond : h x ≤ w 0 * h (x^2) + 1 - w 0 := by
+    linarith [mul_nonneg (sub_nonneg.2 hw01) (sub_nonneg.2 hB1)]
+  have hD := diagonal_bound hProt hiid hw hw1 hC hCc hc1 hcert ⟨hx0, le_of_lt hx1⟩ hcond
+  have hden : 0 < 2*(1-c) := by linarith
+  have hDpos : 0 < w 0 * h (x^2) + 1 - w 0 := lt_of_lt_of_le (h_pos hx0 hx1) hcond
+  have hD0pos : 0 < 1 - (1 - h (x^2)) / (2*(1-c)) := by
+    rw [sub_pos, div_lt_one hden]; linarith
+  have hw0lb : 1/(2*(1-c)) ≤ w 0 := by rw [div_le_iff₀ hden]; linarith
+  have hDD0 : w 0 * h (x^2) + 1 - w 0 ≤ 1 - (1 - h (x^2)) / (2*(1-c)) := by
+    have hkey : (1 - h (x^2))/(2*(1-c)) ≤ w 0 * (1 - h (x^2)) := by
+      rw [div_le_iff₀ hden]
+      linarith [mul_nonneg (sub_nonneg.2 hB1)
+        (by linarith [hH] : (0:ℝ) ≤ 2*w 0*(1-c) - 1)]
+    linarith
+  have hnum : 0 ≤ x * h x := mul_nonneg (le_of_lt hx0) (h_nonneg (le_of_lt hx0) (le_of_lt hx1))
+  have hinv : 1/(1 - (1 - h (x^2)) / (2*(1-c))) ≤ 1/(w 0 * h (x^2) + 1 - w 0) :=
+    one_div_le_one_div_of_le hDpos hDD0
+  have hcmp : x * h x / (1 - (1 - h (x^2)) / (2*(1-c)))
+      ≤ x * h x / (w 0 * h (x^2) + 1 - w 0) :=
+    calc x * h x / (1 - (1 - h (x^2)) / (2*(1-c)))
+        = x * h x * (1/(1 - (1 - h (x^2)) / (2*(1-c)))) := by ring
+      _ ≤ x * h x * (1/(w 0 * h (x^2) + 1 - w 0)) := mul_le_mul_of_nonneg_left hinv hnum
+      _ = x * h x / (w 0 * h (x^2) + 1 - w 0) := by ring
+  linarith [hD, hcmp]
+
+/-- **The numerical corollary of Theorem 3.4.**  Under the hypotheses of the section
+(and `c ≤ 1/2`, as in Proposition 2.2), the certified constant satisfies `c ≤ 0.3829`.
+
+This lies strictly below the product ceiling `c_ceil = 0.3830993…` of Theorem 3.1; the
+exact value in the paper is `c** = 0.382885260…`.  The adversary is the two-point law at
+`x = 0.6909`. -/
+theorem refined_ceiling_numeric
+    (hProt : ∀ k, IsProtocol (Prot k)) (hiid : ∀ x y, Prot 0 x y = x * y)
+    (hw : ∀ k, 0 ≤ w k) (hw1 : ∑ k, w k = 1) (hC : ∀ k, ContainsProduct (C k))
+    (hChide : ∀ k, k ≠ 0 → AdmitsHiding (C k))
+    (hCc : 1 ≤ Cc) (hc0 : 0 < c) (hchalf : c ≤ 1/2) (hcert : Certifies Prot w C Cc c) :
+    c ≤ 3829/10000 := by
+  by_contra hcon
+  push_neg at hcon
+  have hxm : ((6909:ℝ)/10000) ∈ Set.Ioo (0:ℝ) 1 := ⟨by norm_num, by norm_num⟩
+  have hBl : (9985182/10000000:ℝ) ≤ h (((6909:ℝ)/10000)^2) := by rw [xsq_eq]; exact hx2_lower
+  have hBu : h (((6909:ℝ)/10000)^2) ≤ (998519/1000000:ℝ) := by rw [xsq_eq]; exact hx2_upper
+  have hmono : h ((6909:ℝ)/10000) ≤ h (((6909:ℝ)/10000)^2) := by
+    linarith [hx_upper, hBl]
+  have hfp := fixed_point_form hProt hiid hw hw1 hC hChide hCc hc0 hchalf hcert hxm hmono
+  have hc1 : c < 1 := by linarith
+  have hden : 0 < 2*(1-c) := by linarith
+  have hB1 : h (((6909:ℝ)/10000)^2) ≤ 1 := h_le_one _
+  have hD0pos : 0 < 1 - (1 - h (((6909:ℝ)/10000)^2)) / (2*(1-c)) := by
+    rw [sub_pos, div_lt_one hden]; linarith
+  have hne : (1:ℝ) - c ≠ 0 := by linarith
+  have key : ((6909:ℝ)/10000) * h ((6909:ℝ)/10000)
+      ≤ (1 - c) - (1 - h (((6909:ℝ)/10000)^2))/2 := by
+    have e1 : ((6909:ℝ)/10000) * h ((6909:ℝ)/10000)
+        / (1 - (1 - h (((6909:ℝ)/10000)^2)) / (2*(1-c))) ≤ 1 - c := by linarith [hfp]
+    rw [div_le_iff₀ hD0pos] at e1
+    have e2 : (1 - c) * (1 - (1 - h (((6909:ℝ)/10000)^2)) / (2*(1-c)))
+        = (1 - c) - (1 - h (((6909:ℝ)/10000)^2))/2 := by
+      field_simp
+    linarith [e1, e2.le, e2.ge]
+  linarith [key, hx_lower, hBu, hcon]
+
+end UnionClosedCeiling
+\end{Verbatim}
+
+\subsection{\texttt{UnionClosedCeiling/Classes.lean}}
+\begin{Verbatim}[fontsize=\scriptsize,formatcom=\leanmono,samepage=false]
+import UnionClosedCeiling.Framework
+
+/-!
+# Lemma 3.3 — the classes
+
+> **Lemma 3.3.**  The classes of the i.i.d. protocol, of Sawin's protocol, of Yu's
+> protocols for every `ρ > 0`, and of every conditionally-i.i.d. protocol contain the
+> product law.  All but the first admit hiding.
+
+Formalised here, in the finite model:
+
+* the singleton class `{μ ⊗ μ}` of the i.i.d. protocol (`iidClass`) contains the product;
+* the class of **all couplings** (`allCouplings`, Sawin's class) contains the product and
+  admits hiding;
+* the class of **mixtures of products** (`mixtureOfProducts`, the class of every
+  conditionally-i.i.d. protocol) contains the product and admits hiding.
+
+The witness used for hiding is the paper's mixture-of-two-products coupling
+`P = q δ₁⊗δ₁ + (1-q) P₀⊗P₀`, `P₀ = (1-δ)δ₀ + δ δ_y` (`hidingCoupling`).  For the class of
+all couplings the paper offers the maximal-correlation witness instead; since that class
+imposes no constraint, the same mixture witness serves, and we use it for both.
+
+**Not formalised:** the maximal-correlation classes of Yu's protocols.  Their hiding
+witness requires the continuity of singular values in the matrix entries, which is a
+genuinely different argument; see the README.
+-/
+
+namespace UnionClosedCeiling
+
+open Finset
+
+/-- The class of *all* couplings (Sawin's class). -/
+def allCouplings : ∀ n : ℕ, (Fin n → ℝ) → (Fin n → ℝ) → (Fin n → Fin n → ℝ) → Prop :=
+  fun _ _ _ _ => True
+
+/-- The singleton class `{μ ⊗ μ}` of the i.i.d. protocol. -/
+def iidClass : ∀ n : ℕ, (Fin n → ℝ) → (Fin n → ℝ) → (Fin n → Fin n → ℝ) → Prop :=
+  fun _ _ m P => P = productCoupling m
+
+/-- The class of mixtures of product laws: `P = ∑ⱼ πⱼ νⱼ ⊗ νⱼ` with `∑ⱼ πⱼ νⱼ = μ`.
+This is the class `C₃(μ)` of the conditionally-i.i.d. protocols. -/
+def mixtureOfProducts : ∀ n : ℕ, (Fin n → ℝ) → (Fin n → ℝ) → (Fin n → Fin n → ℝ) → Prop :=
+  fun n _ m P => ∃ (J : ℕ) (π : Fin J → ℝ) (ν : Fin J → Fin n → ℝ),
+    (∀ j, 0 ≤ π j) ∧ (∑ j, π j = 1) ∧
+    (∀ j i, 0 ≤ ν j i) ∧ (∀ j, ∑ i, ν j i = 1) ∧
+    (∀ i, ∑ j, π j * ν j i = m i) ∧
+    (∀ i i', P i i' = ∑ j, π j * (ν j i * ν j i'))
+
+/-! ### Products -/
+
+lemma containsProduct_allCouplings : ContainsProduct allCouplings :=
+  fun _ _ _ _ => trivial
+
+lemma containsProduct_iidClass : ContainsProduct iidClass :=
+  fun _ _ _ _ => rfl
+
+lemma containsProduct_mixtureOfProducts : ContainsProduct mixtureOfProducts := by
+  intro n a m hlaw
+  refine ⟨1, ![1], ![m], ?_, ?_, ?_, ?_, ?_, ?_⟩
+  · intro j; fin_cases j; norm_num
+  · simp
+  · intro j i; fin_cases j; exact hlaw.2.1 i
+  · intro j; fin_cases j; exact hlaw.2.2
+  · intro i; simp
+  · intro i i'; simp [productCoupling]
+
+/-! ### Hiding -/
+
+/-- The paper's hiding coupling of `μ_{q,y,δ}` with itself:
+`q δ₁ ⊗ δ₁ + (1-q) P₀ ⊗ P₀` with `P₀ = (1-δ) δ₀ + δ δ_y`.
+In our indexing (`0 ↦ 1`, `1 ↦ 0`, `2 ↦ y`), `δ₁ = ![1,0,0]` and `P₀ = ![0,1-δ,δ]`. -/
+noncomputable def hidingComp1 : Fin 3 → ℝ := ![1, 0, 0]
+
+/-- The second component `P₀ = (1-δ) δ₀ + δ δ_y` of the hiding coupling. -/
+noncomputable def hidingComp2 (δ : ℝ) : Fin 3 → ℝ := ![0, 1 - δ, δ]
+
+/-- The hiding coupling `P = q δ₁⊗δ₁ + (1-q) P₀⊗P₀`. -/
+noncomputable def hidingCoupling (q δ : ℝ) : Fin 3 → Fin 3 → ℝ :=
+  fun i j => q * (hidingComp1 i * hidingComp1 j) + (1-q) * (hidingComp2 δ i * hidingComp2 δ j)
+
+lemma hidingCoupling_isCoupling {q δ : ℝ} (hq0 : 0 ≤ q) (hq1 : q ≤ 1)
+    (hδ0 : 0 ≤ δ) (hδ1 : δ ≤ 1) : IsCoupling (hidingWeights q δ) (hidingCoupling q δ) := by
+  have hc1 : ∀ i, 0 ≤ hidingComp1 i := by
+    intro i; fin_cases i <;> simp [hidingComp1]
+  have hc2 : ∀ i, 0 ≤ hidingComp2 δ i := by
+    intro i; fin_cases i <;> simp [hidingComp2] <;> linarith
+  refine ⟨?_, ?_, ?_⟩
+  · intro i j
+    have := mul_nonneg (hc1 i) (hc1 j)
+    have := mul_nonneg (hc2 i) (hc2 j)
+    unfold hidingCoupling
+    have h1 : 0 ≤ q * (hidingComp1 i * hidingComp1 j) :=
+      mul_nonneg hq0 (mul_nonneg (hc1 i) (hc1 j))
+    have h2 : 0 ≤ (1-q) * (hidingComp2 δ i * hidingComp2 δ j) :=
+      mul_nonneg (by linarith) (mul_nonneg (hc2 i) (hc2 j))
+    linarith
+  · intro i
+    fin_cases i <;>
+      simp [hidingCoupling, hidingComp1, hidingComp2, hidingWeights, Fin.sum_univ_three] <;> ring
+  · intro j
+    fin_cases j <;>
+      simp [hidingCoupling, hidingComp1, hidingComp2, hidingWeights, Fin.sum_univ_three] <;> ring
+
+lemma hidingCoupling_mixture {q δ : ℝ} (hq0 : 0 ≤ q) (hq1 : q ≤ 1)
+    (hδ0 : 0 ≤ δ) (hδ1 : δ ≤ 1) (y : ℝ) :
+    mixtureOfProducts 3 (hidingAtoms y) (hidingWeights q δ) (hidingCoupling q δ) := by
+  refine ⟨2, ![q, 1-q], ![hidingComp1, hidingComp2 δ], ?_, ?_, ?_, ?_, ?_, ?_⟩
+  · intro j; fin_cases j
+    · exact hq0
+    · show (0:ℝ) ≤ 1 - q
+      linarith
+  · simp [Fin.sum_univ_two]
+  · intro j i; fin_cases j <;> fin_cases i <;>
+      simp [hidingComp1, hidingComp2] <;> linarith
+  · intro j; fin_cases j <;> simp [hidingComp1, hidingComp2, Fin.sum_univ_three]
+  · intro i; fin_cases i <;>
+      simp [hidingComp1, hidingComp2, hidingWeights, Fin.sum_univ_two]
+  · intro i i'; simp [hidingCoupling, Fin.sum_univ_two]
+
+lemma hidingCoupling_zeros {q δ : ℝ} : hidingCoupling q δ 2 0 = 0 ∧ hidingCoupling q δ 0 2 = 0 := by
+  constructor <;> simp [hidingCoupling, hidingComp1, hidingComp2]
+
+lemma hidingCoupling_diag {q δ : ℝ} (hq0 : 0 ≤ q) (hδ0 : 0 ≤ δ) :
+    hidingCoupling q δ 2 2 ≤ δ^2 := by
+  have : hidingCoupling q δ 2 2 = (1-q) * (δ * δ) := by
+    simp [hidingCoupling, hidingComp1, hidingComp2]
+  rw [this]
+  nlinarith [mul_nonneg hδ0 hδ0]
+
+/-- The class of all couplings admits hiding. -/
+lemma admitsHiding_allCouplings : AdmitsHiding allCouplings := by
+  intro q y hq hy
+  refine ⟨1, one_pos, fun δ hδ0 hδ1 => ⟨hidingCoupling q δ, ?_, trivial, ?_, ?_, ?_⟩⟩
+  · exact hidingCoupling_isCoupling (le_of_lt hq.1) (le_of_lt hq.2) (le_of_lt hδ0)
+      (le_of_lt hδ1)
+  · exact hidingCoupling_zeros.1
+  · exact hidingCoupling_zeros.2
+  · exact hidingCoupling_diag (le_of_lt hq.1) (le_of_lt hδ0)
+
+/-- The class of mixtures of products admits hiding. -/
+lemma admitsHiding_mixtureOfProducts : AdmitsHiding mixtureOfProducts := by
+  intro q y hq hy
+  refine ⟨1, one_pos, fun δ hδ0 hδ1 => ⟨hidingCoupling q δ, ?_, ?_, ?_, ?_, ?_⟩⟩
+  · exact hidingCoupling_isCoupling (le_of_lt hq.1) (le_of_lt hq.2) (le_of_lt hδ0)
+      (le_of_lt hδ1)
+  · exact hidingCoupling_mixture (le_of_lt hq.1) (le_of_lt hq.2) (le_of_lt hδ0)
+      (le_of_lt hδ1) y
+  · exact hidingCoupling_zeros.1
+  · exact hidingCoupling_zeros.2
+  · exact hidingCoupling_diag (le_of_lt hq.1) (le_of_lt hδ0)
+
+end UnionClosedCeiling
+\end{Verbatim}
+
+\subsection{\texttt{UnionClosedCeiling.lean}}
+\begin{Verbatim}[fontsize=\scriptsize,formatcom=\leanmono,samepage=false]
+import UnionClosedCeiling.Entropy
+import UnionClosedCeiling.Framework
+import UnionClosedCeiling.Ceiling
+import UnionClosedCeiling.Refined
+import UnionClosedCeiling.Classes
+
+/-!
+# A ceiling for single-letter protocol arguments (Sections 2.2 and 3 of the paper)
+
+Main results:
+
+* `UnionClosedCeiling.product_ceiling`   -- Theorem 3.1 (product ceiling)
+* `UnionClosedCeiling.hiding_bound`      -- Theorem 3.4, inequality (H)
+* `UnionClosedCeiling.diagonal_bound`    -- Theorem 3.4, inequality (D)
+* `UnionClosedCeiling.fixed_point_form`  -- Theorem 3.4, the fixed-point form
+* `UnionClosedCeiling.refined_ceiling_numeric` -- Theorem 3.4, `c ≤ 0.3829`
+* `UnionClosedCeiling.containsProduct_*`, `UnionClosedCeiling.admitsHiding_*` -- Lemma 3.3
+-/
+
+#print axioms UnionClosedCeiling.product_ceiling
+#print axioms UnionClosedCeiling.hiding_bound
+#print axioms UnionClosedCeiling.diagonal_bound
+#print axioms UnionClosedCeiling.fixed_point_form
+#print axioms UnionClosedCeiling.refined_ceiling_numeric
+#print axioms UnionClosedCeiling.containsProduct_iidClass
+#print axioms UnionClosedCeiling.containsProduct_allCouplings
+#print axioms UnionClosedCeiling.containsProduct_mixtureOfProducts
+#print axioms UnionClosedCeiling.admitsHiding_allCouplings
+#print axioms UnionClosedCeiling.admitsHiding_mixtureOfProducts
+\end{Verbatim}
+
+\subsection{\texttt{AxiomCheck.lean}}
+\begin{Verbatim}[fontsize=\scriptsize,formatcom=\leanmono,samepage=false]
+import UnionClosedCeiling
+
+#print axioms UnionClosedCeiling.product_ceiling
+#print axioms UnionClosedCeiling.hiding_bound
+#print axioms UnionClosedCeiling.diagonal_bound
+#print axioms UnionClosedCeiling.fixed_point_form
+#print axioms UnionClosedCeiling.refined_ceiling_numeric
+#print axioms UnionClosedCeiling.containsProduct_iidClass
+#print axioms UnionClosedCeiling.containsProduct_allCouplings
+#print axioms UnionClosedCeiling.containsProduct_mixtureOfProducts
+#print axioms UnionClosedCeiling.admitsHiding_allCouplings
+#print axioms UnionClosedCeiling.admitsHiding_mixtureOfProducts
+\end{Verbatim}
+
+\fussy
 
 \begin{thebibliography}{99}
 \bibitem{AHS} R.~Alweiss, B.~Huang and M.~Sellke, Improved lower bound for the union-closed sets conjecture, arXiv:2211.11731 (2022).

@@ -1,5 +1,22 @@
 # A ceiling for single-letter protocol arguments (lead, 2026-09-08)
 
+> **Machine-checked (2026-09-10).** Both theorems below are formalised in Lean 4 / Mathlib in
+> `lean/`, on a finite model of the framework whose certificate hypothesis is implied by the
+> one used here (so the Lean theorems apply to these statements). Map:
+>
+> | Statement in this file | Lean name | File |
+> |---|---|---|
+> | **Theorem (ceiling)**, `c_ceil = 1 - h(1/√2)/√2` | `product_ceiling`, `cCeil` | `lean/UnionClosedCeiling/Ceiling.lean` |
+> | **Theorem (refined ceiling)**, inequality (H) `2·w_iid·(1−c) ≥ 1` | `hiding_bound` | `lean/UnionClosedCeiling/Refined.lean` |
+> | **Theorem (refined ceiling)**, inequality (D) | `diagonal_bound` | `lean/UnionClosedCeiling/Refined.lean` |
+> | the joint (H)+(D) fixed-point form | `fixed_point_form` | `lean/UnionClosedCeiling/Refined.lean` |
+> | the numerical consequence | `refined_ceiling_numeric : c ≤ 3829/10000` | `lean/UnionClosedCeiling/Refined.lean` |
+> | the classes: all couplings, mixtures of products, i.i.d. singleton contain products / admit hiding | `containsProduct_*`, `admitsHiding_*` | `lean/UnionClosedCeiling/Classes.lean` |
+>
+> What Lean proves numerically is `c ≤ 0.3829`, not the exact fixed point `c** = 0.382885260…`
+> (a real-number fixed point, evaluated in `verify.py`). The maximal-correlation classes are not
+> formalised. See `lean/README.md` and `lean/CERTIFICATE.md`.
+
 **Setting** (Liu 2306.08824, Prop. 3). A *protocol* Π assigns to each pair (s,t) of conditional inclusion probabilities a
 joint law Π_{s,t} on {0,1}² with marginals Bern(s), Bern(t); it generates the two copies coordinate by coordinate.
 Let C_Π(µ) be any class of couplings of µ with itself that contains every joint law of (S_i, T_i) := (P(X_i=1|X^{i-1}), P(Y_i=1|Y^{i-1}))

@@ -1,11 +1,12 @@
 # Union-closed sets: the ceiling of the single-letter entropy method, and reaching it
 
-**Final status 2026-09-08 18:30:** paper/paper.pdf is the publication version (13 pp). Four referee rounds → no error, no gap. Independent
+**Final status 2026-09-10:** paper/paper.pdf is the publication version (revised 2026-09-10: 31 pp = the 13-page paper plus Appendices B–C on the Lean formalisation). Four referee rounds → no error, no gap. Independent
 re-certification agrees on every number. Record: c ≥ 0.38284 (Liu-level rigor); proved ceilings 0.383099 / 0.382885260.
+Both ceiling theorems are now **machine-checked in Lean 4 / Mathlib** (lean/, zero sorry, standard axioms only; §3 below). Release v1.1 is the version of record.
 
 Campaign 057, 2026-09-08. Lead: Claude (Fable 5.1); Sonnet agents for literature transcription and numerics.
 
-Status of each claim is marked **[proved]**, **[numerical, Liu-level rigor]** or **[numerical only]**.
+Status of each claim is marked **[proved]**, **[proved, machine-checked in Lean]**, **[numerical, Liu-level rigor]** or **[numerical only]**.
 
 ## 1. Setting
 
@@ -25,13 +26,13 @@ products (0.382709, conditional on two numerically verified hypotheses). Record 
 
 ## 2. Results
 
-**Theorem A (ceiling, [proved], CEILING_THEOREM.md).** For every protocol mixture in which each class contains the product
+**Theorem A (ceiling, [proved, machine-checked in Lean], CEILING_THEOREM.md; Lean `product_ceiling`).** For every protocol mixture in which each class contains the product
 
 law µ⊗µ, (16) fails for c > 1 − h(1/√2)/√2 = 0.3830993. (Two-point law x* = 1/√2 with independent prefixes; on the diagonal
 
 h(Π(0,0)) ≤ 1 = h(x*²) for every protocol, and all other pairs are forced.)
 
-**Theorem B (refined ceiling, [proved], CEILING_THEOREM.md §2).** If the mixture contains the iid protocol with weight w_iid
+**Theorem B (refined ceiling, [proved, machine-checked in Lean], CEILING_THEOREM.md §2; Lean `hiding_bound`, `diagonal_bound`, `fixed_point_form`, `refined_ceiling_numeric`).** If the mixture contains the iid protocol with weight w_iid
 
 and every other class admits *component hiding* (a coupling in which a tiny-mass entropy-carrying atom is never paired with
 
@@ -73,13 +74,54 @@ Rigor ledger for Theorem C (mirrors Liu's Theorem 13 exactly):
 
    (closed form, converging from above); mixed laws 1.0000733. All minimisers = the two-point law.
 
-   **[numerical, code/certify_*.log, code/ROBUSTNESS_ideal.md]**.
-
-   code/ROBUSTNESS_ideal.md]**; structured seeds include both binding adversaries (the earlier β=0.25–0.3 claims were
+   **[numerical, code/certify_*.log, code/ROBUSTNESS_ideal.md]**; structured seeds include both binding adversaries (the earlier β=0.25–0.3 claims were
 
    optimiser misses on the degenerate law and are withdrawn).
 
-## 3. Why the earlier steps landed where they did
+## 3. Formal verification (2026-09-10)
+
+Theorems A and B above (paper Theorems 3.1 and 3.4) are **[proved, machine-checked in Lean]**. The development is in lean/:
+
+a Lake project on Lean 4.23.0 with Mathlib pinned at tag v4.23.0 (commit 37df177aaa770670452312393d4e84aaad56e7b6),
+
+written by a Claude (Anthropic) agent from lean/SPEC.md, every statement checked against the paper by the author.
+
+Model: a **finite** version of the framework of §1 — laws finitely supported on [0,1], protocols given by their (0,0)-value
+
+subject to the Fréchet bounds, classes as predicates on couplings. The certificate `Certifies` used as the hypothesis is
+
+*implied by* (16) (the paper's infimum on the left is at most the value at any admissible coupling), so the Lean theorems
+
+apply verbatim to the paper's certificate.
+
+Checked declarations (all with axioms `[propext, Classical.choice, Quot.sound]`, i.e. nothing beyond Lean's standard three):
+
+- `product_ceiling` — Theorem A: `c ≤ 1 - h(1/√2)/√2` (Ceiling.lean)
+
+- `hiding_bound` — (H): `1 ≤ 2·w₀·(1-c)`; `diagonal_bound` — (D); `fixed_point_form` — the joint form (Refined.lean)
+
+- `refined_ceiling_numeric : c ≤ 3829/10000` — the numerical consequence of Theorem B (Refined.lean)
+
+- `containsProduct_{iidClass,allCouplings,mixtureOfProducts}`, `admitsHiding_{allCouplings,mixtureOfProducts}` — the parts of
+
+  the class lemma (paper Lemma 3.3) for the i.i.d., all-couplings and mixtures-of-products classes (Classes.lean)
+
+**[not formalised]** Proposition 2.2 of the paper (Gilmer's reduction from union-closed families to the certificate) — it is a
+
+hypothesis in Lean, not a theorem; the maximal-correlation class of Lemma 3.3 (needs continuity of singular values);
+
+Sections 4–6 in their entirety, hence Theorem C and the constant 0.38284 and Hypotheses 5.3 / 6.1; and the exact value
+
+c** = 0.382885260…, a real-number fixed point — what Lean proves is c ≤ 0.3829, already below c_ceil = 0.3830993.
+
+Gate: `bash lean/check.sh` (lake build + sorry scan + `#print axioms` scan) exits 0; the same gate ran green in GitHub Actions
+
+(.github/workflows/lean.yml, run 34522052221, fresh Ubuntu clone, 2 min 20 s). Dated certificate with commit, toolchain,
+
+verbatim axiom output and file hashes: **lean/CERTIFICATE.md**; statement-by-statement map: lean/README.md.
+
+
+## 4. Why the earlier steps landed where they did
 
 - Gilmer/ψ: iid protocol under-uses the diagonal for x < 1/√2 (h(x²) < 1). Extremal law U ≡ 1/φ.
 
@@ -95,7 +137,7 @@ Rigor ledger for Theorem C (mirrors Liu's Theorem 13 exactly):
 
   makes the remaining gain +0.00018 rather than +0.0004.
 
-## 4. Other findings (exploratory, not part of the theorem)
+## 5. Other findings (exploratory, not part of the theorem)
 
 - Sequential-coupling DP oracle on actual families (code/seqcoupling_dp.py): no family on ≤ 4 elements with max frequency
 
@@ -107,7 +149,7 @@ Rigor ledger for Theorem C (mirrors Liu's Theorem 13 exactly):
 
 - No frequency-only potential can prove the conjecture (NOTES_lead.md).
 
-## 5. What would be needed to go past 0.382885
+## 6. What would be needed to go past 0.382885
 
 A tensorising constraint on the prefix joint law that forbids component hiding (so the iid weight can drop below 0.81), or a
 
@@ -115,7 +157,7 @@ non-single-letter use of exact union-closure (e.g. H(A∪B) ≤ log|F| − D(law
 
 ## Files
 
-CEILING_THEOREM.md · NOTES_lead.md · progress.md · literature/ (11 transcripts + 4 syntheses) · code/kernel_game.py,
+CEILING_THEOREM.md · lean/ (Lean 4 formalisation; lean/README.md, lean/CERTIFICATE.md) · NOTES_lead.md · progress.md · literature/ (11 transcripts + 4 syntheses) · code/kernel_game.py,
 
 kernel_sweep.py, seqcoupling_dp.py, symmetric_dp.py, relaxed_game.py, INERTIA.md, CONCAVITY_ideal.md, ROBUSTNESS_ideal.md.
 

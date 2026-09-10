@@ -1,0 +1,12 @@
+import UnionClosedCeiling
+
+#print axioms UnionClosedCeiling.product_ceiling
+#print axioms UnionClosedCeiling.hiding_bound
+#print axioms UnionClosedCeiling.diagonal_bound
+#print axioms UnionClosedCeiling.fixed_point_form
+#print axioms UnionClosedCeiling.refined_ceiling_numeric
+#print axioms UnionClosedCeiling.containsProduct_iidClass
+#print axioms UnionClosedCeiling.containsProduct_allCouplings
+#print axioms UnionClosedCeiling.containsProduct_mixtureOfProducts
+#print axioms UnionClosedCeiling.admitsHiding_allCouplings
+#print axioms UnionClosedCeiling.admitsHiding_mixtureOfProducts

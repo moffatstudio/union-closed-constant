@@ -74,3 +74,29 @@ eferee\REFEREE{,2,3,4}.md): round 1 found 4 errors/4 gaps (hiding definition nee
   4 atoms 1.0000733414, 5 atoms 1.0000733414 — identical. Referee rounds 1–4 + lemma: no error, no gap. paper/paper.pdf = 13 pp final.
   NOT submitted; author line = user; repo private. Next (user's call): make repo public or attach code as arXiv ancillary; submit
   math.CO (cross-list cs.IT); then PR to teorth/optimizationproblems C6 with the arXiv id.
+- 2026-09-10 18:00 — **Repository made public and tidied; release v1.0.** README rewritten as a verifier's entry point (claim table with
+  status, reproduction table script→log→time, verification chain); `verify.py` added — one script, two independent evaluators, recomputes
+  every constant printed in the paper (Appendix A, Table 2, Theorem 5.5, Lemma 5.6) and exits non-zero on any discrepancy; GitHub Actions
+  `verify.yml` runs it on every push; `verification/` archive (independent recertification, lemma scripts, referee checks) documented;
+  LICENSE (MIT code / CC BY 4.0 text), CITATION.cff, .zenodo.json added. Tagged **v1.0** = the paper as of 2026-09-08.
+- 2026-09-10 18:40 — Submitted to VibeMathed (`paper/vibemathed-entry.html`): the paper, the repo, the one-minute check, and the AI
+  disclosure as written in the README. No claim beyond the paper's.
+- 2026-09-10 19:00–20:45 — **Lean 4 formalisation of the ceiling theorems.** Spec written first (`lean/SPEC.md`): finite model of the
+  §2.2 framework, `Certifies` as a hypothesis *implied by* (16), the exact statements to prove, the modelling latitude allowed, and the
+  fallback bound if 0.3829 proved too tight. Environment: Lean 4.23.0 via elan, Mathlib pinned at tag v4.23.0 (commit `37df177aaa77…`),
+  local Mathlib checkout reused to avoid the download; Lake project `UnionClosedCeiling`, `autoImplicit` off.
+  Agent: Claude Fable 5.1, working from the spec and the paper; the author checked every statement against the paper before commit.
+  Outcome: **Theorem 3.1** (`product_ceiling`), **Theorem 3.4** in four pieces — (H) `hiding_bound`, (D) `diagonal_bound`,
+  `fixed_point_form`, and `refined_ceiling_numeric : c ≤ 3829/10000` — and **Lemma 3.3** for the i.i.d., all-couplings and
+  mixtures-of-products classes (`Classes.lean`). 1,037 lines. The numerical corollary needed rigorous entropy bounds at
+  x = 0.6909 (Taylor series of log(1−t) with explicit remainder, 16/16/6 terms, plus Mathlib's `log_two_gt_d9`): the target
+  0.3829 was reached, margin ≈ 1.4·10⁻⁵. Not formalised, and said so in `lean/README.md`: Proposition 2.2 (a hypothesis here, not a
+  theorem), the maximal-correlation class, Sections 4–6, and the exact fixed point c** = 0.382885260… .
+  Gate: `lean/check.sh` = `lake build` + `sorry` scan + `#print axioms` scan; passes locally — zero sorry, ten declarations each
+  reporting only `propext`, `Classical.choice`, `Quot.sound`. CI: `.github/workflows/lean.yml`, run 34522052221, fresh Ubuntu clone,
+  green in 2 min 20 s. Committed as `45949fa`; tagged **v1.1** (paper.pdf, union-closed-arxiv.tar.gz, verification-pack.zip) — v1.1 is
+  now the version of record. Lean does **not** prove c ≤ c** or 0.382885, and does not touch Theorem 6.2's 0.38284.
+- 2026-09-10 20:50 — Verification pack (`verification-pack.zip`: the two evaluators, `verify.py`, the one-minute and the four-hour
+  launchers, the paper) sent to a colleague for an independent run on their own machine. Its README says explicitly that the pack checks
+  the numerical certificate only and that the ceiling proofs are machine-checked in Lean in the repository.
+

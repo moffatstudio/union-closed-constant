@@ -5,3 +5,5 @@
 3/ My role: setting the goal and the standard, choosing what to trust, deciding what to publish. Every error the referee agent caught, including one in the lead's own lemma, is documented in the repo. Nothing was hidden to make the story cleaner.
 
 4/ What it is and isn't: the new constant is computer-assisted and conditional on two numerically verified hypotheses of the same type as the previous record, with one regime now fully proved. The two ceiling theorems are unconditional. The gain is +0.00018; the ceiling shows this route cannot give more. Corrections welcome. That is the point of posting it.
+
+5/ Update: the two ceiling theorems are now machine-checked. Lean 4 / Mathlib, no sorry, standard axioms only, CI gate on every push: https://github.com/moffatstudio/union-closed-constant/tree/master/lean What is formalised is Theorems 3.1 and 3.4 and most of Lemma 3.3, giving c ≤ 0.3829. Not formalised: the exact fixed point 0.382885260, the conditional constant 0.38284, and the reduction from union-closed families to the single-letter certificate — that last one is a hypothesis in the Lean development, not a theorem.

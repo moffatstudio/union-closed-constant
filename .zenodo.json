@@ -1,6 +1,7 @@
 {
   "title": "The ceiling of the single-letter entropy method for the union-closed sets conjecture, and a protocol that reaches it: paper, code, logs and verification",
   "upload_type": "software",
+  "version": "1.2",
   "creators": [
     {
       "name": "Moffat, Andrew",
@@ -16,10 +17,17 @@
     "extremal set theory",
     "computer-assisted proof",
     "information theory",
-    "AI-assisted mathematics"
+    "AI-assisted mathematics",
+    "Lean 4",
+    "Mathlib",
+    "formal verification"
   ],
   "subjects": [
-    {"term": "Combinatorics", "identifier": "https://id.loc.gov/authorities/subjects/sh85028802", "scheme": "url"}
+    {
+      "term": "Combinatorics",
+      "identifier": "https://id.loc.gov/authorities/subjects/sh85028802",
+      "scheme": "url"
+    }
   ],
   "related_identifiers": [
     {
